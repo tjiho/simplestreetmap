@@ -2,12 +2,13 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>OpenMapTiles OSM Bright style</title>
+    <title>Maps.ppsfleet.navy</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://maps.ppsfleet.navy/mapbox/mapbox-gl-unminified.js'></script>
     <link href='https://maps.ppsfleet.navy/mapbox/mapbox-gl.css' rel='stylesheet' />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://underscorejs.org/underscore-min.js"></script>
+    <script src="/static/js/search.js"></script>
     <link href='/static/css/style.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
@@ -24,8 +25,11 @@
         <div id="search-results">
         </div>
     </div>
+    <nav id="categories">
+    </nav>
     <script>
-        var currentSearchMarker = null
+
+
 
         var map = new mapboxgl.Map({
             container: 'map',
@@ -34,32 +38,8 @@
             zoom: 12
         });
 
-        function clickOnResult(result) {
-          if (currentSearchMarker)
-            currentSearchMarker.parentNode.removeChild(currentSearchMarker);
-          currentSearchMarker = document.createElement('div');
-          currentSearchMarker.className = 'marker';
-          new mapboxgl.Marker(currentSearchMarker)
-              .setLngLat([result.lon,result.lat])
-              .addTo(map);
+        var search = new Search(map)
 
-          map.flyTo({center: [result.lon,result.lat], zoom: 13});
-
-
-        }
-
-        function search(query) {
-          axios.get('https://nominatim.openstreetmap.org/search?format=json&q='+query)
-          .then(function (response) {
-            cleanSearchResults()
-            response.data.slice(0, 5).forEach( (res) => displaySearchResult(res))
-            console.log(response);
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error);
-          })
-        }
 /*
         function addMarker(lon,lat,id) {
           map.loadImage('/helium/pin.svg.png', function(error, image) {
@@ -97,28 +77,6 @@
            console.log("add marker")
         }*/
         //marker_11
-
-        var lazySearch = _.debounce(search, 300);
-
-        function displaySearchResult(result) {
-          let domResult = document.createElement("div")
-          domResult.classList.add("search-results__result")
-          domResult.innerText = result.display_name
-          domResult.addEventListener("click", (e) => {
-            clickOnResult(result)
-          })
-          document.getElementById("search-results").appendChild(domResult)
-        }
-
-        function cleanSearchResults() {
-          document.getElementById("search-results").innerHTML = ""
-        }
-
-        document.getElementById("search-input").addEventListener("input", (e) => {
-          lazySearch(e.target.value)
-        });
-
-        //search("6 impasse anjou")
     </script>
 </body>
 </html>
