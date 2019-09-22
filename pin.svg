@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg827"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="pin.svg">
+  <defs
+     id="defs821" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-200"
+     inkscape:cy="560"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="988"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata824">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       transform="matrix(0.17406726,0,0,0.17406726,-20.372095,-23.701746)"
+       style="fill-rule:evenodd"
+       id="g6">
+      <path
+         style="fill:#003f7f;stroke-width:37;stroke-miterlimit:10"
+         inkscape:connector-curvature="0"
+         d="M 730.94,1839.6 C 692.174,1649.3 623.82,1490.93 541.04,1344.16 479.633,1235.29 408.5,1134.8 342.68,1029.22 320.708,993.977 301.746,956.744 280.633,920.17 238.417,847.033 204.189,762.23 206.364,652.24 c 2.125,-107.47 33.208,-193.68 78.03,-264.17 73.719,-115.94 197.2,-210.99 362.88,-235.97 135.47,-20.424 262.48,14.082 352.54,66.748 73.596,43.038 130.6,100.53 173.92,168.28 45.22,70.716 76.36,154.26 78.97,263.23 1.3401,55.83 -7.7999,107.53 -20.68,150.42 -13.03,43.409 -33.99,79.695 -52.64,118.45 -36.41,75.659 -82.05,144.98 -127.86,214.34 -136.44,206.61 -264.5,417.31 -320.58,706.03 z"
+         stroke-miterlimit="10"
+         id="path2" />
+      <circle
+         style="fill:#ffffff"
+         cx="729.54999"
+         cy="651.04999"
+         r="183.33"
+         id="circle4" />
+    </g>
+  </g>
+</svg>

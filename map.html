@@ -7,6 +7,7 @@
     <script src='https://maps.ppsfleet.navy/mapbox/mapbox-gl-unminified.js'></script>
     <link href='https://maps.ppsfleet.navy/mapbox/mapbox-gl.css' rel='stylesheet' />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://underscorejs.org/underscore-min.js"></script>
     <link href='style.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
@@ -24,12 +25,28 @@
         </div>
     </div>
     <script>
+        var currentSearchMarker = null
+
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'https://maps.ppsfleet.navy/osm-bright-gl-style/style-cdn.json',
             center: [1.4436, 43.6042],
             zoom: 12
         });
+
+        function clickOnResult(result) {
+          if (currentSearchMarker)
+            currentSearchMarker.parentNode.removeChild(currentSearchMarker);
+          currentSearchMarker = document.createElement('div');
+          currentSearchMarker.className = 'marker';
+          new mapboxgl.Marker(currentSearchMarker)
+              .setLngLat([result.lon,result.lat])
+              .addTo(map);
+
+          map.flyTo({center: [result.lon,result.lat], zoom: 13});
+
+
+        }
 
         function search(query) {
           axios.get('https://nominatim.openstreetmap.org/search?format=json&q='+query)
@@ -42,16 +59,54 @@
             // handle error
             console.log(error);
           })
-          .finally(function () {
-            // always executed
-          });
-
         }
+/*
+        function addMarker(lon,lat,id) {
+          map.loadImage('/helium/pin.svg.png', function(error, image) {
+            if (error) throw error;
+            map.addImage('marker', image);
+            map.addLayer({
+             "id": id,
+             "type": "symbol",
+             "source": {
+                 "type": "geojson",
+                 "data": {
+                     "type": "FeatureCollection",
+                     "features": [
+                         {
+                             "type": "Feature",
+                             "properties": {},
+                             "geometry": {
+                                 "type": "Point",
+                                 "coordinates": [
+                                     lon,
+                                     lat
+
+                                 ]
+                             }
+                         },
+                     ]
+                 }
+             },
+             "layout": {
+                 "icon-image": "marker",
+                 "icon-size": 0.25
+             }
+           });
+         })
+           console.log("add marker")
+        }*/
+        //marker_11
+
+        var lazySearch = _.debounce(search, 300);
 
         function displaySearchResult(result) {
           let domResult = document.createElement("div")
           domResult.classList.add("search-results__result")
           domResult.innerText = result.display_name
+          domResult.addEventListener("click", (e) => {
+            clickOnResult(result)
+          })
           document.getElementById("search-results").appendChild(domResult)
         }
 
@@ -60,7 +115,7 @@
         }
 
         document.getElementById("search-input").addEventListener("input", (e) => {
-          search(e.target.value)
+          lazySearch(e.target.value)
         });
 
         //search("6 impasse anjou")
