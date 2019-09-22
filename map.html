@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>OpenMapTiles OSM Bright style</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://maps.ppsfleet.navy/mapbox/mapbox-gl-unminified.js'></script>
+    <link href='https://maps.ppsfleet.navy/mapbox/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link href='style.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+    <div id='map'></div>
+    <div id="search-container">
+        <label class="search-label" for="search-input">
+            <img src="helium/search.svg" class="search-label__icon"/>
+            <input type="search" placeholder="search..." id="search-input" class="search-label__input"/>
+        </label>
+        <div id="search-results">
+        </div>
+    </div>
+    <script>
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'https://maps.ppsfleet.navy/osm-bright-gl-style/style-cdn.json',
+            center: [1.4436, 43.6042],
+            zoom: 12
+        });
+
+        function search(query) {
+          axios.get('https://nominatim.openstreetmap.org/search?format=json&q='+query)
+          .then(function (response) {
+            cleanSearchResults()
+            response.data.slice(0, 5).forEach( (res) => displaySearchResult(res))
+            console.log(response);
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
+          .finally(function () {
+            // always executed
+          });
+
+        }
+
+        function displaySearchResult(result) {
+          let domResult = document.createElement("div")
+          domResult.classList.add("search-results__result")
+          domResult.innerText = result.display_name
+          document.getElementById("search-results").appendChild(domResult)
+        }
+
+        function cleanSearchResults() {
+          document.getElementById("search-results").innerHTML = ""
+        }
+
+        document.getElementById("search-input").addEventListener("input", (e) => {
+          search(e.target.value)
+        });
+
+        //search("6 impasse anjou")
+    </script>
+</body>
+</html>
