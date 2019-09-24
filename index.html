@@ -35,48 +35,32 @@
             container: 'map',
             style: 'https://maps.ppsfleet.navy/tileserver-data/osm-bright-gl-style/style-cdn.json',
             center: [1.4436, 43.6042],
-            zoom: 12
+            zoom: 12,
+        });
+
+        var nav = new mapboxgl.NavigationControl();
+
+        var gps = new mapboxgl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true
+          },
+          trackUserLocation: true
+        })
+
+        var scale = new mapboxgl.ScaleControl({
+          maxWidth: 80,
+          unit: 'metric'
         });
 
         var search = new Search(map)
 
-/*
-        function addMarker(lon,lat,id) {
-          map.loadImage('/helium/pin.svg.png', function(error, image) {
-            if (error) throw error;
-            map.addImage('marker', image);
-            map.addLayer({
-             "id": id,
-             "type": "symbol",
-             "source": {
-                 "type": "geojson",
-                 "data": {
-                     "type": "FeatureCollection",
-                     "features": [
-                         {
-                             "type": "Feature",
-                             "properties": {},
-                             "geometry": {
-                                 "type": "Point",
-                                 "coordinates": [
-                                     lon,
-                                     lat
+        map.addControl(nav, 'bottom-right');
+        map.addControl(gps, 'bottom-right');
+        map.addControl(scale);
 
-                                 ]
-                             }
-                         },
-                     ]
-                 }
-             },
-             "layout": {
-                 "icon-image": "marker",
-                 "icon-size": 0.25
-             }
-           });
-         })
-           console.log("add marker")
-        }*/
-        //marker_11
+        map.on('load', function() {
+          //plouf
+        });
     </script>
 </body>
 </html>
