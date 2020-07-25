@@ -11,9 +11,10 @@ class Search {
   }
 
   clickOnResult(result) {
-    if (this.currentSearchMarker)
-      this.currentSearchMarker.parentNode.removeChild(currentSearchMarker);
-
+    if (this.currentSearchMarker != null)
+    {
+	this.currentSearchMarker.parentNode.removeChild(this.currentSearchMarker);
+    }
     this.currentSearchMarker = document.createElement('div');
     this.currentSearchMarker.className = 'marker';
 
