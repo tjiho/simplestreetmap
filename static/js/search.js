@@ -13,24 +13,25 @@ class Search {
   clickOnResult(result) {
     if (this.currentSearchMarker != null)
     {
-	this.currentSearchMarker.parentNode.removeChild(this.currentSearchMarker);
+      this.currentSearchMarker.parentNode.removeChild(this.currentSearchMarker);
     }
     this.currentSearchMarker = document.createElement('div');
     this.currentSearchMarker.className = 'marker';
 
     new mapboxgl.Marker(this.currentSearchMarker)
-        .setLngLat([result.lon,result.lat])
+        .setLngLat(result.geometry.coordinates)
         .addTo(map);
 
-    this.map.flyTo({center: [result.lon,result.lat], zoom: 13});
+    this.map.flyTo({center: result.geometry.coordinates, zoom: 13});
+    
+    this.cleanSearchResults();
   }
 
   search(query) {
-    axios.get('https://nominatim.openstreetmap.org/search?format=json&q='+query)
+    axios.get('https://search.maps.ppsfleet.navy/search/?q='+query)
     .then((response) => {
       this.cleanSearchResults()
-      response.data.slice(0, 5).forEach( (res) => this.displaySearchResult(res))
-      console.log(response);
+      response.data.features.slice(0, 5).forEach( (res) => this.displaySearchResult(res))
     })
     .catch(function (error) {
       // handle error
@@ -41,7 +42,7 @@ class Search {
   displaySearchResult(result) {
     let domResult = document.createElement("div")
     domResult.classList.add("search-results__result")
-    domResult.innerText = result.display_name
+    domResult.innerText = result.properties.label
     domResult.addEventListener("click", (e) => {
       this.clickOnResult(result)
     })
