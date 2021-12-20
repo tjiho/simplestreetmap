@@ -27,15 +27,16 @@
     </div>
     <nav id="categories">
     </nav>
-    <script>
+    <script type="module">
+        import { parseHashCoordinates } from './static/js/tools/parseHashCoordinates.js'
 
-
+        const {lng, lat, zoom} = parseHashCoordinates(window.location.hash, 1.4436, 43.6042, 12)
 
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'https://maps.ppsfleet.navy/tileserver-data/qwant-basic-gl-style-toulouse/built-style-debug.json',
-            center: [1.4436, 43.6042],
-            zoom: 12,
+            center: [lng, lat],
+            zoom: zoom,
         });
 
         var nav = new mapboxgl.NavigationControl();
@@ -60,6 +61,13 @@
 
         map.on('load', function() {
           //plouf
+        });
+
+        map.on('moveend', function() {
+            const {lng, lat} = map.getCenter();
+            const zoom = map.getZoom();
+            const hash = `map=${zoom}/${lat}/${lng}`
+            history.replaceState(null, null, document.location.pathname + '#' + hash);
         });
     </script>
 </body>
