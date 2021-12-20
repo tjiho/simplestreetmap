@@ -11,8 +11,7 @@ class Search {
   }
 
   clickOnResult(result) {
-    if (this.currentSearchMarker != null)
-    {
+    if (this.currentSearchMarker != null) {
       this.currentSearchMarker.parentNode.removeChild(this.currentSearchMarker);
     }
     this.currentSearchMarker = document.createElement('div');
@@ -28,15 +27,28 @@ class Search {
   }
 
   search(query) {
-    axios.get('https://search.maps.ppsfleet.navy/search/?q='+query)
-    .then((response) => {
+    if (query && query['0'] === '#') {
+      const coordinates = query.slice(1).split(',')
       this.cleanSearchResults()
-      response.data.features.slice(0, 5).forEach( (res) => this.displaySearchResult(res))
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
+      this.displaySearchResult({
+        properties: {
+          label: 'Coordinates' + coordinates['0'] + ':' + coordinates['1']
+        },
+        geometry: {
+          coordinates
+        }
+      })
+    } else {
+      axios.get('https://search.maps.ppsfleet.navy/search/?q='+query)
+      .then((response) => {
+        this.cleanSearchResults()
+        response.data.features.slice(0, 5).forEach( (res) => this.displaySearchResult(res))
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+    }
   }
 
   displaySearchResult(result) {
