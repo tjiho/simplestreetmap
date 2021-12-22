@@ -1,4 +1,6 @@
-class Search {
+import { Place } from './place.js'
+
+export class Search {
   constructor (map) {
     this.lazySearch = _.debounce(this.search, 300)
 
@@ -11,18 +13,10 @@ class Search {
   }
 
   clickOnResult (result) {
-    if (this.currentSearchMarker != null) {
-      this.currentSearchMarker.parentNode.removeChild(this.currentSearchMarker)
-    }
-    this.currentSearchMarker = document.createElement('div')
-    this.currentSearchMarker.className = 'marker'
-
-    new mapboxgl.Marker(this.currentSearchMarker)
-      .setLngLat(result.geometry.coordinates)
-      .addTo(map)
-
+    const placesDom = document.getElementById('places')
+    console.log(placesDom)
+    new Place(this.map, placesDom, result.geometry.coordinates[1], result.geometry.coordinates[0], result?.properties?.label)
     this.map.flyTo({ center: result.geometry.coordinates, zoom: 13 })
-
     this.cleanSearchResults()
   }
 

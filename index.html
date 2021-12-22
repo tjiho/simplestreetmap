@@ -8,7 +8,6 @@
     <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://underscorejs.org/underscore-min.js"></script>
-    <script src="./static/js/search.js"></script>
     <link href='./static/css/style.css' rel='stylesheet' />
     <style>
         body { margin:0; padding:0; }
@@ -25,10 +24,12 @@
         <div id="search-results">
         </div>
     </div>
+    <div id="places"></div>
     <nav id="categories">
     </nav>
     <script type="module">
         import { parseHashCoordinates } from './static/js/tools/parseHashCoordinates.js'
+        import { Search } from './static/js/search.js'
 
         const {lng, lat, zoom} = parseHashCoordinates(window.location.hash, 1.4436, 43.6042, 13)
 
@@ -53,7 +54,8 @@
           unit: 'metric'
         });
 
-        var search = new Search(map)
+        const places = []
+        const search = new Search(map)
 
         map.addControl(nav, 'bottom-right');
         map.addControl(gps, 'bottom-right');
@@ -70,5 +72,12 @@
           history.replaceState(null, null, document.location.pathname + '#' + hash);
         });
     </script>
+
+    <template id="template-place-chip">
+        <div class="place-chip">
+            <span class="place-chip__name" name="name">unknown place</span>
+            <!-- slot could be used here instead maybe -->
+        </div>
+    </template>
 </body>
 </html>
