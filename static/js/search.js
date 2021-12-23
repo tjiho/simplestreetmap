@@ -13,9 +13,7 @@ export class Search {
   }
 
   clickOnResult (result) {
-    const placesDom = document.getElementById('places')
-    console.log(placesDom)
-    new Place(this.map, placesDom, result.geometry.coordinates[1], result.geometry.coordinates[0], result?.properties?.label)
+    new Place(this.map, result.geometry.coordinates[1], result.geometry.coordinates[0], result?.properties?.label)
     this.map.flyTo({ center: result.geometry.coordinates, zoom: 13 })
     this.cleanSearchResults()
   }
@@ -33,15 +31,15 @@ export class Search {
         }
       })
     } else {
-      axios.get('https://search.maps.ppsfleet.navy/search/?q=' + query)
-        .then((response) => {
+      window.fetch('https://search.maps.ppsfleet.navy/search/?q=' + query).then((response) => {
+        response.json().then((value) => {
           this.cleanSearchResults()
-          response.data.features.slice(0, 5).forEach((res) => this.displaySearchResult(res))
+          value.features.slice(0, 5).forEach((res) => this.displaySearchResult(res))
         })
-        .catch(function (error) {
+      }).catch(function (error) {
         // handle error
-          console.log(error)
-        })
+        console.log(error)
+      })
     }
   }
 
