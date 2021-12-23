@@ -55,22 +55,30 @@ body
   filter: invert(100%);
 }
 
-.search-results__result
+#search-results
 {
-  background-color: white;
-  padding: 1em;
-  margin: 1em;
-  border-radius: 6px;
-  border: 1px solid var(--main-contrast-text);
+  margin-top:4px;
   box-shadow:var(--shadow);
+}
+
+.search-results__result {
+  margin: 0;
+  border-radius: unset;
+  width: 100%;
+  border-bottom: 1px solid #d3d3d380;
+  padding: 16px;
+  background-color: white;
+}
+
+.search-results__result:last-child {
+  border-bottom: none;
 }
 
 .search-results__result:hover
 {
   cursor: pointer;
-  box-shadow: 0px 0px 30px 5px rgba(0,0,0,0.3);
-  box-shadow: 0px 0px 30px 5px rgba(47, 0, 46, 0.2);
-  background-color: rgb(255, 247, 255);
+  background-color: var(--main-color);
+  color: var(--main-contrast-text);
 }
 
 .marker
@@ -89,6 +97,7 @@ body
   position: absolute;
   left: 416px;
   top:32px;
+  max-width: 100%;
 }
 
 place-chip{
@@ -104,8 +113,17 @@ place-chip{
 }
 
  @media only screen and (max-device-width: 650px) { 
-  .search-results__result {
-    margin: 3px;
+
+
+  #places{
+    position: absolute;
+    left: 0px;
+    padding-left:8px;
+    top: 96px;
+    white-space: nowrap;
+    overflow-x: auto;
     box-shadow: none;
+    max-width: calc(100% - 8px);
+
   }
  } 
