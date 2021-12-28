@@ -9,6 +9,8 @@
     <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
     <!-- css -->
     <link href='./static/css/style.css' rel='stylesheet' />
+    <!-- config -->
+    <script src='./config.js'></script>
     <style>
       body { margin:0; padding:0; }
       #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -42,7 +44,7 @@
 
       var map = new mapboxgl.Map({
         container: 'map',
-        style: 'https://maps.ppsfleet.navy/tileserver-data/qwant-basic-gl-style-toulouse/built-style-debug.json',
+        style: BASE_MAP_URL,
         center: [lng, lat],
         zoom: zoom - 1,
       });

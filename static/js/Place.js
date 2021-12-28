@@ -32,7 +32,7 @@ export class Place {
       this.chip = this.generateChipDom(name, parent)
       parent.appendChild(this.chip)
     } else {
-      window.fetch(`https://search.maps.ppsfleet.navy/reverse?lat=${this.lat}&lon=${this.lng}`).then((response) => {
+      window.fetch(BASE_REVERSE_URL(this.lat,this.lng)).then((response) => {
         response.json().then((value) => {
           console.log(value)
           this.name = value.features[0].properties.label

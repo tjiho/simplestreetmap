@@ -37,7 +37,7 @@ export class Search {
       this.searchController = new AbortController()
       const signal = this.searchController.signal
 
-      window.fetch('https://search.maps.ppsfleet.navy/search/?q=' + query, { signal }).then((response) => {
+      window.fetch(BASE_SEARCH_URL(query), { signal }).then((response) => {
         response.json().then((value) => {
           this.cleanSearchResults()
           value.features.slice(0, 5).forEach((res) => this.displaySearchResult(res))
