@@ -4,9 +4,10 @@
     <meta charset='utf-8' />
     <title>Maps.ppsfleet.navy</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!-- mapbox -->
     <script src='https://maps.ppsfleet.navy/maplibre/mapbox-gl-unminified.js'></script>
     <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
-    <script src="https://underscorejs.org/underscore-min.js"></script>
+    <!-- css -->
     <link href='./static/css/style.css' rel='stylesheet' />
     <style>
       body { margin:0; padding:0; }
@@ -31,8 +32,11 @@
 
     <script type="module">
       import { parseHashCoordinates } from './static/js/tools/parseHashCoordinates.js'
-      import { Search } from './static/js/search.js'
-      import { Place } from './static/js/place.js'
+      import { Search } from './static/js/Search.js'
+      import { Place } from './static/js/Place.js'
+      import { BaseChipComponent } from './static/js/components/BaseChipComponent.js'
+
+      customElements.define('base-chip', BaseChipComponent)
 
       const {lng, lat, zoom} = parseHashCoordinates(window.location.hash, 1.4436, 43.6042, 13)
 
@@ -68,9 +72,7 @@
       });
 
       map.on('contextmenu', function(e) {
-        console.log(e.lngLat)
         new Place(map, e.lngLat.lat, e.lngLat.lng)
-
       })
 
       map.on('moveend', function() {
@@ -81,11 +83,17 @@
       });
     </script>
 
-    <template id="template-place-chip">
-      <div class="place-chip">
-        <span class="place-chip__name" name="name">unknown place</span>
-        <!-- slot could be used here instead maybe -->
+    <template id="template-base-chip">
+      <div class="chip_delete">
+        <img src="./static/images/breeze/edit-delete-black.svg" class="icon--medium"/>
       </div>
+      <div class="chip__name">
+        <slot name="name">empty</slot>
+      </div>
+      <div class="chip__actions">
+        <slot name="actions"></slot>
+      </div>
+      <link href='./static/css/chip.css' rel='stylesheet' />
     </template>
 </body>
 </html>

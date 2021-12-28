@@ -1,8 +1,9 @@
-import { Place } from './place.js'
+import { Place } from './Place.js'
+import { debounce } from './tools/debounce.js'
 
 export class Search {
   constructor (map) {
-    this.lazySearch = _.debounce(this.search, 300)
+    this.lazySearch = debounce(this.search.bind(this), 300)
 
     document.getElementById('search-input').addEventListener('input', (e) => {
       this.lazySearch(e.target.value)
@@ -31,7 +32,12 @@ export class Search {
         }
       })
     } else {
-      window.fetch('https://search.maps.ppsfleet.navy/search/?q=' + query).then((response) => {
+      // don't do concurent search, abort previous search
+      if (this.searchController) { this.searchController.abort() }
+      this.searchController = new AbortController()
+      const signal = this.searchController.signal
+
+      window.fetch('https://search.maps.ppsfleet.navy/search/?q=' + query, { signal }).then((response) => {
         response.json().then((value) => {
           this.cleanSearchResults()
           value.features.slice(0, 5).forEach((res) => this.displaySearchResult(res))

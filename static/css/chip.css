@@ -1,0 +1,22 @@
+@import './global.css';
+
+:host {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  margin: 4px;
+  border-radius: 24px;
+  background-color: var(--main-color);
+  color: var(--main-contrast-text);
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  gap:4px;
+}
+
+.chip_delete
+{
+  display:flex;
+  background-color: rgba(255,255,255,0.7);
+  border-radius: 50%;
+  padding: 4px;
+}
