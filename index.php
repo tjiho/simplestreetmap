@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <?php
+      $coordinates = htmlspecialchars($_GET['map']);
+    ?>
+
     <meta charset='utf-8' />
     <title>Maps.ppsfleet.navy</title>
+    <meta property="og:image" content="<?= "https://maps.ppsfleet.navy/toulouse/preview.php?map=".$coordinates?>" />
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <!-- mapbox -->
     <script src='https://maps.ppsfleet.navy/maplibre/mapbox-gl-unminified.js'></script>
@@ -40,13 +45,14 @@
 
       customElements.define('base-chip', BaseChipComponent)
 
-      const {lng, lat, zoom} = parseHashCoordinates(window.location.hash, 1.4436, 43.6042, 13)
+      let params = new URLSearchParams(window.location.search);
+      const {lng, lat, zoom} = parseHashCoordinates(params.get("map") || '', 1.4436, 43.6042, 13)
 
       var map = new mapboxgl.Map({
         container: 'map',
         style: BASE_MAP_URL,
         center: [lng, lat],
-        zoom: zoom - 1,
+        zoom: zoom,
       });
 
       var nav = new mapboxgl.NavigationControl();
@@ -81,7 +87,7 @@
         const {lng, lat} = map.getCenter();
         const zoom = map.getZoom();
         const hash = `map=${zoom}/${lat}/${lng}`
-        history.replaceState(null, null, document.location.pathname + '#' + hash);
+        history.replaceState(null, null, `${document.location.pathname}?${hash}`);
       });
     </script>
 
