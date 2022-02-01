@@ -7,5 +7,11 @@
 
 .icon--medium
 {
-    width: 24px;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+.icon--white
+{
+    filter: invert(100%);
 }

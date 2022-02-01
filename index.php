@@ -9,6 +9,7 @@
     <title>Maps.ppsfleet.navy</title>
     <meta property="og:image" content="<?= "https://maps.ppsfleet.navy/toulouse/preview.php?map=".$coordinates?>" />
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta property="og:image" content="./anemone.jpg">
     <!-- mapbox -->
     <script src='https://maps.ppsfleet.navy/maplibre/mapbox-gl-unminified.js'></script>
     <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
@@ -93,7 +94,7 @@
 
     <template id="template-base-chip">
       <div class="chip_delete">
-        <img src="./static/images/breeze/edit-delete-black.svg" class="icon--medium"/>
+        <img src="./static/images/breeze/edit-delete-black.svg" class="icon--medium icon--white"/>
       </div>
       <div class="chip__name">
         <slot name="name">empty</slot>
