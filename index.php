@@ -14,6 +14,7 @@
     <script src='https://maps.ppsfleet.navy/maplibre/mapbox-gl-unminified.js'></script>
     <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
     <!-- css -->
+    <link href='https://static.ppsfleet.navy/fonts/russisch-sans/style.css' rel='stylesheet' />
     <link href='./static/css/style.css' rel='stylesheet' />
     <!-- config -->
     <script src='./config.js'></script>
