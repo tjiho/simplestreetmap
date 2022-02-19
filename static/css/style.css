@@ -44,6 +44,11 @@
   box-shadow: var(--shadow)
 }
 
+.search-label--with-results
+{
+  border-radius: 5px 5px 0px 0px;
+}
+
 .search-label__icon
 {
   height: 50%;
@@ -55,6 +60,7 @@
 {
   margin-top:0px;
   box-shadow:var(--shadow);
+  border-radius: 0px 0px 5px 5px;
 }
 
 .search-results__result {

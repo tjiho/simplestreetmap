@@ -40,7 +40,7 @@ export class Search {
       window.fetch(BASE_SEARCH_URL(query), { signal }).then((response) => {
         response.json().then((value) => {
           this.cleanSearchResults()
-          value.features.slice(0, 5).forEach((res) => this.displaySearchResult(res))
+          value?.features && value.features.slice(0, 5).forEach((res) => this.displaySearchResult(res))
         })
       }).catch(function (error) {
         // handle error
@@ -51,6 +51,7 @@ export class Search {
 
   displaySearchResult (result) {
     const domResult = document.createElement('div')
+    document.getElementById('search-input').parentNode.classList.add('search-label--with-results')
     domResult.classList.add('search-results__result')
     domResult.innerText = result.properties.label
     domResult.addEventListener('click', (e) => {
@@ -61,5 +62,7 @@ export class Search {
 
   cleanSearchResults () {
     document.getElementById('search-results').innerHTML = ''
+    document.getElementById('search-input').parentNode.classList.remove('search-label--with-results')
+
   }
 }
