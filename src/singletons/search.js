@@ -1,8 +1,9 @@
-import { Place } from './Place.js'
-import { debounce } from './tools/debounce.js'
+import debounce from '../tools/debounce.js'
+import map from './map.js'
+import places from './places.js'
 
 export class Search {
-  constructor (map) {
+  constructor () {
     this.lazySearch = debounce(this.search.bind(this), 300)
 
     document.getElementById('search-input').addEventListener('input', (e) => {
@@ -14,7 +15,7 @@ export class Search {
   }
 
   clickOnResult (result) {
-    new Place(this.map, result.geometry.coordinates[1], result.geometry.coordinates[0], result?.properties?.label)
+    places.add(result.geometry.coordinates[1], result.geometry.coordinates[0], result?.properties?.label)
     this.map.flyTo({ center: result.geometry.coordinates, zoom: 13 })
     this.cleanSearchResults()
   }
@@ -63,6 +64,8 @@ export class Search {
   cleanSearchResults () {
     document.getElementById('search-results').innerHTML = ''
     document.getElementById('search-input').parentNode.classList.remove('search-label--with-results')
-
   }
 }
+
+const search = new Search()
+export default search

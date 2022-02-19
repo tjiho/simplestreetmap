@@ -14,21 +14,21 @@ That's all, put it behind the server of your choice. For dev, I use PHP with `ph
 
 ## Install a search and reverse server:
 
-I use ADDOK: `https://addok.readthedocs.io/en/latest/`, it's quite easy to install and works very well with french addresses.
+I use ADDOK: https://addok.readthedocs.io/en/latest/, it's quite easy to install and works very well with french addresses.
 
-There are other. Qwant maps uses `https://github.com/CanalTP/mimirsbrunn`
+There are other. Qwant maps uses https://github.com/CanalTP/mimirsbrunn
 
 ## Serving tiles
 
-For a small server, there is `https://openmaptiles.org/`. Qwant maps uses a more complex stack, see `https://github.com/Qwant/qwantmaps`
+For a small server, there is https://openmaptiles.org/. Qwant maps uses a more complex stack, see https://github.com/Qwant/qwantmaps
 
 If you don't want to host tiles yourself, maptiler or mapbox offer hosting solutions.
 
 You can use ppsfleet tiles for testing, but only for testing.
 
 
+## Dev
 
+It does not need compilation.
 
-
-
-
+To check the code: `npm standard --fix`

@@ -15,7 +15,7 @@
     <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
     <!-- css -->
     <link href='https://static.ppsfleet.navy/fonts/russisch-sans/style.css' rel='stylesheet' />
-    <link href='./static/css/style.css' rel='stylesheet' />
+    <link href='./src/css/style.css' rel='stylesheet' />
     <!-- config -->
     <script src='./config.js'></script>
     <style>
@@ -40,70 +40,16 @@
     <!-- todo: add a contextmenu -->
 
     <script type="module">
-      import { parseHashCoordinates } from './static/js/tools/parseHashCoordinates.js'
-      import { Search } from './static/js/Search.js'
-      import { Place } from './static/js/Place.js'
-      import { BaseChipComponent } from './static/js/components/BaseChipComponent.js'
+      import search from './src/singletons/search.js'
+      import map from './src/singletons/map.js'
 
-      customElements.define('base-chip', BaseChipComponent)
+      import PlaceComponent from './src/components/PlaceComponent.js'
+      customElements.define('c-place', PlaceComponent)
 
-      let params = new URLSearchParams(window.location.search);
-      const {lng, lat, zoom} = parseHashCoordinates(params.get("map") || '', 1.4436, 43.6042, 13)
-
-      var map = new mapboxgl.Map({
-        container: 'map',
-        style: BASE_MAP_URL,
-        center: [lng, lat],
-        zoom: zoom,
-      });
-
-      var nav = new mapboxgl.NavigationControl();
-
-      var gps = new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true
-        },
-        trackUserLocation: true
-      })
-
-      var scale = new mapboxgl.ScaleControl({
-        maxWidth: 80,
-        unit: 'metric'
-      });
-
-      const search = new Search(map)
-
-      map.addControl(nav, 'bottom-right');
-      map.addControl(gps, 'bottom-right');
-      map.addControl(scale);
-
-      map.on('load', function() {
-
-      });
-
-      map.on('contextmenu', function(e) {
-        new Place(map, e.lngLat.lat, e.lngLat.lng)
-      })
-
-      map.on('moveend', function() {
-        const {lng, lat} = map.getCenter();
-        const zoom = map.getZoom();
-        const hash = `map=${zoom}/${lat}/${lng}`
-        history.replaceState(null, null, `${document.location.pathname}?${hash}`);
-      });
     </script>
 
-    <template id="template-base-chip">
-      <div class="chip_delete">
-        <img src="./static/images/breeze/edit-delete-black.svg" class="icon--medium icon--white"/>
-      </div>
-      <div class="chip__name">
-        <slot name="name">empty</slot>
-      </div>
-      <div class="chip__actions">
-        <slot name="actions"></slot>
-      </div>
-      <link href='./static/css/chip.css' rel='stylesheet' />
-    </template>
+    <?php
+      include "src/components/ChipBaseTemplate.php";
+    ?>
 </body>
 </html>

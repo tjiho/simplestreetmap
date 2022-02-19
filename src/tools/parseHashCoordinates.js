@@ -1,4 +1,4 @@
-export function parseHashCoordinates (hash, defaultLng, defaultLat, defaultZoom) {
+export default function parseHashCoordinates (hash, defaultLng, defaultLat, defaultZoom) {
   const coordinates = hash.replace('#map=', '').split('/')
 
   return {
