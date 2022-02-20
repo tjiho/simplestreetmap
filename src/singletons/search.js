@@ -9,9 +9,19 @@ export class Search {
     document.getElementById('search-input').addEventListener('input', (e) => {
       this.lazySearch(e.target.value)
     })
-
+    
+    document.getElementById('search-close-button').addEventListener('click', (e) => {
+      this.cleanSearchResults()
+    })
+    
+    document.getElementById('search-button').addEventListener('click', (e) => {
+        console.log('yop')
+      this.lazySearch(document.getElementById('search-input').value)
+    })
+    
     this.currentSearchMarker = null
     this.map = map
+    
   }
 
   clickOnResult (result) {
@@ -52,7 +62,7 @@ export class Search {
 
   displaySearchResult (result) {
     const domResult = document.createElement('div')
-    document.getElementById('search-input').parentNode.classList.add('search-label--with-results')
+    document.getElementById('search-container').classList.add('search-container--with-results')
     domResult.classList.add('search-results__result')
     domResult.innerText = result.properties.label
     domResult.addEventListener('click', (e) => {
@@ -63,7 +73,7 @@ export class Search {
 
   cleanSearchResults () {
     document.getElementById('search-results').innerHTML = ''
-    document.getElementById('search-input').parentNode.classList.remove('search-label--with-results')
+    document.getElementById('search-container').classList.remove('search-container--with-results')
   }
 }
 

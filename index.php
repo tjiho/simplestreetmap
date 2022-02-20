@@ -26,14 +26,21 @@
 <body>
     <div id='map'></div>
     <div id="search-container">
-      <label class="search-label" for="search-input">
-        <img src="./static/images/helium/search.svg" class="search-label__icon"/>
-        <input type="search" placeholder="search..." id="search-input" class="search-label__input"/>
-      </label>
+      <div class="search-container__top">
+        <label class="search-label" for="search-input">
+          <img src="./static/images/helium/search.svg" id="search-button" class="search-label__icon"/>
+          <input type="search" placeholder="search..." id="search-input" class="search-label__input"/>
+        </label>
+        <div id="places">
+        </div>
+      </div>
       <div id="search-results">
       </div>
+      <div class="search-container__bottom">
+        <button id="search-close-button">Fermer la recherche</button>
+      </div>
     </div>
-    <div id="places"></div>
+    
     <nav id="categories">
     </nav>
 
