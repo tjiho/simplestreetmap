@@ -48,6 +48,10 @@
   color:white;
 }
 
+.search-label__input:focus {
+    outline: none !important;
+}
+
 .search-label__input::placeholder
 {
   color:white;
