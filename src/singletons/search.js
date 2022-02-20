@@ -15,8 +15,10 @@ export class Search {
     })
     
     document.getElementById('search-button').addEventListener('click', (e) => {
-        console.log('yop')
+      // TODO: add spinner during request
       this.lazySearch(document.getElementById('search-input').value)
+      e.preventDefault();
+      return false
     })
     
     this.currentSearchMarker = null
