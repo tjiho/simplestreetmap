@@ -8,8 +8,13 @@
     <meta charset='utf-8' />
     <title>Maps.ppsfleet.navy</title>
     <meta property="og:image" content="<?= "https://maps.ppsfleet.navy/toulouse/preview.php?map=".$coordinates?>" />
+    <meta property="og:image:width" content="600"/>
+    <meta property="og:image:height" content="400"/>
+    <meta property="og:image:type" content="image/png">
+    <meta property="twitter:image" content="<?= "https://maps.ppsfleet.navy/toulouse/preview.php?map=".$coordinates?>" />
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:title" content="Maps.ppsfleet.navy"/>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <meta property="og:image" content="./anemone.jpg">
     <!-- mapbox -->
     <script src='https://maps.ppsfleet.navy/maplibre/mapbox-gl-unminified.js'></script>
     <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
