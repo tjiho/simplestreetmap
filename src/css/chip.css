@@ -19,7 +19,7 @@
   
 }
 
-:host.selected{
+:host([selected]){
  background-color: var(--main-color);
  color: white;
  font-size: 1.1em;

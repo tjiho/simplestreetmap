@@ -19,8 +19,15 @@ export default class PlaceComponent extends ChipBaseComponent {
     this._lat = lat
     this._lng = lng
     this.addMarker(lat, lng)
+    //this.updateUrl(lat,lng)
   }
 
+  set name(name) {
+    if(name)
+    {
+      super.name = name
+    }
+  }
   get coordinates () {
     return { lat: this._lat, lng: this._lng }
   }
@@ -30,5 +37,11 @@ export default class PlaceComponent extends ChipBaseComponent {
     this.marker = new mapboxgl.Marker()
       .setLngLat([lng, lat])
       .addTo(map)
+  }
+
+  updateUrl(lat,lng) {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.append('places', `${lat},${lng},${name}`);
+    history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
   }
 }

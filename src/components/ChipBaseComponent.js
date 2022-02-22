@@ -17,7 +17,7 @@ export default class ChipBaseComponent extends HTMLElement {
       event.stopPropagation()
     })
 
-    this.setName(this.getAttribute('name'))
+    this.name = this.getAttribute('name')
   }
 
   static get observedAttributes () {
@@ -25,16 +25,22 @@ export default class ChipBaseComponent extends HTMLElement {
   }
 
   attributeChangedCallback (name, oldValue, newValue) {
-    switch (name) {
-      case 'name':
-        this.setName(newValue)
-        break
+    if(oldValue !== newValue)
+    {
+      console.log(oldValue)
+      console.log(newValue)
+      switch (name) {
+        case 'name':
+          this.name = newValue
+          break
+      }
     }
   }
 
-  setName (name) {
+  set name (name) {
     if (name) {
       this.shadowRoot.querySelector('.chip__name').innerText = name
+      this._name = name
     }
   }
 }

@@ -39,8 +39,10 @@ class Map extends mapboxgl.Map {
     this.on('moveend', function () {
       const { lng, lat } = map.getCenter()
       const zoom = map.getZoom()
-      const hash = `map=${zoom}/${lat}/${lng}`
-      history.replaceState(null, null, `${document.location.pathname}?${hash}`)
+
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.set('map', `${zoom}/${lat}/${lng}`);
+      history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
     })
   }
 }
