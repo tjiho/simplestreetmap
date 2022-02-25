@@ -25,10 +25,7 @@ export default class ChipBaseComponent extends HTMLElement {
   }
 
   attributeChangedCallback (name, oldValue, newValue) {
-    if(oldValue !== newValue)
-    {
-      console.log(oldValue)
-      console.log(newValue)
+    if (oldValue !== newValue) {
       switch (name) {
         case 'name':
           this.name = newValue
@@ -42,5 +39,9 @@ export default class ChipBaseComponent extends HTMLElement {
       this.shadowRoot.querySelector('.chip__name').innerText = name
       this._name = name
     }
+  }
+
+  get name () {
+    return this._name
   }
 }

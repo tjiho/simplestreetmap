@@ -15,19 +15,20 @@ export default class PlaceComponent extends ChipBaseComponent {
     })
   }
 
+  set name (name) {
+    if (name) {
+      super.name = name
+      this.updateUrl()
+    }
+  }
+
   set coordinates ({ lat, lng }) {
     this._lat = lat
     this._lng = lng
     this.addMarker(lat, lng)
-    //this.updateUrl(lat,lng)
+    this.updateUrl()
   }
 
-  set name(name) {
-    if(name)
-    {
-      super.name = name
-    }
-  }
   get coordinates () {
     return { lat: this._lat, lng: this._lng }
   }
@@ -39,9 +40,24 @@ export default class PlaceComponent extends ChipBaseComponent {
       .addTo(map)
   }
 
-  updateUrl(lat,lng) {
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.append('places', `${lat},${lng},${name}`);
-    history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
+  updateUrl () {
+    if (this._name && this._lat && this._lng) {
+      const urlParams = new URLSearchParams(window.location.search)
+      urlParams.append('places', `${this._lat},${this._lng},${this._name}`)
+      history.replaceState(null, null, `${document.location.pathname}?${urlParams}`)
+    }
+  }
+
+  remove () {
+    const urlParams = new URLSearchParams(window.location.search)
+    const places = urlParams.getAll('places')
+    const placesWithoutSelf = places.filter((place) => place !== `${this._lat},${this._lng},${this._name}`)
+
+    urlParams.delete('places', placesWithoutSelf)
+    placesWithoutSelf.forEach((place) => urlParams.append('places', place))
+
+    history.replaceState(null, null, `${document.location.pathname}?${urlParams}`)
+
+    super.remove()
   }
 }

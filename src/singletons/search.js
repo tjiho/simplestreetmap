@@ -9,21 +9,20 @@ export class Search {
     document.getElementById('search-input').addEventListener('input', (e) => {
       this.lazySearch(e.target.value)
     })
-    
+
     document.getElementById('search-close-button').addEventListener('click', (e) => {
       this.cleanSearchResults()
     })
-    
+
     document.getElementById('search-button').addEventListener('click', (e) => {
       // TODO: add spinner during request
       this.lazySearch(document.getElementById('search-input').value)
-      e.preventDefault();
+      e.preventDefault()
       return false
     })
-    
+
     this.currentSearchMarker = null
     this.map = map
-    
   }
 
   clickOnResult (result) {

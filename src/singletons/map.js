@@ -1,5 +1,4 @@
 import parseHashCoordinates from '../tools/parseHashCoordinates.js'
-import places from './places.js'
 
 class Map extends mapboxgl.Map {
   constructor () {
@@ -32,16 +31,12 @@ class Map extends mapboxgl.Map {
     this.addControl(gps, 'bottom-right')
     this.addControl(scale)
 
-    this.on('contextmenu', function (e) {
-      places.add(e.lngLat.lat, e.lngLat.lng)
-    })
-
     this.on('moveend', function () {
       const { lng, lat } = map.getCenter()
       const zoom = map.getZoom()
 
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set('map', `${zoom}/${lat}/${lng}`);
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.set('map', `${zoom}/${lat}/${lng}`)
       history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
     })
   }
