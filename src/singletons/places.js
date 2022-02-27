@@ -6,14 +6,14 @@ class Places {
     const self = this // TODO: replace with bind
     this.parent = document.getElementById('places')
     this.selected = []
+    this.OnSelected = []
 
     const currentPlaces = new URLSearchParams(window.location.search).getAll('places')
 
     map.on('load', function () {
       currentPlaces.forEach((place) => {
         const args = place.split(',')
-        console.log(args)
-        self.add(+args[0], +args[1], args[2])
+        self.add(+args[0], +args[1], args[2]) //TODO: if bad args ?
       })
     })
 
@@ -43,8 +43,15 @@ class Places {
   }
 
   selectPlace (event, element) {
-    // element.setAttribute('selected', '')
+    // unselect already selected place until ctrl-alt or maj
+    this.selected.forEach((el) => el.removeAttribute('selected'))
+    this.selected = []
+    // select current place
+    element.setAttribute('selected', '')
+    this.selected.push(element)
+    // do something else (display left panel)
   }
+
 }
 
 const places = new Places()
