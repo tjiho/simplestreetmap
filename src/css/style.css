@@ -101,7 +101,7 @@
   border-bottom: none;
 }
 
-.search-results__result:hover
+.search-results__result:hover, .search-results__result[selected]
 {
   cursor: pointer;
   background-color: var(--main-color);
