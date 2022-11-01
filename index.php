@@ -31,19 +31,6 @@
 <body>
     <div id='map'></div>
     <div id="search-container">
-      <div class="search-container__top">
-        <label class="search-label" for="search-input">
-          <img src="./static/images/helium/search.svg" id="search-button" class="search-label__icon"/>
-          <input type="search" placeholder="search..." id="search-input" class="search-label__input"/>
-        </label>
-        <div id="places">
-        </div>
-      </div>
-      <div id="search-results">
-      </div>
-      <div class="search-container__bottom">
-        <button id="search-close-button">Fermer la recherche</button>
-      </div>
     </div>
     
     <nav id="categories">
@@ -52,12 +39,14 @@
     <!-- todo: add a contextmenu -->
 
     <script type="module">
-      import search from './src/singletons/search.js'
-      import map from './src/singletons/map.js'
+      import { render, html} from './static/vendor/preact/standalone.module.js';
 
+      //import search from './src/singletons/search.js'
+      import map from './src/singletons/map.js'
+      import searchComponent from './src/components/searchComponent.js'
       import PlaceComponent from './src/components/PlaceComponent.js'
       customElements.define('c-place', PlaceComponent)
-
+      render(html`<${searchComponent}/>`, document.getElementById('search-container'));
     </script>
 
     <?php
