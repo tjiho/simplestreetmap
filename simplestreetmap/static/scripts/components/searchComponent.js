@@ -3,7 +3,7 @@ import { fetchSearchResult } from '../tools/api.js'
 
 const CITY_TYPES = ['city', 'town', 'village'];
 
-export default function search(onResultSelected = () => {}) {
+export default function search({onResultSelected = () => {}, id=""}) {
   const [results, setResults] = useState([]);
 
   function onInputSearch(e) {
@@ -13,8 +13,8 @@ export default function search(onResultSelected = () => {}) {
   }
 
   return html`
-      <div>
-        <input type="search" onInput=${onInputSearch}/>
+      <div class="search-container">
+        <input type="search" id="${id}" onInput=${onInputSearch}/>
         <ul class="results">
           ${results.map(searchResult => result({...searchResult, onResultSelected}))}
         </ul>
@@ -26,10 +26,10 @@ function result({ type, name, coord, context, onResultSelected }) {
   const isCity = CITY_TYPES.includes(type);
 
   return html`
-    <li>
-      ${name}
-      <span class="context" onClick=${(e) => onResultSelected(coord)}>${context.join(', ')}</span>
-      ${isCity ? html`<img src="/static/images/helium/home.svg" />` : ''}
+    <li onClick=${(e) => onResultSelected(coord)}>
+      <span class="name">${name}</span>
+      <span class="context">${context.join(', ')}</span>
+      ${isCity ? html`<img src="/static/images/maki/${type}.svg" />` : ''}
     </li>
   `
 }

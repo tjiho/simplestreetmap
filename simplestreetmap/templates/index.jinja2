@@ -30,13 +30,13 @@
         const BASE_MAP_URL = "{{ request.ssm_config['general']['base_map_url'] }}";
     </script>
     <style>
-      body { margin:0; padding:0; }
-      #map { position:absolute; top:0; bottom:0; width:100%; }
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
     </style>
 </head>
 <body>
     <div id='map'></div>
-    <div id="search-container">
+    <div id="left-side-bar">
     </div>
 
     <nav id="categories">
@@ -46,14 +46,20 @@
 
     <script type="module">
 
-      import { render, html} from "{{ request.static_url('simplestreetmap:static/vendor/preact/standalone.module.js') }}";
+        import { render, html} from "{{ request.static_url('simplestreetmap:static/vendor/preact/standalone.module.js') }}";
 
-      //import search from './src/singletons/search.js'
-      import map from "{{ request.static_url('simplestreetmap:static/scripts/singletons/map.js') }}";
-      import searchComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/searchComponent.js') }}";
-      import PlaceComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/PlaceComponent.js') }}";
-      customElements.define('c-place', PlaceComponent);
-      render(html`<${searchComponent}/>`, document.getElementById('search-container'));
+        //import search from './src/singletons/search.js'
+        import map from "{{ request.static_url('simplestreetmap:static/scripts/singletons/map.js') }}";
+        import searchComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/searchComponent.js') }}";
+        import PlaceComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/PlaceComponent.js') }}";
+        customElements.define('c-place', PlaceComponent);
+        render(
+            html`
+                <label for="search-input">Explore the world! What are you looking for?</label>
+                <${searchComponent} id="search-input" onResultSelected="${(e) => console.log(e)}"/>
+            `,
+            document.getElementById('left-side-bar')
+        );
     </script>
 
     <!-- <?php
