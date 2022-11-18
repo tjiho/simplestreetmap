@@ -26,6 +26,7 @@
     <link href="{{ request.static_url('simplestreetmap:static/styles/style.css') }}" rel='stylesheet' />
     <!-- config -->
     <script>
+        const BASE_API_URL = '/api/v1'
         const BASE_MAP_URL = "{{ request.ssm_config['general']['base_map_url'] }}";
     </script>
     <style>
