@@ -1,12 +1,12 @@
 @import './global.css';
 @import './search.css';
+@import './tabs.css';
 
 #left-side-bar
 {
   z-index: 1;
   position: relative;
-  max-width: 350px;
-  background: #fff;
+  /*max-width: 350px;*/
   padding: .5rem;
 }
 

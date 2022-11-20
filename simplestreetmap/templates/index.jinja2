@@ -52,12 +52,28 @@
         import map from "{{ request.static_url('simplestreetmap:static/scripts/singletons/map.js') }}";
         import searchComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/searchComponent.js') }}";
         import PlaceComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/PlaceComponent.js') }}";
+        import tabsComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/tabsComponent.js') }}";
+        import tabExploreComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/tabExploreComponent.js') }}";
+        import tabJourneyComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/tabJourneyComponent.js') }}";
+
         customElements.define('c-place', PlaceComponent);
+        const tabs = [
+          {
+            icon: 'edit-find',
+            label: 'Explore',
+            content: tabExploreComponent,
+            childProps: {},
+            selected: true
+          },
+          {
+            icon: 'compass',
+            label: 'Journey',
+            content: tabJourneyComponent,
+            childProps: {}
+          }
+        ];
         render(
-            html`
-                <label for="search-input">Explore the world! What are you looking for?</label>
-                <${searchComponent} id="search-input" onResultSelected="${(e) => console.log(e)}"/>
-            `,
+            html`<${tabsComponent} tabs="${tabs}" name="left-side-bar"/>`,
             document.getElementById('left-side-bar')
         );
     </script>
