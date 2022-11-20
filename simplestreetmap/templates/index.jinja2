@@ -36,11 +36,11 @@
 </head>
 <body>
     <div id='map'></div>
-    <div id="left-side-bar">
+    <div id="interface">
+      <div id="left-side-bar">
+      </div>
+      <div id='places'></div>
     </div>
-
-    <nav id="categories">
-    </nav>
 
     <!-- todo: add a contextmenu -->
 
@@ -77,7 +77,7 @@
             document.getElementById('left-side-bar')
         );
     </script>
-
+    {% include "components/chipBaseTemplate.jinja2" %}
     <!-- <?php
       include "src/components/ChipBaseTemplate.php";
     ?> -->

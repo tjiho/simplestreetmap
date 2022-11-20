@@ -2,12 +2,17 @@
 @import './search.css';
 @import './tabs.css';
 
+#interface
+{
+  position: relative;
+  z-index: 10;
+}
+
 #left-side-bar
 {
-  z-index: 1;
-  position: relative;
   /*max-width: 350px;*/
   padding: .5rem;
+  display: inline-block;
 }
 
 #search-container *
@@ -122,8 +127,7 @@
 
 #places
 {
-  flex:1;
-  display:flex;
+  display:inline-flex;
   flex-wrap:wrap;
   align-items: center;
   padding-left:1em;

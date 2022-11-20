@@ -3,20 +3,19 @@
 :host {
   display: flex;
   align-items: center;
-  
+
   padding: 0.25em;
   margin: 0.25em;
   padding-right: 0.5em;
   border-radius: 1.5em;
-  
+
   color: var(--main-color);
   border: 2px solid var(--main-color);
   background-color: #e6e3e3;
   box-shadow:var(--shadow);
-  
+
   cursor:pointer;
   gap:4px;
-  
 }
 
 :host([selected]){
