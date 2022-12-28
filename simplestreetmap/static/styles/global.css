@@ -1,3 +1,5 @@
+@import url('https://static.ppsfleet.navy/fonts/Besley/style.css');
+@import url('https://static.ppsfleet.navy/fonts/russisch-sans/style.css');  
 :root
 {
   --main-color: #69369B;
@@ -21,4 +23,9 @@
 .icon--white
 {
     filter: invert(100%);
+}
+
+h2
+{
+    margin: 0.5rem 0;
 }

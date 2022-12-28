@@ -11,7 +11,8 @@ export default function tabExploreComponent() {
   }
 
   return html`
-    <label for="search-input">Explore the world! What are you looking for?</label>
+    <h2>Explore the world!</h2>
+    <label for="search-input">What are you looking for?</label>
     <${searchComponent} id="search-input" onResultSelected="${addPlace}"/>
   `
 }

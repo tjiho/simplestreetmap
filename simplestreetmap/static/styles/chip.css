@@ -16,6 +16,7 @@
 
   cursor:pointer;
   gap:4px;
+  z-index: -1;
 }
 
 :host([selected]){

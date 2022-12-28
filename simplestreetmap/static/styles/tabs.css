@@ -16,9 +16,13 @@
 
 [role=tabpanel] {
   background-color: white;
-  padding: 0.25rem;
+  padding: 0.5rem;
   width: 300px;
   display: none;
+}
+
+[role=tabpanel] h2 {
+  font-family: 'Besley';
 }
 
 [role=tabpanel].is-selected {

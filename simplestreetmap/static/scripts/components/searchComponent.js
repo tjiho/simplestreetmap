@@ -4,6 +4,14 @@ import { fetchSearchResult } from '../tools/api.js'
 const CITY_TYPES = ['city', 'town', 'village'];
 
 export default function search({onResultSelected = () => {}, id=""}) {
+  // TODO: add a cross to clear the autocomplete
+  // TODO: add keyboard navigation -> up/down to select, enter to validate, escape to close the autocomplete
+  // TODO: add a loading indicator
+  // TODO: add a "no result" message
+  // TODO: darken the background when the autocomplete is open
+  // TODO: highlight search term in the results
+  // TODO: kill old requests when the user types something new
+
   const [results, setResults] = useState([]);
 
   function onInputSearch(e) {
@@ -12,9 +20,13 @@ export default function search({onResultSelected = () => {}, id=""}) {
     fetchSearchResult(searchValue).then(setResults)
   }
 
+  function blur(e) {
+    setResults([])
+  }
+
   return html`
-      <div class="search-container">
-        <input type="search" id="${id}" onInput=${onInputSearch}/>
+      <div class="search-container" autoCompleted=${results.length > 0 ? 'true' : null}>
+        <input type="search" id="${id}" onInput=${onInputSearch} onBlur=${blur} onFocus=${onInputSearch}/>
         <ul class="results">
           ${results.map(searchResult => result({...searchResult, onResultSelected}))}
         </ul>
