@@ -21,7 +21,7 @@ export default function search({onResultSelected = () => {}, id=""}) {
   }
 
   function blur(e) {
-    setResults([])
+    setTimeout(() => setResults([]), 200) //to fix
   }
 
   return html`
