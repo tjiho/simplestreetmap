@@ -40,6 +40,26 @@ class Map extends mapboxgl.Map {
       history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
     })
   }
+
+  printItinerary(path,id) {
+    this.addSource(id, {
+      'type': 'geojson',
+      'data': path
+    });
+    this.addLayer({
+      'id': id,
+      'type': 'line',
+      'source': id,
+      'layout': {
+      'line-join': 'round',
+      'line-cap': 'round'
+      },
+      'paint': {
+      'line-color': '#888',
+      'line-width': 8
+      }
+    });
+  }
 }
 
 const map = new Map()

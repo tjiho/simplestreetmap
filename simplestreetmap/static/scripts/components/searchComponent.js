@@ -1,9 +1,11 @@
 import { html, Component, render, createContext, useState, useEffect } from '../../../static/vendor/preact/standalone.module.js';
 import { fetchSearchResult } from '../tools/api.js'
+import debounce from '../tools/debounce.js'
 
+const debounceSearch = debounce(fetchSearchResult, 300)
 const CITY_TYPES = ['city', 'town', 'village'];
 
-export default function search({onResultSelected = () => {}, id=""}) {
+export default function search({onResultSelected = () => {}, id="",value=""}) {
   // TODO: add a cross to clear the autocomplete
   // TODO: add keyboard navigation -> up/down to select, enter to validate, escape to close the autocomplete
   // TODO: add a loading indicator
@@ -13,22 +15,35 @@ export default function search({onResultSelected = () => {}, id=""}) {
   // TODO: kill old requests when the user types something new
 
   const [results, setResults] = useState([]);
+  //const [searchController, setSearchController] = useState(null);
+  const [searchValue,setSearchValue] = useState('')
 
   function onInputSearch(e) {
 		const searchValue = e.target.value
+    setSearchValue(searchValue)
+    
+      //if (searchController) { searchController.abort() }
+      //setSearchController(new AbortController())
+      //const signal = searchController.signal
+    
+    debounceSearch(searchValue).then(setResults)
+  }
 
-    fetchSearchResult(searchValue).then(setResults)
+  function _onResultSelected(coord, name) {
+    onResultSelected(coord, name)
+    setResults([])
+    setSearchValue(name)
   }
 
   function blur(e) {
-    setTimeout(() => setResults([]), 200) //to fix
+    setTimeout(() => setResults([]), 300) //to fix
   }
 
   return html`
       <div class="search-container" autoCompleted=${results.length > 0 ? 'true' : null}>
-        <input type="search" id="${id}" onInput=${onInputSearch} onBlur=${blur} onFocus=${onInputSearch}/>
+        <input type="search" id="${id}" onInput=${onInputSearch} onBlur=${blur} onFocus=${onInputSearch} autocomplete="off" value=${searchValue}/>
         <ul class="results">
-          ${results.map(searchResult => result({...searchResult, onResultSelected}))}
+          ${results.map(searchResult => result({...searchResult, onResultSelected: _onResultSelected}))}
         </ul>
       </div>
     `
