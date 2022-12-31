@@ -10,7 +10,7 @@ class Map extends mapboxgl.Map {
       container: 'map',
       style: BASE_MAP_URL,
       center: [lng, lat],
-      zoom: zoom
+      zoom
     })
 
     const nav = new mapboxgl.NavigationControl()
@@ -41,24 +41,24 @@ class Map extends mapboxgl.Map {
     })
   }
 
-  printItinerary(path,id) {
+  printItinerary (path, id) {
     this.addSource(id, {
-      'type': 'geojson',
-      'data': path
-    });
+      type: 'geojson',
+      data: path
+    })
     this.addLayer({
-      'id': id,
-      'type': 'line',
-      'source': id,
-      'layout': {
-      'line-join': 'round',
-      'line-cap': 'round'
+      id,
+      type: 'line',
+      source: id,
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
       },
-      'paint': {
-      'line-color': '#888',
-      'line-width': 8
+      paint: {
+        'line-color': '#888',
+        'line-width': 8
       }
-    });
+    })
   }
 }
 

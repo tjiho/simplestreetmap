@@ -1,5 +1,6 @@
 @import './global.css';
 @import './search.css';
+@import './itinerary.css';
 @import './tabs.css';
 @import './button.css';
 
@@ -15,104 +16,6 @@
   /*max-width: 350px;*/
   padding: .5rem;
   display: inline-block;
-}
-
-#search-container *
-{
-  box-sizing: border-box;
-}
-
-.search-container__top
-{
-  display: flex;
-  flex-direction: row;
-}
-
-.search-label
-{
-  border: none;
-  padding: 0em 1em;
-  background-color: #000000aa;
-  color: white;
-  border-radius: 5px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  box-shadow: var(--shadow);
-  width: 350px;
-  max-width: calc(100% - 2em);
-  margin: 1em;
-}
-
-.search-label__input
-{
-  background-color:lightgrey;
-  flex: 1;
-  background-color: transparent;
-  border: none;
-  padding: 0.8em;
-  font-size: 1.1em;
-  color:white;
-}
-
-.search-label__input:focus {
-    outline: none !important;
-}
-
-.search-label__input::placeholder
-{
-  color:white;
-}
-
-
-.search-label__icon
-{
-  height: 50%;
-  vertical-align: middle;
-  filter: invert(100%);
-  cursor: pointer;
-}
-
-
-.search-container__bottom
-{
-  display:none;
-}
-
-
-#search-results
-{
-  width: 350px;
-  max-width: 100%;
-  position: absolute;
-  left: 1em;
-  top: calc(50px + 1em);
-  margin-top:0px;
-  box-shadow:var(--shadow);
-  border-radius: 0px 0px 5px 5px;
-}
-
-.search-results__result {
-  margin: 0;
-  border-radius: unset;
-  width: 100%;
-  border-bottom: 1px solid var(--line-color);
-  padding: 16px;
-  background-color: white;
-}
-
-
-
-.search-results__result:last-child
-{
-  border-bottom: none;
-}
-
-.search-results__result:hover, .search-results__result[selected]
-{
-  cursor: pointer;
-  background-color: var(--main-color);
-  color: var(--main-contrast-text);
 }
 
 .marker

@@ -13,7 +13,7 @@ class Places {
     map.on('load', function () {
       currentPlaces.forEach((place) => {
         const args = place.split(',')
-        self.add(+args[0], +args[1], args[2]) //TODO: if bad args ?
+        self.add(+args[0], +args[1], args[2]) // TODO: if bad args ?
       })
     })
 
@@ -51,7 +51,6 @@ class Places {
     this.selected.push(element)
     // do something else (display left panel)
   }
-
 }
 
 const places = new Places()

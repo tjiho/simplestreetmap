@@ -6,7 +6,8 @@
   --main-color-transparent-25: rgba(105, 54, 155, 0.25);
   --main-contrast-text: white;
   --shadow:0px 0px 15px 5px rgba(0,0,0,0.2);
-  --line-color: #d3d3d380;
+  --line-color-small-contrast: #ddd;
+  --line-color-big-contrast: #979797;
 }
 
 *
@@ -29,3 +30,25 @@ h2
 {
     margin: 0.5rem 0;
 }
+
+.flex
+{
+    display: flex
+}
+
+.flex.center
+{
+    justify-content: center;
+    align-items: center;
+}
+
+.fullHeight
+{
+    height: 100%;
+}
+
+.fullWidth
+{
+    width:100%;
+}
+

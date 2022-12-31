@@ -49,36 +49,32 @@
 
         //import search from './src/singletons/search.js'
         import map from "{{ request.static_url('simplestreetmap:static/scripts/singletons/map.js') }}";
-        import searchComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/searchComponent.js') }}";
         import PlaceComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/PlaceComponent.js') }}";
-        import tabsComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/tabsComponent.js') }}";
-        import tabExploreComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/tabExploreComponent.js') }}";
-        import tabJourneyComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/tabJourneyComponent.js') }}";
+        import TabsComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabsComponent.js') }}";
+        import TabExploreComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabExploreComponent.js') }}";
+        import TabJourneyComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabJourneyComponent.js') }}";
 
         customElements.define('c-place', PlaceComponent);
         const tabs = [
           {
             icon: 'edit-find',
             label: 'Explore',
-            content: tabExploreComponent,
+            content: TabExploreComponent,
             childProps: {},
             selected: true
           },
           {
             icon: 'compass',
             label: 'Journey',
-            content: tabJourneyComponent,
+            content: TabJourneyComponent,
             childProps: {}
           }
         ];
         render(
-            html`<${tabsComponent} tabs="${tabs}" name="left-side-bar"/>`,
+            html`<${TabsComponent} tabs="${tabs}" name="left-side-bar"/>`,
             document.getElementById('left-side-bar')
         );
     </script>
     {% include "components/chipBaseTemplate.jinja2" %}
-    <!-- <?php
-      include "src/components/ChipBaseTemplate.php";
-    ?> -->
 </body>
 </html>

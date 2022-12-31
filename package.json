@@ -1,0 +1,12 @@
+{
+  "name": "simplestreetmap",
+  
+  "standard": {
+    "globals": ["mapboxgl","history","BASE_API_URL","BASE_MAP_URL","HTMLElement","BASE_SEARCH_URL","BASE_REVERSE_URL" ],
+    "ignore": [
+      "/simplestreetmap/static/vendor/",
+      "/build"
+    ]
+  }
+  
+}

@@ -43,8 +43,7 @@ export default class PlaceComponent extends ChipBaseComponent {
   updateUrl () {
     if (this._name && this._lat && this._lng) {
       const urlParams = new URLSearchParams(window.location.search)
-      if(!urlParams.getAll('places').find((place) => place === `${this._lat},${this._lng},${this._name}`))
-      {
+      if (!urlParams.getAll('places').find((place) => place === `${this._lat},${this._lng},${this._name}`)) {
         urlParams.append('places', `${this._lat},${this._lng},${this._name}`)
         history.replaceState(null, null, `${document.location.pathname}?${urlParams}`)
       }

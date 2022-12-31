@@ -1,0 +1,13 @@
+.itinerary-summmary-list {
+    display: flex;
+    flex-direction: column;
+    gap:0.5rem;
+    margin: 0.25rem;
+    padding: 0;
+}
+
+.itinerary-summmary {
+    border: 1px solid var(--line-color-small-contrast);
+    padding: 0.5rem;
+    list-style-type: none;
+}

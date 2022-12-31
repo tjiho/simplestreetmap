@@ -29,6 +29,10 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
             }]
         '''
         res = []
+
+        if not 'journeys' in response:
+            return [] # TODO: return 404 instead
+        
         for journey in response['journeys']:
             curr_journey = {}
             curr_journey['distances'] = journey['distances']

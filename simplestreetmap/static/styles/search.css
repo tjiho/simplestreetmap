@@ -1,7 +1,7 @@
 .search-container {
   display: flex;
   flex-direction: column;
-  border: solid 1px #979797;
+  border: solid 1px var(--line-color-big-contrast);
   border-radius: 0.25rem;
   position: relative;
 }
@@ -27,7 +27,7 @@
   content: '';
   width: 90%;
   position: absolute;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--line-color-small-contrast);
   left: 5%;
   top: -0.25rem;
 }
