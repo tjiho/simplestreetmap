@@ -41,11 +41,7 @@ class Map extends mapboxgl.Map {
     })
   }
 
-  printItinerary (path, id) {
-    this.addSource(id, {
-      type: 'geojson',
-      data: path
-    })
+  printItinerary (id) {
     this.addLayer({
       id,
       type: 'line',
