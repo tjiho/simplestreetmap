@@ -41,7 +41,7 @@ class Map extends mapboxgl.Map {
     })
   }
 
-  printItinerary (id) {
+  printItinerary (id,color) {
     this.addLayer({
       id,
       type: 'line',
@@ -51,8 +51,9 @@ class Map extends mapboxgl.Map {
         'line-cap': 'round'
       },
       paint: {
-        'line-color': '#888',
-        'line-width': 8
+        'line-color': color,
+        'line-width': 4,
+        'line-opacity': 1
       }
     })
   }

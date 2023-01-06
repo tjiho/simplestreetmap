@@ -13,6 +13,8 @@ export default class Journey {
     this.path = this.mergePath()
     this.alternatives = [] // other journeys return by the api for the same itinerary
     this.display = this._display.bind(this)
+    this.setColor = this._setColor.bind(this)
+    this.moveOnTop = this._moveOnTop.bind(this)
     this.addSource()
   }
 
@@ -31,7 +33,21 @@ export default class Journey {
   }
 
   _display() {
-    map.printItinerary(this.id)
+    //TODO: layer des nom de villes au dessus
+    map.printItinerary(this.id,this.color)
+  }
+
+  _setColor(color) {
+    this.color = color
+    map.setPaintProperty(
+      this.id,
+      'line-color',
+      color
+    );
+  }
+
+  _moveOnTop() {
+    map.moveLayer(this.id)
   }
 
 

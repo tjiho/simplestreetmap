@@ -67,18 +67,18 @@ function JourneyListComponent({from, to, backToForm}) {
   const [journeyList, setJourneyList] = useState(null)
 
   useEffect(() => {
-    /*
+    console.log(from.coordinates, to.coordinates)
     fetchItinerary(from.coordinates, to.coordinates).then((value) => {
-      setItinerary(value)
-      setLoading(false)
-    })*/
-    const journeysPlain = toulousePau
-    const journeys = journeysPlain.map((j) => {
-        const journeyObj = new Journey({from, to, ...j})
+      const journeysPlain = value
+      console.log(journeysPlain)
+      const journeys = journeysPlain.map((j) => {
+        const journeyObj = new Journey({from, to, color: "#ab9aba",...j})
+        journeyObj.display()
         return journeyObj
+      })
+      setJourneyList(journeys)
+      setLoading(false)
     })
-    setJourneyList(journeys)
-    setLoading(false)
   }, [from, to])
 
   return (loading || !journeyList)
@@ -94,13 +94,18 @@ function JourneyListComponent({from, to, backToForm}) {
   `
 }
 
-function JourneySummaryComponent({distances, duration, sections, display}) {
+function JourneySummaryComponent({distances, duration, sections, display, setColor, moveOnTop}) {
   function hover() {
+    setColor("#69369B")
+    moveOnTop()
+  }
 
+  function out() {
+    setColor("#ab9aba")
   }
 
   return html`
-    <li class="itinerary-summmary" onmouseover=${hover} >
+    <li class="itinerary-summmary" onmouseover=${hover} onmouseout=${out}>
       <div>Distance: </div>
       <div>Duration: ${simplifyDuration(duration)}</div>
       <div>Steps: ${sections.length}</div>

@@ -10,4 +10,10 @@
     border: 1px solid var(--line-color-small-contrast);
     padding: 0.5rem;
     list-style-type: none;
+    box-sizing:border-box;
+}
+
+.itinerary-summmary:hover {
+    border: 2px solid var(--main-color);
+    padding: calc(0.5rem - 1px);
 }
