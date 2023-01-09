@@ -15,8 +15,8 @@ export default function TabJourneyComponent() {
     childrenProps: {onSubmit: findItinerary}
   })
 
-  function findItinerary(from, to) {
-    setChildren({Children: JourneyListComponent, childrenProps: {from, to, backToForm}})
+  function findItinerary(from, to, mode) {
+    setChildren({Children: JourneyListComponent, childrenProps: {from, to, mode, backToForm}})
   }
 
   function backToForm(e) {
@@ -44,13 +44,22 @@ function ItineraryFormComponent({onSubmit}) {
   }
 
   function _onSubmit(e) {
-    onSubmit(from, to)
+    const mode = document.getElementById("journey-mode-input").value
+    console.log(document.getElementById("journey-mode-input"))
+    onSubmit(from, to, mode)
     e.preventDefault()
     return false
   }
 
   return html`
     <form onSubmit=${_onSubmit}>
+      <label for="journey-mode-input">Mode</label>
+      <br/>
+      <select name="mode" id="journey-mode-input">
+          <option value="bike">Bike</option>
+          <option value="public_transport">Public transport</option>
+      </select>
+      <br/>
       <label for="journey-from-input">Start</label>
       <${SearchComponent} id="journey-from-input" onResultSelected="${AddStartPoint}"/>
       <label for="journey-to-input">End</label>
@@ -60,7 +69,7 @@ function ItineraryFormComponent({onSubmit}) {
   `
 }
 
-function JourneyListComponent({from, to, backToForm}) {
+function JourneyListComponent({from, to, mode, backToForm}) {
   // TODO: add not found status
 
   const [loading, setLoading] = useState(true)
@@ -68,11 +77,11 @@ function JourneyListComponent({from, to, backToForm}) {
 
   useEffect(() => {
     console.log(from.coordinates, to.coordinates)
-    fetchItinerary(from.coordinates, to.coordinates).then((value) => {
+    fetchItinerary(from.coordinates, to.coordinates, mode).then((value) => {
       const journeysPlain = value
       console.log(journeysPlain)
       const journeys = journeysPlain.map((j) => {
-        const journeyObj = new Journey({from, to, color: "#ab9aba",...j})
+        const journeyObj = new Journey({from, to, mode, color: "#ab9aba",...j})
         journeyObj.display()
         return journeyObj
       })
@@ -81,12 +90,19 @@ function JourneyListComponent({from, to, backToForm}) {
     })
   }, [from, to])
 
+  function _backToForm(e) {
+    journeyList.forEach(j => {
+      j.hide()
+      j.destroy()
+    });
+    backToForm(e)
+  }
   return (loading || !journeyList)
     ? LoadingComponent({})
     : html`
     <div>
       <h3>From ${from.placeName} to ${to.placeName}</h3>
-      <button onClick=${backToForm}>Look for an other itinerary</button>
+      <button onClick=${_backToForm}>Look for an other itinerary</button>
       <ul class="itinerary-summmary-list">
         ${journeyList.map(JourneySummaryComponent)}
       </ul>

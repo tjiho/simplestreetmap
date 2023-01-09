@@ -7,45 +7,13 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
         self.url = 'https://api.navitia.io/v1/journeys'
         self.token = '2b515b9b-846a-4ad5-9419-66e1f1832a83'
     
-    def itinerary(self, origin, destination, dateTime=None, mode=None):
+    def itinerary(self, origin_lon, origin_lat, destination_lon, destination_lat, dateTime=None, mode=None):
         print('Requesting navitia...')
+        origin = "%s;%s" % (origin_lon, origin_lat)
+        destination = "%s;%s" % (destination_lon, destination_lat)
         response = requests.get(self.url, params = {'from': origin, 'to':destination, 'key':self.token }).json()
         print('Navitia response received')
-        '''
-            [{
-                path: geoJSON
-                duration: time in seconds
-                distances: distance in meters
-                co2_emissions: co2 emissions in grams
-                sections: [{
-                    path: geoJSON
-                    duration: time in seconds
-                    distances: distance in meters
-                    co2_emissions: co2 emissions in grams
-                    mode: oneOf('public_transport','walking','bike','car','taxi','ridesharing')
-                    departure_time: datetime(yyyymmddThhmmss)
-                    instructions: []
-                    elevations: []
-                    from: {
-                        name,
-                        coord: [lat,lon],
-                    }
-                    to : {
-                        name,
-                        coords: [lat,lon]
-                    }
-                    // if public_transport
-                    transport_info: {
-                        type: oneOf('metro','bus',train')
-                        network: 'Toulouse - tisseo'
-                        direction: name (ex: Ramonville (Ramonville-Saint-Agne))
-                        line_name: lineo 4 or A or TER/TGV or 65
-                        line_bg_color: color (ex: FFDD00)
-                        line_text_color: color
-                    }
-                }]
-            }]
-        '''
+
         res = []
 
         if not 'journeys' in response:

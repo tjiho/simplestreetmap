@@ -1,7 +1,7 @@
 import map from "../singletons/map.js";
 
 export default class Journey {
-  constructor({from, to, mode = 0, color = null, distances, sections, duration, path}) {
+  constructor({from, to, mode, color = null, distances, sections, duration, path}) {
     this.id = crypto.randomUUID();
     this.from = from;
     this.to = to;
@@ -15,6 +15,8 @@ export default class Journey {
     this.display = this._display.bind(this)
     this.setColor = this._setColor.bind(this)
     this.moveOnTop = this._moveOnTop.bind(this)
+    this.hide = this._hide.bind(this)
+    this.destroy = this._destroy.bind(this)
     this.addSource()
   }
 
@@ -48,6 +50,14 @@ export default class Journey {
 
   _moveOnTop() {
     map.moveLayer(this.id)
+  }
+
+  _hide() {
+    map.removeLayer(this.id)
+  }
+
+  _destroy() {
+    map.removeSource(this.id)
   }
 
 
