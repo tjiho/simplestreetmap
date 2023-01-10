@@ -28,17 +28,12 @@
         const BASE_API_URL = '/api/v1'
         const BASE_MAP_URL = "{{ request.ssm_config['general']['base_map_url'] }}";
     </script>
-    <style>
-        body { margin:0; padding:0; }
-        #map { position:absolute; top:0; bottom:0; width:100%; }
-    </style>
 </head>
 <body>
     <div id='map'></div>
-    <div id="interface">
-      <div id="left-side-bar">
-      </div>
-      <div id='places'></div>
+    <div id="left-side-bar">
+    </div>
+    <div id="annotations">
     </div>
 
     <!-- todo: add a contextmenu -->
@@ -53,6 +48,7 @@
         import TabsComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabsComponent.js') }}";
         import TabExploreComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabExploreComponent.js') }}";
         import TabJourneyComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabJourneyComponent.js') }}";
+        import ListAnnotationsComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/ListAnnotationsComponent.js') }}";
 
         customElements.define('c-place', PlaceComponent);
         const tabs = [
@@ -73,6 +69,11 @@
         render(
             html`<${TabsComponent} tabs="${tabs}" name="left-side-bar"/>`,
             document.getElementById('left-side-bar')
+        );
+
+        render(
+          html`<${ListAnnotationsComponent}/>`,
+          document.getElementById('annotations')
         );
     </script>
     {% include "components/chipBaseTemplate.jinja2" %}

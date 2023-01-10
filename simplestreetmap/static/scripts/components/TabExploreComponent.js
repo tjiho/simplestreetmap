@@ -1,11 +1,11 @@
 import { html } from '../../../static/vendor/preact/standalone.module.js'
 import SearchComponent from './SearchComponent.js'
-import places from '../singletons/places.js'
+import Place from '../models/Place.js'
 import map from '../singletons/map.js'
 
 export default function TabExploreComponent () {
   function addPlace (coordinates, placeName) {
-    places.add(coordinates[1], coordinates[0], placeName)
+    new Place({ lat: coordinates[1], lng: coordinates[0], name: placeName })
     map.flyTo({ center: coordinates, zoom: 13 })
   }
 

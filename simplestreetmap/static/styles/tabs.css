@@ -21,10 +21,6 @@
   display: none;
 }
 
-[role=tabpanel] h2 {
-  font-family: 'Besley';
-}
-
 [role=tabpanel].is-selected {
   display: block;
 }

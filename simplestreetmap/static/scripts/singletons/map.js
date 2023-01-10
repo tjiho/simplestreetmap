@@ -39,23 +39,27 @@ class Map extends mapboxgl.Map {
       searchParams.set('map', `${zoom}/${lat}/${lng}`)
       history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
     })
+
+    this.on('load', function () {
+
+    })
+
+    this.annotations = [] // itineraries, places, drawings, etc.
+    this.callbacksOnAnnotationsChange = []
+    /*
+    places: name, coordinates, temporal information
+    itineraries: name, start, end, temporal information, color
+
+    */
   }
 
-  printItinerary (id,color) {
-    this.addLayer({
-      id,
-      type: 'line',
-      source: id,
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
-      paint: {
-        'line-color': color,
-        'line-width': 4,
-        'line-opacity': 1
-      }
-    })
+  pushAnnotations (element) {
+    this.annotations.push(element)
+    this.callbacksOnAnnotationsChange.forEach(callback => callback(element, this.annotations))
+  }
+
+  onAnnotationsChange (callback) {
+    this.callbacksOnAnnotationsChange.push(callback)
   }
 }
 
