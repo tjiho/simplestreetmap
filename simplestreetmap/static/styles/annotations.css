@@ -1,4 +1,45 @@
-#annotations ul {
+#annotations > ul {
     margin: 0;
     padding-left: 1rem;
+}
+
+.annotations-line {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.annotations-line__icon {
+    height: 1.5rem;
+    border-radius: 4px;
+    background-color: var(--main-color);
+    padding: 0.1rem;
+}
+
+.annotations-line__actions {
+    display: flex;
+    gap:0.5rem;
+    align-items: center;
+}
+
+.annotations-line__name {
+    cursor: pointer;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.annotations-line__name:hover {
+    text-decoration: underline;
+}
+
+.annotations-line__actions button {
+    height: 2rem;
+    width: 2rem;
+    background-color: transparent;
+    border:none;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
 }

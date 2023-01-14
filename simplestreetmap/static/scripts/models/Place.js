@@ -1,8 +1,9 @@
 import map from '../singletons/map.js'
+import AbstractAnnotation from "./AbstractAnnotation.js";
 
-export default class Place {
+export default class Place extends AbstractAnnotation {
   constructor ({ lat, lng, name }) {
-    this.id = crypto.randomUUID()
+    super()
     this.lat = lat
     this.lng = lng
     this.name = name
@@ -28,10 +29,6 @@ export default class Place {
   }
 
   destroy () {
-    map.removeSource(this.id)
-  }
-
-  saveToAnnotations () {
-    map.pushAnnotations(this)
+    this?.marker?.remove()
   }
 }

@@ -44,7 +44,7 @@ class Map extends mapboxgl.Map {
 
     })
 
-    this.annotations = [] // itineraries, places, drawings, etc.
+    this.annotations = {} // itineraries, places, drawings, etc. {id: annotation}
     this.callbacksOnAnnotationsChange = []
     /*
     places: name, coordinates, temporal information
@@ -53,9 +53,14 @@ class Map extends mapboxgl.Map {
     */
   }
 
-  pushAnnotations (element) {
-    this.annotations.push(element)
-    this.callbacksOnAnnotationsChange.forEach(callback => callback(element, this.annotations))
+  pushAnnotation (element) {
+    this.annotations[element.id] = element
+    this.callbacksOnAnnotationsChange.forEach(callback => callback('add',element, this.annotations))
+  }
+
+  removeAnnotation(element) {
+    delete this.annotations[element.id]
+    this.callbacksOnAnnotationsChange.forEach(callback => callback('remove',element, this.annotations))
   }
 
   onAnnotationsChange (callback) {

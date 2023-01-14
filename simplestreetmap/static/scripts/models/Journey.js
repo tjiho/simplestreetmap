@@ -1,8 +1,9 @@
 import map from '../singletons/map.js'
+import AbstractAnnotation from "./AbstractAnnotation.js";
 
-export default class Journey {
+export default class Journey extends AbstractAnnotation {
   constructor ({ name, from, to, mode, color = null, distances, sections, duration, path }) {
-    this.id = crypto.randomUUID()
+    super()
     this.objectType = 'journey'
     this.name = from.placeName + ' - ' + to.placeName
     this.from = from
@@ -68,9 +69,5 @@ export default class Journey {
 
   destroy () {
     map.removeSource(this.id)
-  }
-
-  saveToAnnotations () {
-    map.pushAnnotations(this)
   }
 }
