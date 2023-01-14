@@ -61,10 +61,15 @@ export default class Journey extends AbstractAnnotation {
         'line-opacity': 1
       }
     })
+
+    this.visible = true
+    return this.visible
   }
 
   hide () {
     map.removeLayer(this.id)
+    this.visible = false
+    return this.visible
   }
 
   destroy () {

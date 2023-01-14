@@ -22,13 +22,21 @@ export default class Place extends AbstractAnnotation {
     this.marker = new mapboxgl.Marker({ color: '#69369B' })
       .setLngLat([this.lng, this.lat])
       .addTo(map)
+    this.visible = true
+    return this.visible
   }
 
   hide () {
     this?.marker?.remove()
+    this.visible = false
+    return this.visible
   }
 
   destroy () {
     this?.marker?.remove()
+  }
+
+  zoomOn() {
+    map.flyTo({ center: [this.lng, this.lat], zoom: 13 })
   }
 }

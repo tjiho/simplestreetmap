@@ -13,37 +13,63 @@ export default function ListAnnotationsComponent() {
   return html`
     <h2>Annotations</h2>
     <ul>
-      ${Object.values(annotations).map((annotations) => AnnotationLineComponent({
-        name: annotations.name,
-        objectType: annotations.objectType,
-        removeFromAnnotations: annotations.removeFromAnnotations.bind(annotations)
+      ${Object.values(annotations).map((annotation) => AnnotationLineComponent({
+        name: annotation.name,
+        objectType: annotation.objectType,
+        removeFromAnnotations: annotation.removeFromAnnotations.bind(annotation),
+        baseVisible: annotation.visible,
+        show: annotation.show.bind(annotation),
+        hide: annotation.hide.bind(annotation),
+        zoomOn: annotation.zoomOn.bind(annotation),
+        key: annotation.id
       }))}
     </ul>
   `
 }
 
-function AnnotationLineComponent({name, objectType, removeFromAnnotations}) {
+function AnnotationLineComponent({name, objectType, removeFromAnnotations, baseVisible, show, hide, zoomOn}) {
+
+  const [visible, setVisibility] = useState(baseVisible)
 
   function _removeAnnotation(e) {
     removeFromAnnotations()
     e.preventDefault()
   }
 
+  function _show(e) {
+    setVisibility(show())
+    e.preventDefault()
+  }
+
+  function _hide(e) {
+    setVisibility(hide())
+    e.preventDefault()
+  }
+
+  function _zoomOn(e) {
+    zoomOn()
+    e.preventDefault()
+  }
+
   return html`
-    <li class="annotations-line">
+    <li class="annotations-line" title="${name}">
       ${AnnotationIconTypeComponent({objectType})}
-      <span class="annotations-line__name">${name}</span>
+      <span class="annotations-line__name" onClick=${_zoomOn}>${name}</span>
       <div class="annotations-line__actions">
-        <button>
-          <img src="/static/images/breeze/document-edit.svg"/>
+        <button title="Edit annotation">
+          <img src="/static/images/breeze/document-edit.svg" alt="pen icon"/>
         </button>
 
-        <button>
-          <img src="/static/images/breeze/view-visible.svg"/>
+        <button onclick="${visible ? _hide : _show}" title="${visible ? "Hide annotation" : "Show annotation"}">
+          ${
+            visible
+            ? html`<img src="/static/images/breeze/view-visible.svg" alt="eye icon"/>`
+            : html`<img src="/static/images/breeze/view-hidden.svg" alt="eye crossed icon"/>`
+          }
         </button>
 
-        <button onclick="${_removeAnnotation}">
-          <img src="/static/images/breeze/edit-delete-black.svg"/>
+        <button onclick="${_removeAnnotation}" title="Remove annotation">
+          <img src="/static/images/breeze/edit-delete-black.svg" alt="trash icon"/>
         </button>
       </div>
     </li>

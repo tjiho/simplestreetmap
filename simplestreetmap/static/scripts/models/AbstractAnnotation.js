@@ -3,6 +3,7 @@ import map from '../singletons/map.js'
 export default class AbstractAnnotation {
   constructor () {
     this.id = crypto.randomUUID()
+    this.visible = true
   }
 
   setColor (color) {}
