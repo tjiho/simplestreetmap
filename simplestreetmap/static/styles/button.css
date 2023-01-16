@@ -1,5 +1,11 @@
 .standard-button {
     cursor: pointer;
-    padding: 0.25rem 1rem;
+    padding: 0.5rem 1rem;
     font-size: 1rem;
+    background-color: var(--main-color);
+    border: none;
+    color: white;
+    max-width: 200px;
+    border-radius: 4px;
+    font-weight: 600;
 }

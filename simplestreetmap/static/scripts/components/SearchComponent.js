@@ -53,7 +53,7 @@ function result ({ type, name, coord, context, onResultSelected }) {
   const isCity = CITY_TYPES.includes(type)
 
   return html`
-    <li onClick=${(e) => onResultSelected(coord, name)}>
+    <li onClick=${(e) => onResultSelected(coord, name, context)}>
       <span class="name">${name}</span>
       <span class="context">${context.join(', ')}</span>
       ${isCity ? html`<img src="/static/images/maki/${type}.svg" />` : ''}
