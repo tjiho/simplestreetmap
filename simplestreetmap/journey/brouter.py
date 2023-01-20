@@ -7,10 +7,10 @@ class BrouterJourneyAdapter(BaseJourneyAdapter):
         self.url = 'https://brouter.maps.ppsfleet.navy'
         self.token = '2b515b9b-846a-4ad5-9419-66e1f1832a83'
 
-    def itinerary(self, origin_lon, origin_lat, destination_lon, destination_lat, dateTime=None, mode=None):
+    def itinerary(self, origin_lon, origin_lat, destination_lon, destination_lat, profile='trekking', dateTime=None, mode=None):
         print('Requesting Brouter...')
         lonlats="%s,%s|%s,%s" % (origin_lon, origin_lat, destination_lon, destination_lat)
-        response = requests.get(self.url, params = {'profile':'safeCycle','lonlats': lonlats,'format':'geojson','alternativeidx':0 }).json()
+        response = requests.get(self.url, params = {'profile':profile,'lonlats': lonlats,'format':'geojson','alternativeidx':0 }).json()
         print('Brouter response received')
 
         if not 'features' in response:

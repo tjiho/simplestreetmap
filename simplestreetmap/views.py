@@ -21,8 +21,17 @@ def itinerary_view(request):
             request.params['from'].split(',')[0],
             request.params['from'].split(',')[1],
             request.params['to'].split(',')[0],
-            request.params['to'].split(',')[1]
+            request.params['to'].split(',')[1],
+            profile='trekking'
         )
+    elif mode == 'walk':
+            return request.brouter_adapter.itinerary(
+                request.params['from'].split(',')[0],
+                request.params['from'].split(',')[1],
+                request.params['to'].split(',')[0],
+                request.params['to'].split(',')[1],
+                profile='walking'
+            )
 
 def index_view(request):
     return {}
