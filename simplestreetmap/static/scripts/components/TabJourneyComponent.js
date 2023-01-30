@@ -55,6 +55,7 @@ function JourneyFormComponent({onSubmit}) {
         <select name="mode" id="journey-mode-input">
           <option value="bike">Bike</option>
           <option value="public_transport">Public transport</option>
+          <option value="walk">Walk</option>
         </select>
       </div>
       <div class="form-field">
