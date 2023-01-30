@@ -1,5 +1,6 @@
 import {html, useEffect, useState} from '../../../static/vendor/preact/standalone.module.js'
 import map from '../singletons/map.js'
+import eventBus from "../singletons/eventBus.js";
 
 export default function ListAnnotationsComponent() {
   const [annotations, setAnnotations] = useState({})
@@ -9,6 +10,12 @@ export default function ListAnnotationsComponent() {
       setAnnotations({...newAnnotations})
     })
   }, [])
+
+  function clickOnAnnotation(annotation) {
+    if (annotation.objectType == 'place') {
+      eventBus.emit('selectPlace', {place: annotation})
+    }
+  }
 
   return html`
     <h2>Annotations</h2>
@@ -21,13 +28,14 @@ export default function ListAnnotationsComponent() {
         show: annotation.show.bind(annotation),
         hide: annotation.hide.bind(annotation),
         zoomOn: annotation.zoomOn.bind(annotation),
+        onClick: () => clickOnAnnotation(annotation),
         key: annotation.id
       }))}
     </ul>
   `
 }
 
-function AnnotationLineComponent({name, objectType, removeFromAnnotations, baseVisible, show, hide, zoomOn}) {
+function AnnotationLineComponent({name, objectType, removeFromAnnotations, baseVisible, show, hide, zoomOn, onClick}) {
 
   const [visible, setVisibility] = useState(baseVisible)
 
@@ -46,15 +54,16 @@ function AnnotationLineComponent({name, objectType, removeFromAnnotations, baseV
     e.preventDefault()
   }
 
-  function _zoomOn(e) {
+  function clickOnAnnotation(e) {
     zoomOn()
+    onClick()
     e.preventDefault()
   }
 
   return html`
     <li class="annotations-line" title="${name}">
       ${AnnotationIconTypeComponent({objectType})}
-      <span class="annotations-line__name" onClick=${_zoomOn}>${name}</span>
+      <span class="annotations-line__name" onClick=${clickOnAnnotation}>${name}</span>
       <div class="annotations-line__actions">
         <button title="Edit annotation">
           <img src="/static/images/breeze/document-edit.svg" alt="pen icon"/>
@@ -63,8 +72,8 @@ function AnnotationLineComponent({name, objectType, removeFromAnnotations, baseV
         <button onclick="${visible ? _hide : _show}" title="${visible ? "Hide annotation" : "Show annotation"}">
           ${
             visible
-            ? html`<img src="/static/images/breeze/view-visible.svg" alt="eye icon"/>`
-            : html`<img src="/static/images/breeze/view-hidden.svg" alt="eye crossed icon"/>`
+              ? html`<img src="/static/images/breeze/view-visible.svg" alt="eye icon"/>`
+              : html`<img src="/static/images/breeze/view-hidden.svg" alt="eye crossed icon"/>`
           }
         </button>
 

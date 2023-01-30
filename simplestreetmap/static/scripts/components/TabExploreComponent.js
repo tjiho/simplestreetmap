@@ -2,17 +2,24 @@ import { html, useState } from '../../../static/vendor/preact/standalone.module.
 import SearchComponent from './SearchComponent.js'
 import Place from '../models/Place.js'
 import map from '../singletons/map.js'
+import eventBus from "../singletons/eventBus.js";
 
 export default function TabExploreComponent () {
-
-  function addPlace (coordinates, placeName) {
-    new Place({ lat: coordinates[1], lng: coordinates[0], name: placeName })
+  const [place, setPlace] = useState(null)
+  function addPlace (coordinates, placeName, context) {
+    setPlace(new Place({ lat: coordinates[1], lng: coordinates[0], name: placeName, context }))
     map.flyTo({ center: coordinates, zoom: 13 })
   }
+
+  eventBus.on('selectPlace', (e) => {
+    console.log(e.detail.place)
+    setPlace(e.detail.place)
+  })
 
   return html`
     <h2>Explore the world!</h2>
     ${ExploreFormComponent({onResultSelected:addPlace})}
+    ${place && ExploreDetailComponent(place)}
   `
 }
 
@@ -27,10 +34,12 @@ function ExploreFormComponent ({onResultSelected}) {
 
 function ExploreDetailComponent({lat, lng, name, context}) {
   return html`
-    <h3>${name}</h3>
-    <div class="context">${context.join(', ')}</div>
-    <div>GPS coordinate: ${lat},${lng}</div>
-    <button>Start an itinerary from ${name}</button>
-    <button>Start an itinerary to ${name}</button>
+    <div class="place-detail">
+      <h3>${name}</h3>
+      <div class="context secondary-text">${context.join(', ')}</div>
+      <div class="secondary-text">${lat}, ${lng}</div>
+      <button class="standard-button">Itinerary from</button>
+      <button class="standard-button">Itinerary to</button>
+    </div>
   `
 }

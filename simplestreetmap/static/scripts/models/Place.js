@@ -2,12 +2,13 @@ import map from '../singletons/map.js'
 import AbstractAnnotation from "./AbstractAnnotation.js";
 
 export default class Place extends AbstractAnnotation {
-  constructor ({ lat, lng, name }) {
+  constructor ({ lat, lng, name, context }) {
     super()
     this.lat = lat
     this.lng = lng
     this.name = name
-
+    this.context = context
+    
     this.objectType = 'place'
 
     this.show()

@@ -52,8 +52,6 @@
   opacity: .7;
 }
 .search-container span.context {
-  font-size: 80%;
-  opacity: .6;
   margin-left: .5em;
   flex: 1;
 }

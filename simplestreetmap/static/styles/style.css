@@ -4,6 +4,7 @@
 @import './tabs.css';
 @import './button.css';
 @import './annotations.css';
+@import './place.css';
 
 body 
 { 
@@ -42,11 +43,6 @@ body
   height: calc(100%);
   border-radius: 0px;
   box-sizing: border-box;
-}
-
-h2 
-{
-  font-family: 'Besley';
 }
 
 @media only screen and (min-device-width: 650px) {

@@ -29,6 +29,12 @@
 h2
 {
     margin: 0.5rem 0;
+    font-family: 'Besley';
+}
+
+h3
+{
+    margin:0;
 }
 
 .flex
@@ -68,4 +74,9 @@ select {
     border: solid 1px var(--line-color-big-contrast);
     padding: calc(0.25rem);
     border-radius: 0.25rem;
+}
+
+.secondary-text {
+    font-size: 80%;
+    opacity: .6;
 }

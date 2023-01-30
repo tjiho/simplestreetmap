@@ -29,8 +29,8 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '' 
     debounceSearch(searchValue).then(setResults)
   }
 
-  function _onResultSelected (coord, name) {
-    onResultSelected(coord, name)
+  function _onResultSelected (coord, name, context) {
+    onResultSelected(coord, name, context)
     setResults([])
     setSearchValue(name)
   }
@@ -55,7 +55,7 @@ function result ({ type, name, coord, context, onResultSelected }) {
   return html`
     <li onClick=${(e) => onResultSelected(coord, name, context)}>
       <span class="name">${name}</span>
-      <span class="context">${context.join(', ')}</span>
+      <span class="context secondary-text">${context.join(', ')}</span>
       ${isCity ? html`<img src="/static/images/maki/${type}.svg" />` : ''}
     </li>
   `

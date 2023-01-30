@@ -1,0 +1,10 @@
+.place-detail {
+    margin-top: 1rem;
+    border-top: 1px solid var(--line-color-small-contrast);
+    padding-top: 1rem;
+}
+
+.place-detail button {
+    margin-top: 0.5rem;
+    width: 100%;
+}
