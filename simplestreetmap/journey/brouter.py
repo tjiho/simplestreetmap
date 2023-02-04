@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 from . import BaseJourneyAdapter
 
@@ -21,12 +22,17 @@ class BrouterJourneyAdapter(BaseJourneyAdapter):
         curr_journey = {}
         curr_journey['distances'] = journey['properties']['track-length']
         curr_journey['duration'] = journey['properties']['total-time']
+
+        departure_time = datetime.datetime.now()
+        arrival_time = departure_time + datetime.timedelta(seconds=int(journey['properties']['total-time']))
         curr_journey['sections'] = [
             {
                 'path': journey['geometry'],
                 'duration': journey['properties']['total-time'],
                 'distances': journey['properties']['track-length'],
-                'mode': 'bike'
+                'mode': 'bike',
+                'departure_time': departure_time.strftime("%Y-%m-%dT%H:%M:%S"),
+                'arrival_time': arrival_time.strftime("%Y-%m-%dT%H:%M:%S")
             }
         ]
 

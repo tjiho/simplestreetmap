@@ -1,24 +1,27 @@
+import datetime
+
 import requests
 
 from . import BaseJourneyAdapter
+
 
 class NavitiaJourneyAdapter(BaseJourneyAdapter):
     def __init__(self):
         self.url = 'https://api.navitia.io/v1/journeys'
         self.token = '2b515b9b-846a-4ad5-9419-66e1f1832a83'
-    
+
     def itinerary(self, origin_lon, origin_lat, destination_lon, destination_lat, dateTime=None, mode=None):
         print('Requesting navitia...')
         origin = "%s;%s" % (origin_lon, origin_lat)
         destination = "%s;%s" % (destination_lon, destination_lat)
-        response = requests.get(self.url, params = {'from': origin, 'to':destination, 'key':self.token }).json()
+        response = requests.get(self.url, params={'from': origin, 'to': destination, 'key': self.token}).json()
         print('Navitia response received')
 
         res = []
 
         if not 'journeys' in response:
-            return [] # TODO: return 404 instead
-        
+            return []  # TODO: return 404 instead
+
         for journey in response['journeys']:
             curr_journey = {}
             curr_journey['distances'] = journey['distances']
@@ -35,7 +38,7 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
                 if 'path' in section:
                     curr_section['instructions'] = section['path']
                 if 'elevations' in section:
-                    curr_section['elevations'] = section['elevations']                
+                    curr_section['elevations'] = section['elevations']
                 if 'mode' in section:
                     curr_section['mode'] = section['mode']
                 if 'from' in section:
@@ -43,17 +46,17 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
                 if 'to' in section:
                     curr_section['to'] = self.parse_place(section['to'])
 
-                curr_section['mode'] = self.getMode(section)
+                curr_section['mode'] = self.get_mode(section)
                 if curr_section['mode'] == 'public_transport':
                     curr_section['transport_info'] = self.parse_transport_info(section)
-
+                curr_section['departure_time'] = self.get_departure_time(section)
+                curr_section['arrival_time'] = self.get_arrival_time(section)
                 curr_journey['sections'].append(curr_section)
-
 
             res.append(curr_journey)
         return res
 
-    def parse_place(self,navitia_place):
+    def parse_place(self, navitia_place):
         res = {}
         if 'name' in navitia_place:
             res['name'] = navitia_place['name']
@@ -65,17 +68,26 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
 
         return res
 
-    def getMode(self,navitia_section):
+    def get_mode(self, navitia_section):
         if 'mode' in navitia_section:
             return navitia_section['mode']
         elif 'links' in navitia_section:
             return 'public_transport'
 
-    def getDepartureTime(self,navitia_section):
+    def get_departure_time(self, navitia_section):
         if 'departure_date_time' in navitia_section:
-            return navitia_section['departure_date_time']
+            departure = datetime.datetime.strptime(navitia_section['departure_date_time'], "%Y%m%dT%H%M%S")
+            return departure.strftime("%Y-%m-%dT%H:%M:%S")
 
-    def parse_transport_info(self,navitia_section):
+    def get_arrival_time(self, navitia_section):
+        if 'departure_date_time' in navitia_section and 'duration' in navitia_section:
+            arrival = datetime.datetime.strptime(
+                navitia_section['departure_date_time'],
+                "%Y%m%dT%H%M%S"
+            ) + datetime.timedelta(seconds=navitia_section['duration'])
+            return arrival.strftime("%Y-%m-%dT%H:%M:%S")
+
+    def parse_transport_info(self, navitia_section):
         if 'display_informations' in navitia_section:
             return {
                 'type': navitia_section['display_informations']['physical_mode'],

@@ -17,3 +17,12 @@
     border: 2px solid var(--main-color);
     padding: calc(0.5rem - 1px);
 }
+
+
+.journey-summary__general-infos {
+    display:flex;
+}
+
+.journey-summmary__duration {
+    flex:1
+}

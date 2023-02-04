@@ -115,7 +115,8 @@ function JourneyListComponent({from, to, mode, backToForm}) {
             saveToAnnotations: j.saveToAnnotations.bind(j),
             setColor: j.setColor.bind(j),
             moveOnTop: j.moveOnTop.bind(j),
-            backToForm: _backToForm
+            backToForm: _backToForm,
+            key: j.id
           }))}
         </ul>
       </div>
@@ -132,6 +133,7 @@ function JourneySummaryComponent({
                                    moveOnTop,
                                    backToForm
                                  }) {
+
   const [simplifiedDistance, setSimplifiedDistance] = useState(null)
 
   function hover() {
@@ -162,10 +164,49 @@ function JourneySummaryComponent({
 
   return html`
     <li class="journey-summmary" onmouseover=${hover} onmouseout=${out}>
-      <div>Distance: ${simplifiedDistance}</div>
-      <div>Duration: ${simplifyDuration(duration)}</div>
-      <div>Steps: ${sections.length}</div>
+      <div class="journey-summary__general-infos">
+        <span class="journey-summmary__duration">${simplifyDuration(duration)}</span>
+        <span class="journey-summmary__distance"> ${simplifiedDistance}</span>
+      </div>
+      <div class="journey-summary__steps">
+        <span class="journey-summmary__times">
+          ${sections.map(journeySummarySectionComponent)} end
+        </span>
+      </div>
       <button class="standard-button" onClick=${save}>Save</button>
     </li>
+  `
+}
+
+function journeySummarySectionComponent({departure_time,mode,transport_info}) {
+
+  function displayTime(datetime) {
+    const timeObj = new Date(datetime)
+    return addLeadingZero(timeObj.getHours()) + 'h' + addLeadingZero(timeObj.getMinutes())
+  }
+
+  function addLeadingZero(number) {
+    if(number < 10) {
+      return '0' + number
+    }
+    else {
+      return '' + number
+    }
+  }
+
+  function iconFromTransport(mode) {
+    switch (mode) {
+      case 'walking':
+        return 'pitch.svg'
+      case 'public_transport':
+        return 'bus.svg'
+      default:
+        return 'bicycle-share.svg'
+    }
+
+  }
+
+  return html`
+    ${displayTime(departure_time)} -> <img src="/static/images/maki/${iconFromTransport(mode)}"/> ->
   `
 }
