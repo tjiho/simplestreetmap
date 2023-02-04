@@ -178,7 +178,7 @@ function JourneySummaryComponent({
   `
 }
 
-function journeySummarySectionComponent({departure_time,mode,transport_info}) {
+function journeySummarySectionComponent({departure_time, mode, transport_info}) {
 
   function displayTime(datetime) {
     const timeObj = new Date(datetime)
@@ -186,10 +186,9 @@ function journeySummarySectionComponent({departure_time,mode,transport_info}) {
   }
 
   function addLeadingZero(number) {
-    if(number < 10) {
+    if (number < 10) {
       return '0' + number
-    }
-    else {
+    } else {
       return '' + number
     }
   }
@@ -206,7 +205,8 @@ function journeySummarySectionComponent({departure_time,mode,transport_info}) {
 
   }
 
-  return html`
-    ${displayTime(departure_time)} -> <img src="/static/images/maki/${iconFromTransport(mode)}"/> ->
-  `
+  if (mode !== 'waiting' && mode !== 'transfer')
+    return html`
+      ${displayTime(departure_time)} -> <img src="/static/images/maki/${iconFromTransport(mode)}"/> ->
+    `
 }

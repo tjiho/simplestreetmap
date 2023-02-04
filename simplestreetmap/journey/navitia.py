@@ -14,6 +14,8 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
         print('Requesting navitia...')
         origin = "%s;%s" % (origin_lon, origin_lat)
         destination = "%s;%s" % (destination_lon, destination_lat)
+        print(origin)
+        print(destination)
         response = requests.get(self.url, params={'from': origin, 'to': destination, 'key': self.token}).json()
         print('Navitia response received')
 
@@ -39,8 +41,6 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
                     curr_section['instructions'] = section['path']
                 if 'elevations' in section:
                     curr_section['elevations'] = section['elevations']
-                if 'mode' in section:
-                    curr_section['mode'] = section['mode']
                 if 'from' in section:
                     curr_section['from'] = self.parse_place(section['from'])
                 if 'to' in section:
@@ -71,6 +71,8 @@ class NavitiaJourneyAdapter(BaseJourneyAdapter):
     def get_mode(self, navitia_section):
         if 'mode' in navitia_section:
             return navitia_section['mode']
+        elif 'type' in navitia_section:
+            return navitia_section['type']
         elif 'links' in navitia_section:
             return 'public_transport'
 
