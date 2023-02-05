@@ -18,7 +18,7 @@ export default function TabJourneyComponent() {
   }
 
   function backToForm(e) {
-    setChildren({Children: JourneyFormComponent, childrenProps: {onSubmit: findJourney}})
+    setChildren({Children: JourneyFormComponent, childrenProps: {onSubmit: findJourney}}) //something wrong here, sometime it failed
     e.preventDefault()
     return false
   }
@@ -207,6 +207,16 @@ function journeySummarySectionComponent({departure_time, mode, transport_info}) 
 
   if (mode !== 'waiting' && mode !== 'transfer')
     return html`
-      ${displayTime(departure_time)} -> <img src="/static/images/maki/${iconFromTransport(mode)}"/> ->
+      ${displayTime(departure_time)} -> <img src="/static/images/maki/${iconFromTransport(mode)}"/> ${transport_info && transportNameComponent(transport_info || {})}->
     `
 }
+
+function transportNameComponent({line_name: lineName, line_bg_color:bgColor, line_text_color:textColor,type}) {
+  return html`
+    <div style="background-color: ${bgColor || 'white'};color: ${textColor || 'black'};" class="transport-name">
+    ${lineName}
+    </div>
+  `
+}
+
+//transport_info.line_name / line_bg_color / type

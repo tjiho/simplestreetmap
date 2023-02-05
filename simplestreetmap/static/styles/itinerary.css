@@ -26,3 +26,9 @@
 .journey-summmary__duration {
     flex:1
 }
+
+.transport-name {
+  display: inline-block;
+  border: 1px solid;
+  padding: 0 0.5rem;
+}
