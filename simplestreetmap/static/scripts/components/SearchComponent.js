@@ -5,7 +5,7 @@ import debounce from '../tools/debounce.js'
 const debounceSearch = debounce(fetchSearchResult, 300)
 const CITY_TYPES = ['city', 'town', 'village']
 
-export default function SearchComponent ({ onResultSelected = () => {}, id = '' }) {
+export default function SearchComponent ({ onResultSelected = () => {}, id = '', value = '', onInput = () => {} }) {
   // TODO: add a cross to clear the autocomplete
   // TODO: add keyboard navigation -> up/down to select, enter to validate, escape to close the autocomplete
   // TODO: add a loading indicator
@@ -16,23 +16,23 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '' 
 
   const [results, setResults] = useState([])
   // const [searchController, setSearchController] = useState(null);
-  const [searchValue, setSearchValue] = useState('')
+  //const [searchValue, setSearchValue] = useState(initialSearchValue)
 
   function onInputSearch (e) {
-    const searchValue = e.target.value
-    setSearchValue(searchValue)
-
+    const inputValue = e.target.value
+    //setSearchValue(inputValue)
+    onInput(e)
     // if (searchController) { searchController.abort() }
     // setSearchController(new AbortController())
     // const signal = searchController.signal
 
-    debounceSearch(searchValue).then(setResults)
+    debounceSearch(inputValue).then(setResults)
   }
 
   function _onResultSelected (coord, name, context) {
     onResultSelected(coord, name, context)
     setResults([])
-    setSearchValue(name)
+    onInput({ target: { value: name } })
   }
 
   function blur (e) {
@@ -41,7 +41,7 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '' 
 
   return html`
       <div class="search-container" autoCompleted=${results.length > 0 ? 'true' : null}>
-        <input type="search" id="${id}" onInput=${onInputSearch} onBlur=${blur} onFocus=${onInputSearch} autocomplete="off" value=${searchValue}/>
+        <input type="search" id="${id}" onInput=${onInputSearch} onBlur=${blur} onFocus=${onInputSearch} autocomplete="off" value=${value}/>
         <ul class="results">
           ${results.map(searchResult => result({ ...searchResult, onResultSelected: _onResultSelected }))}
         </ul>

@@ -6,6 +6,7 @@ import LoadingComponent from './LoadingComponent.js'
 import simplifyDuration from '../tools/simplifyDuration.js'
 // import toulousePau from '../constants/toulouse-pau.js'
 import Journey from '../models/Journey.js'
+import eventBus from "../singletons/eventBus.js";
 
 export default function TabJourneyComponent() {
   const [{Children, childrenProps}, setChildren] = useState({
@@ -32,6 +33,17 @@ export default function TabJourneyComponent() {
 function JourneyFormComponent({onSubmit}) {
   const [from, setFrom] = useState(null)
   const [to, setTo] = useState(null)
+  
+  const [searchFrom, setSearchFrom] = useState('')
+  const [searchTo, setSearchTo] = useState('')
+
+  function onInputFrom (e) {
+    setSearchFrom(e.target.value)
+  }
+
+  function onInputTo (e) {
+    setSearchTo(e.target.value)
+  }
 
   function AddStartPoint(coordinates, placeName) {
     setFrom({coordinates, placeName})
@@ -40,6 +52,16 @@ function JourneyFormComponent({onSubmit}) {
   function addEndPoint(coordinates, placeName) {
     setTo({coordinates, placeName})
   }
+
+  eventBus.on('startJourneyFrom', (e) => {
+    setFrom(e.detail.place)
+    setSearchFrom(e.detail.place.name)
+  })
+
+  eventBus.on('startJourneyTo', (e) => {
+    setTo(e.detail.place)
+    setSearchTo(e.detail.place.name)
+  })
 
   function _onSubmit(e) {
     const mode = document.getElementById('journey-mode-input').value
@@ -60,12 +82,12 @@ function JourneyFormComponent({onSubmit}) {
       </div>
       <div class="form-field">
         <label for="journey-from-input">Start</label>
-        <${SearchComponent} id="journey-from-input" onResultSelected="${AddStartPoint}"/>
+        <${SearchComponent} id="journey-from-input" onResultSelected="${AddStartPoint}" value=${searchFrom} onInput=${onInputFrom}/>
       </div>
 
       <div class="form-field">
         <label for="journey-to-input">End</label>
-        <${SearchComponent} id="journey-to-input" onResultSelected="${addEndPoint}"/>
+        <${SearchComponent} id="journey-to-input" onResultSelected="${addEndPoint}" value=${searchTo} onInput=${onInputTo}/>
       </div>
       <input class="standard-button" type="submit" value="Find itinerary"/>
     </form>
@@ -212,8 +234,13 @@ function journeySummarySectionComponent({departure_time, mode, transport_info}) 
 }
 
 function transportNameComponent({line_name: lineName, line_bg_color:bgColor, line_text_color:textColor,type}) {
+
+  const style = {
+    'background-color': bgColor || 'white',
+    'color': textColor || 'black'
+  }
   return html`
-    <div style="background-color: ${bgColor || 'white'};color: ${textColor || 'black'};" class="transport-name">
+    <div style=${style} class="transport-name">
     ${lineName}
     </div>
   `
