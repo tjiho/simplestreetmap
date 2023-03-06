@@ -13,6 +13,7 @@ export default function ListAnnotationsComponent() {
 
   function clickOnAnnotation(annotation) {
     if (annotation.objectType == 'place') {
+      eventBus.emit('selectTab', {tab: 0})
       eventBus.emit('selectPlace', {place: annotation})
     }
   }

@@ -9,25 +9,43 @@ import Journey from '../models/Journey.js'
 import eventBus from "../singletons/eventBus.js";
 
 export default function TabJourneyComponent() {
-  const [{Children, childrenProps}, setChildren] = useState({
-    Children: JourneyFormComponent,
-    childrenProps: {onSubmit: findJourney}
-  })
+  const [state, setState] = useState("form")
+  const [from, setFrom] = useState(null)
+  const [to, setTo] = useState(null)
+  const [mode, setMode] = useState(null)
 
   function findJourney(from, to, mode) {
-    setChildren({Children: JourneyListComponent, childrenProps: {from, to, mode, backToForm}})
+    setFrom(from)
+    setTo(to)
+    setMode(mode)
+    setState("list")
   }
 
   function backToForm(e) {
-    setChildren({Children: JourneyFormComponent, childrenProps: {onSubmit: findJourney}}) //something wrong here, sometime it failed
+    setState("form")
     e.preventDefault()
     return false
   }
 
-  return html`
-    <h2>Plan your journey</h2>
-    ${Children(childrenProps)}
-  `
+  switch (state) {
+    case "form":
+      return html`
+        <h2>Plan your journey</h2>
+        <${JourneyFormComponent} onSubmit=${findJourney}/>
+      `
+    case "list":
+      return html`
+        <h2>Plan your journey</h2>
+        <${JourneyListComponent} from=${from} to=${to} mode=${mode} backToForm=${backToForm}/>
+      `
+    default:
+      return html`
+        <h2>Plan your journey</h2>
+        <${JourneyFormComponent} onSubmit=${findJourney}/>
+      `
+      break;
+  }
+  
 }
 
 function JourneyFormComponent({onSubmit}) {
@@ -45,12 +63,12 @@ function JourneyFormComponent({onSubmit}) {
     setSearchTo(e.target.value)
   }
 
-  function AddStartPoint(coordinates, placeName) {
-    setFrom({coordinates, placeName})
+  function AddStartPoint(coordinates, name) {
+    setFrom({coordinates, name})
   }
 
-  function addEndPoint(coordinates, placeName) {
-    setTo({coordinates, placeName})
+  function addEndPoint(coordinates, name) {
+    setTo({coordinates, name})
   }
 
   eventBus.on('startJourneyFrom', (e) => {
@@ -126,7 +144,7 @@ function JourneyListComponent({from, to, mode, backToForm}) {
     ? LoadingComponent({})
     : html`
       <div>
-        <h3>From ${from.placeName} to ${to.placeName}</h3>
+        <h3>From ${from.name} to ${to.name}</h3>
         <button onClick=${_backToForm}>Look for an other itinerary</button>
         <ul class="journey-summmary-list">
           ${journeyList.map((j) => JourneySummaryComponent({

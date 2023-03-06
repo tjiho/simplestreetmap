@@ -5,7 +5,7 @@ export default class Journey extends AbstractAnnotation {
   constructor ({ name, from, to, mode, color = null, distances, sections, duration, path }) {
     super()
     this.objectType = 'journey'
-    this.name = from.placeName + ' - ' + to.placeName
+    this.name = from.name + ' - ' + to.name
     this.from = from
     this.to = to
     this.mode = mode

@@ -7,8 +7,8 @@ import eventBus from "../singletons/eventBus.js";
 export default function TabExploreComponent () {
   const [place, setPlace] = useState(null)
 
-  function addPlace (coordinates, placeName, context) {
-    setPlace(new Place({ lat: coordinates[1], lng: coordinates[0], name: placeName, context }))
+  function addPlace (coordinates, name, context) {
+    setPlace(new Place({ lat: coordinates[1], lng: coordinates[0], name, context }))
     map.flyTo({ center: coordinates, zoom: 13 })
   }
 
