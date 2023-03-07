@@ -96,6 +96,7 @@ function JourneyFormComponent({onSubmit}) {
           <option value="bike">Bike</option>
           <option value="public_transport">Public transport</option>
           <option value="walk">Walk</option>
+          <option value="camera">Walk without camera</option>
         </select>
       </div>
       <div class="form-field">
@@ -119,6 +120,7 @@ function JourneyListComponent({from, to, mode, backToForm}) {
   const [journeyList, setJourneyList] = useState(null)
 
   useEffect(() => {
+    console.log(from.coordinates, to.coordinates)
     fetchItinerary(from.coordinates, to.coordinates, mode).then((value) => {
       const journeysPlain = value
       const journeys = journeysPlain.map((j) => {
