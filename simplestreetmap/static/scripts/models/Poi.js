@@ -2,19 +2,13 @@ import map from '../singletons/map.js'
 import AbstractAnnotation from './AbstractAnnotation.js'
 
 export default class Journey extends AbstractAnnotation {
-  constructor ({ name, from, to, mode, color = null, distances, sections, duration, path }) {
+  constructor ({ sourceLayer, name, color }) {
     super()
-    this.objectType = 'journey'
-    this.name = from.name + ' - ' + to.name
-    this.from = from
-    this.to = to
-    this.mode = mode
-    this.color = color
-    this.distances = distances
-    this.duration = duration
-    this.sections = sections
-    this.path = this.mergePath()
-    this.alternatives = [] // other journeys return by the api for the same itinerary
+    this.objectType = 'Poi'
+    this.sourceLayer = sourceLayer
+    this.name = name ?? sourceLayer
+    this.color = color ?? 'blue'
+    this.canBeDestroy = false
     this.addSource()
   }
 
@@ -29,14 +23,18 @@ export default class Journey extends AbstractAnnotation {
   }
 
   addSource () {
-    map.addSource(this.id, { type: 'geojson', data: this.path })
+    map.addSource(this.id, {
+      type: 'vector',
+      tiles: [`${BASE_FEATURES_URL}/${this.sourceLayer}/{z}/{x}/{y}.pbf`],
+      minzoom: 12
+    })
   }
 
   setColor (color) {
     this.color = color
     map.setPaintProperty(
       this.id,
-      'line-color',
+      'circle-color',
       color
     )
   }
@@ -49,16 +47,11 @@ export default class Journey extends AbstractAnnotation {
     // TODO: mettre le layer des noms de villes au dessus
     map.addLayer({
       id: this.id,
-      type: 'line',
+      type: 'circle',
       source: this.id,
-      layout: {
-        'line-join': 'round',
-        'line-cap': 'round'
-      },
+      'source-layer': this.sourceLayer,
       paint: {
-        'line-color': this.color,
-        'line-width': 4,
-        'line-opacity': 1
+        'circle-color': this.color
       }
     })
 

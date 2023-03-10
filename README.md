@@ -31,4 +31,4 @@ You can use ppsfleet tiles for testing, but only for testing.
 
 It does not need compilation.
 
-To check the code: `npm standard --fix`
+To check the code: `npx standard --fix`

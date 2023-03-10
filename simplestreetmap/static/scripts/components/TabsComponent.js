@@ -1,5 +1,5 @@
 import { html, useState } from '../../../static/vendor/preact/standalone.module.js'
-import eventBus from "../singletons/eventBus.js";
+import eventBus from '../singletons/eventBus.js'
 
 export default function TabsComponent ({ tabs, name }) {
   const [selectedTab, setSelectedTab] = useState(0)

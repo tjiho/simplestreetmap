@@ -1,6 +1,7 @@
 import parseHashCoordinates from '../tools/parseHashCoordinates.js'
+import Poi from '../models/Poi.js'
 
-class Map extends mapboxgl.Map {
+class Map extends maplibregl.Map {
   constructor () {
     console.log('Init map')
     const params = new URLSearchParams(window.location.search)
@@ -13,16 +14,16 @@ class Map extends mapboxgl.Map {
       zoom
     })
 
-    const nav = new mapboxgl.NavigationControl()
+    const nav = new maplibregl.NavigationControl()
 
-    const gps = new mapboxgl.GeolocateControl({
+    const gps = new maplibregl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true
       },
       trackUserLocation: true
     })
 
-    const scale = new mapboxgl.ScaleControl({
+    const scale = new maplibregl.ScaleControl({
       maxWidth: 80,
       unit: 'metric'
     })
@@ -41,7 +42,8 @@ class Map extends mapboxgl.Map {
     })
 
     this.on('load', function () {
-
+      const cameras = new Poi({ sourceLayer: 'public.cameras', name: 'Cameras' })
+      cameras.saveToAnnotations()
     })
 
     this.annotations = {} // itineraries, places, drawings, etc. {id: annotation}
@@ -55,12 +57,12 @@ class Map extends mapboxgl.Map {
 
   pushAnnotation (element) {
     this.annotations[element.id] = element
-    this.callbacksOnAnnotationsChange.forEach(callback => callback('add',element, this.annotations))
+    this.callbacksOnAnnotationsChange.forEach(callback => callback('add', element, this.annotations))
   }
 
-  removeAnnotation(element) {
+  removeAnnotation (element) {
     delete this.annotations[element.id]
-    this.callbacksOnAnnotationsChange.forEach(callback => callback('remove',element, this.annotations))
+    this.callbacksOnAnnotationsChange.forEach(callback => callback('remove', element, this.annotations))
   }
 
   onAnnotationsChange (callback) {

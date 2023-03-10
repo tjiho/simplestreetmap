@@ -2,7 +2,7 @@ import { html, useState } from '../../../static/vendor/preact/standalone.module.
 import SearchComponent from './SearchComponent.js'
 import Place from '../models/Place.js'
 import map from '../singletons/map.js'
-import eventBus from "../singletons/eventBus.js";
+import eventBus from '../singletons/eventBus.js'
 
 export default function TabExploreComponent () {
   const [place, setPlace] = useState(null)
@@ -19,14 +19,14 @@ export default function TabExploreComponent () {
 
   return html`
     <h2>Explore the world!</h2>
-    ${ExploreFormComponent({onResultSelected:addPlace})}
+    ${ExploreFormComponent({ onResultSelected: addPlace })}
     ${place && ExploreDetailComponent(place)}
   `
 }
 
-function ExploreFormComponent ({onResultSelected}) {
+function ExploreFormComponent ({ onResultSelected }) {
   const [search, setSearch] = useState('')
-  
+
   function onInputSearch (e) {
     setSearch(e.target.value)
   }
@@ -39,16 +39,15 @@ function ExploreFormComponent ({onResultSelected}) {
   `
 }
 
-function ExploreDetailComponent({lat, lng, name, context}) {
-
-  function addStartPoint() {
-    eventBus.emit('selectTab', {tab: 1})
-    eventBus.emit('startJourneyFrom', {place: {coordinates: [lng, lat], name}})
+function ExploreDetailComponent ({ lat, lng, name, context }) {
+  function addStartPoint () {
+    eventBus.emit('selectTab', { tab: 1 })
+    eventBus.emit('startJourneyFrom', { place: { coordinates: [lng, lat], name } })
   }
 
-  function addEndPoint() {
-    eventBus.emit('selectTab', {tab: 1})
-    eventBus.emit('startJourneyTo', {place: {coordinates: [lng, lat], name}})
+  function addEndPoint () {
+    eventBus.emit('selectTab', { tab: 1 })
+    eventBus.emit('startJourneyTo', { place: { coordinates: [lng, lat], name } })
   }
 
   return html`

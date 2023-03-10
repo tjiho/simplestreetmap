@@ -1,39 +1,39 @@
-import {html, useState, useEffect} from '../../../static/vendor/preact/standalone.module.js'
+import { html, useState, useEffect } from '../../../static/vendor/preact/standalone.module.js'
 import SearchComponent from './SearchComponent.js'
 // import map from '../singletons/map.js'
-import {fetchItinerary} from '../tools/api.js'
+import { fetchItinerary } from '../tools/api.js'
 import LoadingComponent from './LoadingComponent.js'
 import simplifyDuration from '../tools/simplifyDuration.js'
 // import toulousePau from '../constants/toulouse-pau.js'
 import Journey from '../models/Journey.js'
-import eventBus from "../singletons/eventBus.js";
+import eventBus from '../singletons/eventBus.js'
 
-export default function TabJourneyComponent() {
-  const [state, setState] = useState("form")
+export default function TabJourneyComponent () {
+  const [state, setState] = useState('form')
   const [from, setFrom] = useState(null)
   const [to, setTo] = useState(null)
   const [mode, setMode] = useState(null)
 
-  function findJourney(from, to, mode) {
+  function findJourney (from, to, mode) {
     setFrom(from)
     setTo(to)
     setMode(mode)
-    setState("list")
+    setState('list')
   }
 
-  function backToForm(e) {
-    setState("form")
+  function backToForm (e) {
+    setState('form')
     e.preventDefault()
     return false
   }
 
   switch (state) {
-    case "form":
+    case 'form':
       return html`
         <h2>Plan your journey</h2>
         <${JourneyFormComponent} onSubmit=${findJourney}/>
       `
-    case "list":
+    case 'list':
       return html`
         <h2>Plan your journey</h2>
         <${JourneyListComponent} from=${from} to=${to} mode=${mode} backToForm=${backToForm}/>
@@ -43,15 +43,13 @@ export default function TabJourneyComponent() {
         <h2>Plan your journey</h2>
         <${JourneyFormComponent} onSubmit=${findJourney}/>
       `
-      break;
   }
-  
 }
 
-function JourneyFormComponent({onSubmit}) {
+function JourneyFormComponent ({ onSubmit }) {
   const [from, setFrom] = useState(null)
   const [to, setTo] = useState(null)
-  
+
   const [searchFrom, setSearchFrom] = useState('')
   const [searchTo, setSearchTo] = useState('')
 
@@ -63,12 +61,12 @@ function JourneyFormComponent({onSubmit}) {
     setSearchTo(e.target.value)
   }
 
-  function AddStartPoint(coordinates, name) {
-    setFrom({coordinates, name})
+  function AddStartPoint (coordinates, name) {
+    setFrom({ coordinates, name })
   }
 
-  function addEndPoint(coordinates, name) {
-    setTo({coordinates, name})
+  function addEndPoint (coordinates, name) {
+    setTo({ coordinates, name })
   }
 
   eventBus.on('startJourneyFrom', (e) => {
@@ -81,7 +79,7 @@ function JourneyFormComponent({onSubmit}) {
     setSearchTo(e.detail.place.name)
   })
 
-  function _onSubmit(e) {
+  function _onSubmit (e) {
     const mode = document.getElementById('journey-mode-input').value
     onSubmit(from, to, mode)
     e.preventDefault()
@@ -113,7 +111,7 @@ function JourneyFormComponent({onSubmit}) {
   `
 }
 
-function JourneyListComponent({from, to, mode, backToForm}) {
+function JourneyListComponent ({ from, to, mode, backToForm }) {
   // TODO: add not found status
 
   const [loading, setLoading] = useState(true)
@@ -124,7 +122,7 @@ function JourneyListComponent({from, to, mode, backToForm}) {
     fetchItinerary(from.coordinates, to.coordinates, mode).then((value) => {
       const journeysPlain = value
       const journeys = journeysPlain.map((j) => {
-        const journeyObj = new Journey({from, to, mode, color: '#ab9aba', ...j})
+        const journeyObj = new Journey({ from, to, mode, color: '#ab9aba', ...j })
         journeyObj.show()
         return journeyObj
       })
@@ -133,7 +131,7 @@ function JourneyListComponent({from, to, mode, backToForm}) {
     })
   }, [from, to])
 
-  function _backToForm(e, journeyToKeep = null) {
+  function _backToForm (e, journeyToKeep = null) {
     journeyList.forEach(j => {
       if (j.id === journeyToKeep) return
       j.hide()
@@ -165,20 +163,19 @@ function JourneyListComponent({from, to, mode, backToForm}) {
     `
 }
 
-function JourneySummaryComponent({
-                                   id,
-                                   distances,
-                                   duration,
-                                   sections,
-                                   saveToAnnotations,
-                                   setColor,
-                                   moveOnTop,
-                                   backToForm
-                                 }) {
-
+function JourneySummaryComponent ({
+  id,
+  distances,
+  duration,
+  sections,
+  saveToAnnotations,
+  setColor,
+  moveOnTop,
+  backToForm
+}) {
   const [simplifiedDistance, setSimplifiedDistance] = useState(null)
 
-  function hover() {
+  function hover () {
     setColor('#69369B')
     moveOnTop()
   }
@@ -194,11 +191,11 @@ function JourneySummaryComponent({
     }
   }, [distances])
 
-  function out() {
+  function out () {
     setColor('#ab9aba')
   }
 
-  function save(e) {
+  function save (e) {
     saveToAnnotations()
     setColor('#69369B')
     backToForm(e, id)
@@ -220,14 +217,13 @@ function JourneySummaryComponent({
   `
 }
 
-function journeySummarySectionComponent({departure_time, mode, transport_info}) {
-
-  function displayTime(datetime) {
+function journeySummarySectionComponent ({ departure_time, mode, transport_info }) {
+  function displayTime (datetime) {
     const timeObj = new Date(datetime)
     return addLeadingZero(timeObj.getHours()) + 'h' + addLeadingZero(timeObj.getMinutes())
   }
 
-  function addLeadingZero(number) {
+  function addLeadingZero (number) {
     if (number < 10) {
       return '0' + number
     } else {
@@ -235,7 +231,7 @@ function journeySummarySectionComponent({departure_time, mode, transport_info}) 
     }
   }
 
-  function iconFromTransport(mode) {
+  function iconFromTransport (mode) {
     switch (mode) {
       case 'walking':
         return 'pitch.svg'
@@ -244,20 +240,19 @@ function journeySummarySectionComponent({departure_time, mode, transport_info}) 
       default:
         return 'bicycle-share.svg'
     }
-
   }
 
-  if (mode !== 'waiting' && mode !== 'transfer')
+  if (mode !== 'waiting' && mode !== 'transfer') {
     return html`
       ${displayTime(departure_time)} -> <img src="/static/images/maki/${iconFromTransport(mode)}"/> ${transport_info && transportNameComponent(transport_info || {})}->
     `
+  }
 }
 
-function transportNameComponent({line_name: lineName, line_bg_color:bgColor, line_text_color:textColor,type}) {
-
+function transportNameComponent ({ line_name: lineName, line_bg_color: bgColor, line_text_color: textColor, type }) {
   const style = {
     'background-color': bgColor || 'white',
-    'color': textColor || 'black'
+    color: textColor || 'black'
   }
   return html`
     <div style=${style} class="transport-name">
@@ -266,4 +261,4 @@ function transportNameComponent({line_name: lineName, line_bg_color:bgColor, lin
   `
 }
 
-//transport_info.line_name / line_bg_color / type
+// transport_info.line_name / line_bg_color / type

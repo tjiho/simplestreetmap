@@ -1,9 +1,10 @@
 import map from '../singletons/map.js'
 
-export default class AbstractAnnotation {
+export default class Poi {
   constructor () {
     this.id = crypto.randomUUID()
-    this.visible = true
+    this.visible = false
+    this.canBeDestroy = true
   }
 
   setColor (color) {}
@@ -20,10 +21,12 @@ export default class AbstractAnnotation {
     map.pushAnnotation(this)
   }
 
-  removeFromAnnotations() {
-    this.destroy()
-    map.removeAnnotation(this)
+  removeFromAnnotations () {
+    if (this.canBeDestroy) {
+      this.destroy()
+      map.removeAnnotation(this)
+    }
   }
 
-  zoomOn() {}
+  zoomOn () {}
 }

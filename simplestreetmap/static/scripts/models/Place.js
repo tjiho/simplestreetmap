@@ -1,5 +1,5 @@
 import map from '../singletons/map.js'
-import AbstractAnnotation from "./AbstractAnnotation.js";
+import AbstractAnnotation from './AbstractAnnotation.js'
 
 export default class Place extends AbstractAnnotation {
   constructor ({ lat, lng, name, context }) {
@@ -8,7 +8,7 @@ export default class Place extends AbstractAnnotation {
     this.lng = lng
     this.name = name
     this.context = context
-    
+
     this.objectType = 'place'
 
     this.show()
@@ -20,7 +20,7 @@ export default class Place extends AbstractAnnotation {
   }
 
   show () {
-    this.marker = new mapboxgl.Marker({ color: '#69369B' })
+    this.marker = new maplibregl.Marker({ color: '#69369B' })
       .setLngLat([this.lng, this.lat])
       .addTo(map)
     this.visible = true
@@ -37,7 +37,7 @@ export default class Place extends AbstractAnnotation {
     this?.marker?.remove()
   }
 
-  zoomOn() {
+  zoomOn () {
     map.flyTo({ center: [this.lng, this.lat], zoom: 13 })
   }
 }

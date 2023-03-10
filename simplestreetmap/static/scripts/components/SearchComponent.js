@@ -16,11 +16,11 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
 
   const [results, setResults] = useState([])
   // const [searchController, setSearchController] = useState(null);
-  //const [searchValue, setSearchValue] = useState(initialSearchValue)
+  // const [searchValue, setSearchValue] = useState(initialSearchValue)
 
   function onInputSearch (e) {
     const inputValue = e.target.value
-    //setSearchValue(inputValue)
+    // setSearchValue(inputValue)
     onInput(e)
     // if (searchController) { searchController.abort() }
     // setSearchController(new AbortController())

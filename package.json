@@ -2,7 +2,7 @@
   "name": "simplestreetmap",
   
   "standard": {
-    "globals": ["mapboxgl","history","crypto","HTMLElement","BASE_API_URL","BASE_MAP_URL","BASE_SEARCH_URL","BASE_REVERSE_URL"],
+    "globals": ["mapboxgl","maplibregl","history","crypto","CustomEvent","HTMLElement","BASE_API_URL","BASE_MAP_URL","BASE_SEARCH_URL","BASE_REVERSE_URL","BASE_FEATURES_URL"],
     "ignore": [
       "/simplestreetmap/static/vendor/",
       "/build"
