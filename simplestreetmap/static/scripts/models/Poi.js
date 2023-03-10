@@ -26,7 +26,7 @@ export default class Journey extends AbstractAnnotation {
     map.addSource(this.id, {
       type: 'vector',
       tiles: [`${BASE_FEATURES_URL}/${this.sourceLayer}/{z}/{x}/{y}.pbf`],
-      minzoom: 12
+      minzoom: 10
     })
   }
 
