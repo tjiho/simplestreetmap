@@ -118,7 +118,6 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
   const [journeyList, setJourneyList] = useState(null)
 
   useEffect(() => {
-    console.log(from.coordinates, to.coordinates)
     fetchItinerary(from.coordinates, to.coordinates, mode).then((value) => {
       const journeysPlain = value
       const journeys = journeysPlain.map((j) => {
@@ -127,6 +126,9 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
         return journeyObj
       })
       setJourneyList(journeys)
+      setLoading(false)
+    }).catch((error) => {
+      setJourneyList([])
       setLoading(false)
     })
   }, [from, to])
@@ -145,7 +147,7 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
     : html`
       <div>
         <h3>From ${from.name} to ${to.name}</h3>
-        <button onClick=${_backToForm}>Look for an other itinerary</button>
+        <button onClick=${_backToForm} class="standard-button button--secondary">Look for an other itinerary</button>
         <ul class="journey-summmary-list">
           ${journeyList.map((j) => JourneySummaryComponent({
             id: j.id,
@@ -159,6 +161,9 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
             key: j.id
           }))}
         </ul>
+        ${journeyList.length == 0 && html`
+          <p>No journeys founds</p>
+        `}
       </div>
     `
 }
