@@ -81,8 +81,10 @@ function JourneyFormComponent ({ onSubmit }) {
   })
 
   function _onSubmit (e) {
-    const mode = document.getElementById('journey-mode-input').value
-    onSubmit(from, to, mode)
+    if(from != null && to != null) {
+      const mode = document.getElementById('journey-mode-input').value
+      onSubmit(from, to, mode)
+    }
     e.preventDefault()
     return false
   }
