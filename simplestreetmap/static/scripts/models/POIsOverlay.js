@@ -1,9 +1,10 @@
 import map from '../singletons/map.js'
 import AbstractAnnotation from './AbstractAnnotation.js'
 
-export default class Journey extends AbstractAnnotation {
-  constructor ({ sourceLayer, name, color }) {
+export default class POIsOverlay extends AbstractAnnotation {
+  constructor ({ tilesUrl, sourceLayer, name, color }) {
     super()
+    this.tilesUrl = tilesUrl
     this.objectType = 'Poi'
     this.sourceLayer = sourceLayer
     this.name = name ?? sourceLayer
@@ -15,7 +16,7 @@ export default class Journey extends AbstractAnnotation {
   addSource () {
     map.addSource(this.id, {
       type: 'vector',
-      tiles: [`${BASE_FEATURES_URL}/${this.sourceLayer}/{z}/{x}/{y}.pbf`],
+      tiles: [`${this.tilesUrl}/${this.sourceLayer}/{z}/{x}/{y}.pbf`],
       minzoom: 10
     })
   }

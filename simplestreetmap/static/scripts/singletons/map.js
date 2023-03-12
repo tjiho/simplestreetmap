@@ -1,5 +1,5 @@
 import parseHashCoordinates from '../tools/parseHashCoordinates.js'
-import Poi from '../models/Poi.js'
+import POIsOverlay from '../models/POIsOverlay.js'
 
 class Map extends maplibregl.Map {
   constructor () {
@@ -9,7 +9,7 @@ class Map extends maplibregl.Map {
 
     super({
       container: 'map',
-      style: BASE_MAP_URL,
+      style: MAP_STYLE_URL,
       center: [lng, lat],
       zoom
     })
@@ -42,8 +42,7 @@ class Map extends maplibregl.Map {
     })
 
     this.on('load', function () {
-      const cameras = new Poi({ sourceLayer: 'public.cameras', name: 'Cameras' })
-      cameras.saveToAnnotations()
+      this.loadOverlays()
     })
 
     this.annotations = {} // itineraries, places, drawings, etc. {id: annotation}
@@ -67,6 +66,14 @@ class Map extends maplibregl.Map {
 
   onAnnotationsChange (callback) {
     this.callbacksOnAnnotationsChange.push(callback)
+  }
+
+  loadOverlays() {
+    for(const overlay of OVERLAYS) {
+      const overlayObj = new POIsOverlay(overlay)
+      overlayObj.saveToAnnotations()
+    }
+   
   }
 }
 

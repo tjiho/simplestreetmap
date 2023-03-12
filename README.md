@@ -1,16 +1,35 @@
 # Simplestreetmap
 
-Another open source frontend map based on OSM data. A demo is available at [https://maps.ppsfleet.navy/toulouse](https://maps.ppsfleet.navy/toulouse)
+Another open source frontend map based on OSM data. A demo is available at [https://beta.maps.ppsfleet.navy](https://beta.maps.ppsfleet.navy)
 
-![screenshot](./static/images/screenshot.png)
+![screenshot](./simplestreetmap/static/images/screenshot.png)
 
 ## Installation
 
-Edit `config.js` with your own search, reverse, and tile server.
+Edit `simplestreetmap/config.py` with your own search, mapbox/maplibre style url and the path to maplibre library.
 
-Edit `index.html` to import maplibre from your server or some CDN.
+You can add other data overlay with the key overlays:
 
-That's all, put it behind the server of your choice. For dev, I use PHP with `php -S localhost:<port>`.
+```
+'overlays': [
+    {
+        'tiles_url': 'some_tiles_server',
+        'source_layer': 'public.cameras',
+        'name': 'cameras'
+    }
+],
+```
+
+Then do a venv:  
+`python3 -m venv env; source env/bin/activate`   
+and install the project  
+`pip install .`
+
+## Run
+
+```
+gunicorn -b 127.0.0.1:8088 --workers 4 'simplestreetmap:make_app()'
+``` 
 
 ## Install a search and reverse server:
 

@@ -20,15 +20,23 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     -->
     <!-- mapbox -->
-    <script src='https://static.ppsfleet.navy/js/maplibre-2.4.0.js'></script>
-    <link href='https://static.ppsfleet.navy/js/maplibre-2.4.0.css' rel='stylesheet' />
+    <script src="{{ request.ssm_config['maplibre']['js']['url'] }}"></script>
+    <link href="{{ request.ssm_config['maplibre']['css']['url'] }}" rel='stylesheet' />
     <!-- css -->
     <link href="{{ request.static_url('simplestreetmap:static/styles/style.css') }}" rel='stylesheet' />
     <!-- config -->
     <script>
-        const BASE_API_URL = '/api/v1'
-        const BASE_MAP_URL = "{{ request.ssm_config['general']['base_map_url'] }}";
-        const BASE_FEATURES_URL = "{{ request.ssm_config['general']['base_features_url'] }}";
+        const BASE_API_URL = '/api/v1';
+        const MAP_STYLE_URL = "{{ request.ssm_config['general']['map_style_url'] }}";
+        const BASE_FEATURES_URL = "http://localhost:7800";
+        const OVERLAYS = [];
+        {% for overlay in request.ssm_config['overlays'] %}
+          OVERLAYS.push({
+            tilesUrl:"{{ overlay.tiles_url }}", 
+            sourceLayer:"{{ overlay.source_layer }}", 
+            name: "{{ overlay.name }}"
+          })
+        {% endfor %}
     </script>
 </head>
 <body>
