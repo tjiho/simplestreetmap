@@ -2,12 +2,12 @@ import map from '../singletons/map.js'
 import AbstractAnnotation from './AbstractAnnotation.js'
 
 export default class Journey extends AbstractAnnotation {
-  constructor ({ name, from, to, mode, color = null, distances, sections, duration, path }) {
+  constructor ({ from, to, mode, color = null, distances, sections, duration, path }) {
     super()
     this.objectType = 'journey'
     this.name = from.name + ' - ' + to.name
-    this.from = from
-    this.to = to
+    this.from = from // {name, coordinates}
+    this.to = to // {name, coordinates}
     this.mode = mode
     this.color = color
     this.distances = distances
@@ -67,12 +67,36 @@ export default class Journey extends AbstractAnnotation {
   }
 
   hide () {
-    map.removeLayer(this.id)
+    if(this.visible)
+      map.removeLayer(this.id)
     this.visible = false
     return this.visible
   }
 
   destroy () {
+    this.hide()
     map.removeSource(this.id)
   }
+
+  zoomOn() {
+    const bounds = new maplibregl.LngLatBounds(
+      this.path.features[0].geometry.coordinates[0],
+      this.path.features[0].geometry.coordinates[0]
+    )
+
+    for(const f of this.path.features)
+    {
+      if(f.geometry) {
+        const coordinates = f.geometry.coordinates;
+        for (const coord of coordinates) {
+          bounds.extend(coord);
+        }
+      }
+    }
+  
+    map.fitBounds(bounds, {
+      padding: 200
+    });
+  }
+    
 }

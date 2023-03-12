@@ -7,6 +7,7 @@ import simplifyDuration from '../tools/simplifyDuration.js'
 // import toulousePau from '../constants/toulouse-pau.js'
 import Journey from '../models/Journey.js'
 import eventBus from '../singletons/eventBus.js'
+import map from '../singletons/map.js'
 
 export default function TabJourneyComponent () {
   const [state, setState] = useState('form')
@@ -127,7 +128,9 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
       })
       setJourneyList(journeys)
       setLoading(false)
+      _fitToMap(journeys)
     }).catch((error) => {
+      console.error(error)
       setJourneyList([])
       setLoading(false)
     })
@@ -140,6 +143,29 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
       j.destroy()
     })
     backToForm(e)
+  }
+
+  function _fitToMap(journeys) {
+    const bounds = new maplibregl.LngLatBounds(
+      journeys[0].path.features[0].geometry.coordinates[0],
+      journeys[0].path.features[0].geometry.coordinates[0]
+    );
+
+    for(const j of journeys) {
+      for(const f of j.path.features)
+      {
+        if(f.geometry) {
+          const coordinates = f.geometry.coordinates;
+          for (const coord of coordinates) {
+            bounds.extend(coord);
+          }
+        }
+      }
+    }
+    map.fitBounds(bounds, {
+      padding: 200
+    });
+
   }
 
   return (loading || !journeyList)
@@ -265,5 +291,3 @@ function transportNameComponent ({ line_name: lineName, line_bg_color: bgColor, 
     </div>
   `
 }
-
-// transport_info.line_name / line_bg_color / type

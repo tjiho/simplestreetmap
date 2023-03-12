@@ -12,16 +12,6 @@ export default class Journey extends AbstractAnnotation {
     this.addSource()
   }
 
-  mergePath () {
-    return {
-      type: 'FeatureCollection',
-      features: this.sections.map((section) => ({
-        type: 'Feature',
-        geometry: section.path
-      }))
-    }
-  }
-
   addSource () {
     map.addSource(this.id, {
       type: 'vector',
