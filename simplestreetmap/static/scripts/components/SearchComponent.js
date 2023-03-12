@@ -28,6 +28,7 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
     // const signal = searchController.signal
 
     debounceSearch(inputValue).then(setResults)
+    setSelectedResult(0)
   }
 
   function _onResultSelected (coord, name, context) {
