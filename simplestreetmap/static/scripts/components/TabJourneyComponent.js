@@ -81,7 +81,7 @@ function JourneyFormComponent ({ onSubmit }) {
   })
 
   function _onSubmit (e) {
-    if(from != null && to != null) {
+    if (from != null && to != null) {
       const mode = document.getElementById('journey-mode-input').value
       onSubmit(from, to, mode)
     }
@@ -147,27 +147,25 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
     backToForm(e)
   }
 
-  function _fitToMap(journeys) {
+  function _fitToMap (journeys) {
     const bounds = new maplibregl.LngLatBounds(
       journeys[0].path.features[0].geometry.coordinates[0],
       journeys[0].path.features[0].geometry.coordinates[0]
-    );
+    )
 
-    for(const j of journeys) {
-      for(const f of j.path.features)
-      {
-        if(f.geometry) {
-          const coordinates = f.geometry.coordinates;
+    for (const j of journeys) {
+      for (const f of j.path.features) {
+        if (f.geometry) {
+          const coordinates = f.geometry.coordinates
           for (const coord of coordinates) {
-            bounds.extend(coord);
+            bounds.extend(coord)
           }
         }
       }
     }
     map.fitBounds(bounds, {
       padding: 200
-    });
-
+    })
   }
 
   return (loading || !journeyList)
@@ -189,7 +187,7 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
             key: j.id
           }))}
         </ul>
-        ${journeyList.length == 0 && html`
+        ${journeyList.length === 0 && html`
           <p>No journeys founds</p>
         `}
       </div>

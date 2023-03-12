@@ -67,8 +67,7 @@ export default class Journey extends AbstractAnnotation {
   }
 
   hide () {
-    if(this.visible)
-      map.removeLayer(this.id)
+    if (this.visible) { map.removeLayer(this.id) }
     this.visible = false
     return this.visible
   }
@@ -78,25 +77,23 @@ export default class Journey extends AbstractAnnotation {
     map.removeSource(this.id)
   }
 
-  zoomOn() {
+  zoomOn () {
     const bounds = new maplibregl.LngLatBounds(
       this.path.features[0].geometry.coordinates[0],
       this.path.features[0].geometry.coordinates[0]
     )
 
-    for(const f of this.path.features)
-    {
-      if(f.geometry) {
-        const coordinates = f.geometry.coordinates;
+    for (const f of this.path.features) {
+      if (f.geometry) {
+        const coordinates = f.geometry.coordinates
         for (const coord of coordinates) {
-          bounds.extend(coord);
+          bounds.extend(coord)
         }
       }
     }
-  
+
     map.fitBounds(bounds, {
       padding: 200
-    });
+    })
   }
-    
 }

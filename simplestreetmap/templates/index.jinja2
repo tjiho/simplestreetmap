@@ -28,7 +28,6 @@
     <script>
         const BASE_API_URL = '/api/v1';
         const MAP_STYLE_URL = "{{ request.ssm_config['general']['map_style_url'] }}";
-        const BASE_FEATURES_URL = "http://localhost:7800";
         const OVERLAYS = [];
         {% for overlay in request.ssm_config['overlays'] %}
           OVERLAYS.push({

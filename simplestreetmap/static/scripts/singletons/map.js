@@ -45,13 +45,8 @@ class Map extends maplibregl.Map {
       this.loadOverlays()
     })
 
-    this.annotations = {} // itineraries, places, drawings, etc. {id: annotation}
+    this.annotations = {} // itineraries, places, drawings, etc. {annotation_id: annotation}
     this.callbacksOnAnnotationsChange = []
-    /*
-    places: name, coordinates, temporal information
-    itineraries: name, start, end, temporal information, color
-
-    */
   }
 
   pushAnnotation (element) {
@@ -68,12 +63,11 @@ class Map extends maplibregl.Map {
     this.callbacksOnAnnotationsChange.push(callback)
   }
 
-  loadOverlays() {
-    for(const overlay of OVERLAYS) {
+  loadOverlays () {
+    for (const overlay of OVERLAYS) {
       const overlayObj = new POIsOverlay(overlay)
       overlayObj.saveToAnnotations()
     }
-   
   }
 }
 
