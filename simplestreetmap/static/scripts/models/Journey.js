@@ -96,4 +96,18 @@ export default class Journey extends AbstractAnnotation {
       padding: 200
     })
   }
+
+  toJson () {
+    return {
+      from: this.from,
+      to: this.to,
+      mode: this.mode,
+      color: this.color,
+      distances: this.distances,
+      duration: this.duration,
+      sections: this.sections,
+      path: this.path,
+      objectType: this.objectType
+    }
+  }
 }

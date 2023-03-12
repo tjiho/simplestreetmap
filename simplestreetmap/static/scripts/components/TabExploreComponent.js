@@ -13,7 +13,6 @@ export default function TabExploreComponent () {
   }
 
   eventBus.on('selectPlace', (e) => {
-    console.log(e.detail.place)
     setPlace(e.detail.place)
   })
 

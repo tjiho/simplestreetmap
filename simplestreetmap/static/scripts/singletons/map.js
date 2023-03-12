@@ -1,5 +1,6 @@
 import parseHashCoordinates from '../tools/parseHashCoordinates.js'
 import POIsOverlay from '../models/POIsOverlay.js'
+import websocketClient from './webSocketClient.js'
 
 class Map extends maplibregl.Map {
   constructor () {
@@ -49,14 +50,20 @@ class Map extends maplibregl.Map {
     this.callbacksOnAnnotationsChange = []
   }
 
-  pushAnnotation (element) {
+  pushAnnotation (element, userSource = 'self') {
     this.annotations[element.id] = element
     this.callbacksOnAnnotationsChange.forEach(callback => callback('add', element, this.annotations))
+    if(userSource == 'self') {
+      websocketClient.send({action: "add", annotation: element.toJson()})
+    }
   }
 
-  removeAnnotation (element) {
+  removeAnnotation (element, userSource = 'self') {
     delete this.annotations[element.id]
     this.callbacksOnAnnotationsChange.forEach(callback => callback('remove', element, this.annotations))
+    if(userSource == 'self') {
+      websocketClient.send({action: "remove", annotation: element.toJson()})
+    }
   }
 
   onAnnotationsChange (callback) {
@@ -66,7 +73,7 @@ class Map extends maplibregl.Map {
   loadOverlays () {
     for (const overlay of OVERLAYS) {
       const overlayObj = new POIsOverlay(overlay)
-      overlayObj.saveToAnnotations()
+      overlayObj.saveToAnnotations('overlays')
     }
   }
 }

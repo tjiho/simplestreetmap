@@ -40,4 +40,14 @@ export default class Place extends AbstractAnnotation {
   zoomOn () {
     map.flyTo({ center: [this.lng, this.lat], zoom: 13 })
   }
+
+  toJson () {
+    return {
+      lat: this.lat,
+      lng: this.lng,
+      name: this.name,
+      context: this.context,
+      objectType: this.objectType
+    }
+  }
 }

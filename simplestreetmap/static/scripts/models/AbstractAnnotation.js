@@ -17,16 +17,23 @@ export default class Poi {
 
   destroy () {}
 
-  saveToAnnotations () {
-    map.pushAnnotation(this)
+  saveToAnnotations (source = 'self') {
+    map.pushAnnotation(this, source)
   }
 
-  removeFromAnnotations () {
+  removeFromAnnotations (source = 'self') {
     if (this.canBeDestroy) {
       this.destroy()
-      map.removeAnnotation(this)
+      map.removeAnnotation(this, source)
     }
   }
 
   zoomOn () {}
+
+  toJson () {
+    return {
+      id: this.id,
+      objectType: this.objectType
+    }
+  }
 }
