@@ -1,7 +1,7 @@
 class webSocketClient {
     constructor(mapId = null) {
         this.mapId = mapId;
-
+        console.log("Init websocket client");
         this.socket = null;
         this.socket = new WebSocket("ws://localhost:8765");
         this.socket.onopen = this.init.bind(this);
@@ -10,6 +10,7 @@ class webSocketClient {
             console.log("Received message from websocket");
             console.log(event.data);
         };
+
         this.socket.onclose = function () {
             console.log("Disconnected from websocket");
         };
