@@ -46,8 +46,6 @@ If you don't want to host tiles yourself, maptiler or mapbox offer hosting solut
 You can use ppsfleet tiles for testing, but only for testing.
 
 
-## Dev
+## Frontend Dev
 
-It does not need compilation.
-
-To check the code: `npx standard --fix`
+Format frontend code: `npx standard --fix`
