@@ -26,12 +26,12 @@ class Place(Base):
 class Plan(Base): # sorry can't use map keyword
     __tablename__ = "plan"
     id: Mapped[int] = mapped_column(primary_key=True)
+    token: Mapped[str] = mapped_column(String(40))
     name: Mapped[str] = mapped_column(String(30))
     places: Mapped[List["Place"]] = relationship(back_populates="plan")
 
     def __repr__(self) -> str:
         return f"Plan(id={self.id!r}, name={self.name!r}, places={self.places!r})"
 
-
-def createPlace(id: int, name: str, latitude: float, longitude: float) -> Place:
-    return Place(id=id, name=name, latitude=latitude, longitude=longitude)
+def setup_database(engine):
+    Base.metadata.create_all(engine)

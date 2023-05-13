@@ -1,15 +1,17 @@
 import asyncio
 import websockets
 import json
+import sys
 from sqlalchemy import create_engine
 
 from controller import Controller
+from model import setup_database
 
-engine = create_engine("sqlite://", echo=True)
+engine = create_engine("sqlite:///database.sqlite", echo=True)
 
 
 class WebsocketHandler():
-    def __init__(self):
+    def __init__(self, ):
         self.userController = Controller(engine)
         
     
@@ -51,7 +53,7 @@ class WebsocketHandler():
             try:
                 plan = self.userController.load_plan(message["map_token"])
                 print(plan)
-                await websocket.send(json.dump({"type": "hello", "map_token": plan.id}))
+                await websocket.send(json.dumps({"action": "hello", "map_token": plan.token}))
             except Exception as e:
                 print(e)
                 # return error
@@ -59,7 +61,7 @@ class WebsocketHandler():
         else:
             print("Creating new plan")
             plan = self.userController.create_plan()
-            await websocket.send(json.dump({"type": "hello", "map_token": plan.id}))
+            await websocket.send(json.dumps({"action": "hello", "map_token": plan.token}))
 
     async def create(self, message, websocket):
         pass
@@ -69,6 +71,11 @@ class WebsocketHandler():
 
 
 async def main():
+    if len(sys.argv) > 1 and sys.argv[1] == 'setup':
+        setup_database(engine)
+        print('Database created')
+        return
+
     wsHandler = WebsocketHandler()
     async with websockets.serve(wsHandler.websocketListener, "localhost", 8765):
         print("Server started")

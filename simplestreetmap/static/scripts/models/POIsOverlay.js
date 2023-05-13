@@ -60,7 +60,7 @@ export default class POIsOverlay extends AbstractAnnotation {
     map.removeSource(this.id)
   }
 
-  toJson() {
+  toJson () {
     return {
       tilesUrl: this.tilesUrl,
       sourceLayer: this.sourceLayer,
