@@ -107,7 +107,7 @@ export default class Journey extends AbstractAnnotation {
       duration: this.duration,
       sections: this.sections,
       path: this.path,
-      objectType: this.objectType
+      object_type: this.objectType
     }
   }
 }

@@ -26,14 +26,26 @@ class Controller():
         return plan
 
     def add_place(self, place):
-        place_object = Place(id=place.id, name=place.name, latitude=place.latitude, longitude=place.longitude)
+        annotation_uuid = str(uuid4())
+        place_object = Place(
+            uuid=annotation_uuid, 
+            name=place['name'], 
+            lat=place['lat'], 
+            lng=place['lng'],
+            plan_id=self.plan.id
+            #context=place['context']
+        )
         self.session.add(place_object)
         self.session.commit()
-        pass
+        return place_object
 
     def remove_place(self, place_id):
         place_object = Place(id=place_id)
         self.session.delete(place_object)
         self.session.commit()
         pass
+
+    def add_annotation(self,annotation):
+        if annotation['object_type'] == 'place':
+            return self.add_place(annotation)
 

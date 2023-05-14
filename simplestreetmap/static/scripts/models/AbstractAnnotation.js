@@ -5,6 +5,7 @@ export default class Poi {
     this.id = crypto.randomUUID()
     this.visible = false
     this.canBeDestroy = true
+    this.backendId = null
   }
 
   setColor (color) {}
@@ -33,7 +34,7 @@ export default class Poi {
   toJson () {
     return {
       id: this.id,
-      objectType: this.objectType
+      object_type: this.objectType
     }
   }
 }

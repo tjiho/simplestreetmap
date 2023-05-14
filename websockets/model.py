@@ -11,17 +11,21 @@ class Base(DeclarativeBase):
     pass
 
 class Place(Base):
-    __tablename__ = "user_account"
+    __tablename__ = "place"
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(30))
-    latitude: Mapped[float]
-    longitude: Mapped[float]
+    uuid: Mapped[str] = mapped_column(String(40))
+    
+    name: Mapped[str] = mapped_column(String(50))
+    lat: Mapped[float]
+    lng: Mapped[float]
+    context: Mapped[Optional[str]]
+
     plan_id: Mapped[int] = mapped_column(ForeignKey("plan.id"))
     plan: Mapped["Plan"] = relationship(back_populates="places")
     #plan_id: Mapped[int] = mapped_column(ForeignKey("plan.id"))
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, name={self.name!r}, latitude={self.latitude!r}, longitude={self.longitude!r})"
+        return f"User(id={self.id!r}, name={self.name!r}, latitude={self.lat!r}, longitude={self.lng!r})"
     
 class Plan(Base): # sorry can't use map keyword
     __tablename__ = "plan"

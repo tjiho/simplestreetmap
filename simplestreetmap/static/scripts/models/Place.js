@@ -47,7 +47,7 @@ export default class Place extends AbstractAnnotation {
       lng: this.lng,
       name: this.name,
       context: this.context,
-      objectType: this.objectType
+      object_type: this.objectType
     }
   }
 }

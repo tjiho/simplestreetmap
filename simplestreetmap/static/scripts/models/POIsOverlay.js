@@ -62,11 +62,11 @@ export default class POIsOverlay extends AbstractAnnotation {
 
   toJson () {
     return {
-      tilesUrl: this.tilesUrl,
-      sourceLayer: this.sourceLayer,
+      tiles_url: this.tilesUrl,
+      source_layer: this.sourceLayer,
       name: this.name,
       color: this.color,
-      objectType: this.objectType
+      object_type: this.objectType
     }
   }
 }

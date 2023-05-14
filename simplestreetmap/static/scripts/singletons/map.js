@@ -63,7 +63,7 @@ class Map extends maplibregl.Map {
     this.annotations[element.id] = element
     this.callbacksOnAnnotationsChange.forEach(callback => callback('add', element, this.annotations))
     if (userSource === 'self') {
-      websocketClient.send({ action: 'add', annotation: element.toJson() })
+      this.websocketClient.send({ action: 'add_annotation', annotation: element.toJson() })
     }
   }
 
@@ -71,7 +71,7 @@ class Map extends maplibregl.Map {
     delete this.annotations[element.id]
     this.callbacksOnAnnotationsChange.forEach(callback => callback('remove', element, this.annotations))
     if (userSource === 'self') {
-      websocketClient.send({ action: 'remove', annotation: element.toJson() })
+      this.websocketClient.send({ action: 'remove_annotation', annotation: element.toJson() })
     }
   }
 
