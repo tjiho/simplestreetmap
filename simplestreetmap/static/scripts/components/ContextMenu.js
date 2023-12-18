@@ -1,37 +1,56 @@
 import { html, useEffect, useState } from '../../../static/vendor/preact/standalone.module.js'
 import { fetchReverseGeocoding } from '../tools/api.js'
+import eventBus from '../singletons/eventBus.js'
+import Place from '../models/Place.js'
+
 import LoadingComponent from './LoadingComponent.js'
 
-export default function ContextMenu ({ coordinates }) {
-  const [place, setPlace] = useState(null)
-
+export default function ContextMenu ({ coordinates, currentPopup }) {
+  const [place, setPlace] = useState({ name: '' })
+  // const [value, setValue] = useState(0);
   const options = [
     {
       label: 'Add an annotation',
       callback: () => {
-        new Place({ lat: coordinates[1], lng: coordinates[0], name: 'prout', context: '' })
-        popup.remove()
+        new Place({ lat: place.coord[1], lng: place.coord[0], name: place.name, context: place.context })
+        currentPopup.remove()
       }
     },
-    { label: 'Start an itinerary from', callback: () => {} },
-    { label: 'Start an itinerary to', callback: () => {} }
+    {
+      label: 'Start an itinerary from',
+      callback: () => {
+        eventBus.emit('selectTab', { tab: 1 })
+        eventBus.emit('startJourneyFrom', { place: { coordinates: place.coord, name: place.name } })
+        currentPopup.remove()
+      }
+    },
+    {
+      label: 'Start an itinerary to',
+      callback: () => {
+        eventBus.emit('selectTab', { tab: 1 })
+        eventBus.emit('startJourneyTo', { place: { coordinates: place.coord, name: place.name } })
+        currentPopup.remove()
+      }
+    }
   ]
 
   useEffect(async () => {
-    const res = await fetchReverseGeocoding(coordinates)
-    console.log(res)
+    fetchReverseGeocoding(coordinates).then((res) => {
+      setPlace({ ...res })
+    })
     // setPlace(res)
   }, [])
 
   return html`
         <div class="context-menu">
-            ${place ? baseContextMenu({ options }) : LoadingComponent({})}
+            ${place?.name ? baseContextMenu({ title: place.name, options }) : LoadingComponent({})}
         </div>
     `
 }
+//
 
 // options: [{label, callback}]
-function baseContextMenu ({ options }) {
+function baseContextMenu ({ title, options }) {
   // const isCity = CITY_TYPES.includes(type)
 
   // return html`
@@ -43,6 +62,7 @@ function baseContextMenu ({ options }) {
   // `
 
   return html`
+        <h3>${title}</h3>
         <ul class="menu-section">
             ${options.map(option => html`
                 <li onClick=${option.callback}>

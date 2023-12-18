@@ -1,7 +1,5 @@
 class WebSocketClient {
   constructor (mapToken = null) {
-    const self = this
-
     this.mapToken = mapToken
     console.log('Init websocket client')
     this.socket = null

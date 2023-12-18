@@ -109,8 +109,8 @@ class Map {
 
   onClick (e) {
     const popup = new maplibregl.Popup({
-      className: 'Mypopup',
-      closeButton: false
+      className: 'Mypopup'
+      // closeButton: false
       // closeOnClick: false,
     })
 
@@ -118,11 +118,11 @@ class Map {
 
     const tooltipNode = document.createElement('div')
 
-    render(html`<${ContextMenu} coordinates=${coordinates}/>`, tooltipNode)
+    render(html`<${ContextMenu} coordinates=${coordinates} currentPopup=${popup}/>`, tooltipNode)
 
     popup
       .setLngLat(e.lngLat)
-      .setHTML(tooltipNode.innerHTML)
+      .setDOMContent(tooltipNode)
       .addTo(this.getMap())
   }
 

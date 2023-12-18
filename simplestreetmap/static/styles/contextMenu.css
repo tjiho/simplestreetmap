@@ -1,10 +1,24 @@
-.maplibregl-popup-content {
+#map .maplibregl-popup-close-button {
+    font-size: 24px;
+    top: -4px;
+}
+
+#map .maplibregl-popup {
+    max-width: none !important;
+    font-size: small;
+}
+
+#map .maplibregl-popup-content {
     padding:0;
     margin:0;
 }
 
+.context-menu h3 {
+    padding-right: 2rem;
+}
+
 .context-menu {
-    padding: 0.25rem;
+    padding: 0.5rem;
 }
 
 .context-menu ul{
