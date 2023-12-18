@@ -9,6 +9,6 @@ export async function fetchItinerary (from, to, mode, signal) {
 }
 
 export async function fetchReverseGeocoding (coordinates, signal) {
-  const result = await window.fetch(`${BASE_API_URL}/reverse?lat=${coordinates[1]}&lng=${coordinates[0]}`, signal)
+  const result = await window.fetch(`${BASE_API_URL}/reverse?lat=${coordinates[1]}&lon=${coordinates[0]}`, signal)
   return await result.json()
 }

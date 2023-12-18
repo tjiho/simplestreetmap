@@ -14,13 +14,12 @@ class AddokSearchAdapter(BaseSearchAdapter):
 
         return result
 
-    def reverse(self, lat, long):
-        response = requests.get(f'{self.url}/reverse', params = { 'lon': long, 'lat': lat }).json()
+    def reverse(self, lat, lon):
+        response = requests.get(f'{self.url}/reverse', params = { 'lon': lon, 'lat': lat }).json()
         if len(response['features']) == 0:
             return {
                 'name': 'Unknown',
                 'type': 'Unknown',
-                'coord': [long, lat],
                 'context': []
             }
         else:

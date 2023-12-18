@@ -6,5 +6,5 @@ class BaseSearchAdapter(object):
         pass
 
     @abc.abstractmethod
-    def reverse(self, lat, long):
+    def reverse(self, lat, lon):
         pass
