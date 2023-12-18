@@ -1,4 +1,4 @@
-import { html } from '../../vendor/preact/standalone.module.js'
+import { html } from '../../../static/vendor/preact/standalone.module.js'
 
 export default function LoadingComponent ({ title = 'Loading...' }) {
   return html`

@@ -1,4 +1,5 @@
-import { html, useEffect, useState } from '../../../static/vendor/preact/standalone.module.js'
+import { html, useState, useEffect } from '../../../static/vendor/preact/standalone.module.js'
+
 import map from '../singletons/map.js'
 import eventBus from '../singletons/eventBus.js'
 

@@ -4,6 +4,12 @@ def search_view(request):
 
     return request.search_adapter.search(request.params['q'])
 
+def reverse_view(request):
+    if not request.params.get('lat', '') or not request.params.get('long', ''):
+        return []
+
+    return request.search_adapter.reverse(request.params['lat'], request.params['long'])
+
 def itinerary_view(request):
     if not request.params.get('from', '') or not request.params.get('to', ''):
         return []

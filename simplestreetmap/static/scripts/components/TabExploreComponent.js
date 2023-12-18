@@ -1,4 +1,5 @@
 import { html, useState } from '../../../static/vendor/preact/standalone.module.js'
+
 import SearchComponent from './SearchComponent.js'
 import Place from '../models/Place.js'
 import map from '../singletons/map.js'
@@ -9,7 +10,7 @@ export default function TabExploreComponent () {
 
   function addPlace (coordinates, name, context) {
     setPlace(new Place({ lat: coordinates[1], lng: coordinates[0], name, context }))
-    map.flyTo({ center: coordinates, zoom: 13 })
+    map.getMap().flyTo({ center: coordinates, zoom: 13 })
   }
 
   eventBus.on('selectPlace', (e) => {

@@ -5,6 +5,7 @@ import sys
 import logging
 
 from sqlalchemy import create_engine
+from collections import defaultdict
 
 from controller import Controller
 from model import setup_database
@@ -18,14 +19,16 @@ engine = create_engine("sqlite:///database.sqlite", echo=False)
 
 class WebsocketHandler():
     def __init__(self):
-        self.userController = Controller(engine)
         
+        self.clients = defaultdict(set)
     
+   
     async def websocketListener(self, websocket):
         logger.debug("New connection")
         
         async for message in websocket:
             message = json.loads(message)
+            print(message)
             match message:
                 case {"action": "ping"}:
                     logger.debug("Ping received")
@@ -52,30 +55,45 @@ class WebsocketHandler():
 
             #await websocket.send(message)
 
+    async def run_loop(self):
+        while True:
+            await asyncio.sleep(1)
+
     async def hello(self, message, websocket):
+        websocket.userController = Controller(engine)
         if "map_token" in message:
             print("Loading plan")
             try:
-                plan = self.userController.load_plan(message["map_token"])
+                plan = websocket.userController.load_plan(message["map_token"])
                 print(plan)
-                await websocket.send(json.dumps({"action": "hello", "map_token": plan.token}))
+                await websocket.send(json.dumps({
+                    "action": "hello", 
+                    "map_token": plan.token, 
+                    "places": [ place.toJSON() for place in plan.places],
+                    "user_id": websocket.userController.user_id
+                }))
             except Exception as e:
                 print(e)
                 # return error
                 pass
         else:
             print("Creating new plan")
-            plan = self.userController.create_plan()
-            await websocket.send(json.dumps({"action": "hello", "map_token": plan.token}))
+            plan = websocket.userController.create_plan()
+            await websocket.send(json.dumps({"action": "hello", "map_token": plan.token, "user_id": websocket.userController.user_id}))
+
+        self.clients[plan.token].add(websocket)
 
     async def add_annotation(self, message, websocket):
         if("annotation" in message):
-            saved_annotation = self.userController.add_annotation(message["annotation"])
-            await websocket.send(json.dumps({
-                "action": "add", 
-                "annotation": message["annotation"], 
-                "uuid": saved_annotation.uuid, 
-            }))
+            saved_annotation = websocket.userController.add_annotation(message["annotation"])
+            #breakpoint()
+            for websocketClient in self.clients[websocket.userController.plan.token]:
+                await websocketClient.send(json.dumps({
+                    "action": "add", 
+                    "annotation": message["annotation"], 
+                    "uuid": saved_annotation.uuid,
+                    "user_id": websocket.userController.user_id
+                }))
         else:
             logger.warning("No annotation in message")
         pass
@@ -91,8 +109,9 @@ async def main():
         return
 
     wsHandler = WebsocketHandler()
-    async with websockets.serve(wsHandler.websocketListener, "localhost", 8765):
+    async with websockets.serve(wsHandler.websocketListener, "127.0.0.1", 8765):
         logger.debug("Server started")
+        # await broadcast_messages()  # runs forever
         await asyncio.Future()  # run forever
 
 asyncio.run(main())

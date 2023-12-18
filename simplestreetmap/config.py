@@ -17,10 +17,10 @@ def get_config():
         },
         'maplibre': {
             'js': {
-                'url': 'https://static.ppsfleet.navy/js/maplibre-2.4.0.js'
+                'url': 'https://static.ppsfleet.navy/js/maplibre-3.6.2.js'
             },
             'css': {
-                'url': 'https://static.ppsfleet.navy/js/maplibre-2.4.0.css'
+                'url': 'https://static.ppsfleet.navy/js/maplibre-3.6.2.css'
             } 
         }
     }

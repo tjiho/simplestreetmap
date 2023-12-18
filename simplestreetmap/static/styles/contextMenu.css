@@ -1,0 +1,29 @@
+.maplibregl-popup-content {
+    padding:0;
+    margin:0;
+}
+
+.context-menu {
+    padding: 0.25rem;
+}
+
+.context-menu ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.context-menu li {
+    display: flex;
+    align-items: baseline;
+    padding: 0.25rem 0.5rem;
+    /* margin: 0 0.5rem; */
+    list-style: none;
+    cursor: pointer;
+    border-radius: .25rem;  
+}
+  
+.context-menu li:hover, .context-menu li[selected] {
+background: var(--main-color);
+color: var(--main-contrast-text);
+}

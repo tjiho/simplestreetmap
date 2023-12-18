@@ -5,6 +5,7 @@ from .journey.brouter import BrouterJourneyAdapter
 from .config import get_config
 from .views import (
     search_view,
+    reverse_view,
     index_view,
     itinerary_view,
 )
@@ -23,10 +24,12 @@ def make_app():
         config.add_static_view('static', 'static')
 
         config.add_route('search', '/api/v1/search')
+        config.add_route('reverse', '/api/v1/reverse')
         config.add_route('itinerary', '/api/v1/itinerary')
         config.add_route('index', '/')
 
         config.add_view(search_view, route_name='search', request_method='GET', renderer='json')
+        config.add_view(reverse_view, route_name='reverse', request_method='GET', renderer='json')
         config.add_view(itinerary_view, route_name='itinerary', request_method='GET', renderer='json')
         config.add_view(index_view, route_name='index', request_method='GET', renderer='index.jinja2')
 

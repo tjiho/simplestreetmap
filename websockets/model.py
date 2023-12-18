@@ -22,11 +22,25 @@ class Place(Base):
 
     plan_id: Mapped[int] = mapped_column(ForeignKey("plan.id"))
     plan: Mapped["Plan"] = relationship(back_populates="places")
+
+    user_id: Mapped[str] = mapped_column(String(40))
+
     #plan_id: Mapped[int] = mapped_column(ForeignKey("plan.id"))
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, name={self.name!r}, latitude={self.lat!r}, longitude={self.lng!r})"
+        return f"Place(id={self.id!r}, name={self.name!r}, latitude={self.lat!r}, longitude={self.lng!r})"
     
+    def toJSON(self):
+        return {
+            'id': self.id,
+            'uuid': self.uuid,
+            'name': self.name,
+            'lat': self.lat,
+            'lng': self.lng,
+            'context': self.context
+        } 
+    
+
 class Plan(Base): # sorry can't use map keyword
     __tablename__ = "plan"
     id: Mapped[int] = mapped_column(primary_key=True)

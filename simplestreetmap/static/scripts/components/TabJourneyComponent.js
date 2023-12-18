@@ -1,4 +1,5 @@
 import { html, useState, useEffect } from '../../../static/vendor/preact/standalone.module.js'
+
 import SearchComponent from './SearchComponent.js'
 // import map from '../singletons/map.js'
 import { fetchItinerary } from '../tools/api.js'
@@ -163,7 +164,7 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
         }
       }
     }
-    map.fitBounds(bounds, {
+    map.getMap().fitBounds(bounds, {
       padding: 200
     })
   }
@@ -286,7 +287,7 @@ function transportNameComponent ({ line_name: lineName, line_bg_color: bgColor, 
     color: textColor || 'black'
   }
   return html`
-    <div style=${style} class="transport-name">
+    <div style="${style}" class="transport-name">
     ${lineName}
     </div>
   `

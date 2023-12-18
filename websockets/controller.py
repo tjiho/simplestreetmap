@@ -8,8 +8,12 @@ class Controller():
         self.database_connection = database_connection
         self.plan = None
         self.session = Session(self.database_connection)
+        self.user_id = str(uuid4())
         pass
     
+    def close(self):
+        self.session.close()
+
     def load_plan(self, plan_token):
         plan = self.session.query(Plan).filter(Plan.token == plan_token).one()
         if plan is None:
@@ -32,7 +36,8 @@ class Controller():
             name=place['name'], 
             lat=place['lat'], 
             lng=place['lng'],
-            plan_id=self.plan.id
+            plan_id=self.plan.id,
+            user_id=self.user_id
             #context=place['context']
         )
         self.session.add(place_object)

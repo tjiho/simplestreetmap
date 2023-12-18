@@ -1,19 +1,28 @@
 class WebSocketClient {
   constructor (mapToken = null) {
+    const self = this
+
     this.mapToken = mapToken
     console.log('Init websocket client')
     this.socket = null
     this.socket = new WebSocket('ws://localhost:8765')
     this.socket.onopen = this.init.bind(this)
 
-    this.socket.onmessage = function (event) {
+    const onMessageCallBack = (event) => {
       console.log('Received message from websocket')
-      console.log(event.data)
+      const data = JSON.parse(event.data)
+      console.log(data)
+      const action = data.action
+      this.callCallbacks(action, data)
     }
+
+    this.socket.onmessage = onMessageCallBack.bind(this)
 
     this.socket.onclose = function () {
       console.log('Disconnected from websocket')
     }
+
+    this.callbacks = { add: [], hello: [], remove: [] } //
   }
 
   init () {
@@ -25,7 +34,7 @@ class WebSocketClient {
       this.send({ action: 'hello' })
     }
 
-    //this.onMessage('hello',this.#helloCallback.bind(this))
+    // this.onMessage('hello',this.#helloCallback.bind(this))
   }
 
   send (message) {
@@ -37,12 +46,14 @@ class WebSocketClient {
   }
 
   onMessage (actionToFilterOn, callback) {
-    this.socket.onmessage = function (event) {
-      const data = JSON.parse(event.data)
-      console.log(data)
-      if (data.action === actionToFilterOn) {
+    if (this.callbacks[actionToFilterOn]) { this.callbacks[actionToFilterOn].push(callback) } else { this.callbacks[actionToFilterOn] = [callback] }
+  }
+
+  callCallbacks (action, data) {
+    if (this.callbacks[action]) {
+      this.callbacks[action].forEach(callback => {
         callback(data)
-      }
+      })
     }
   }
 

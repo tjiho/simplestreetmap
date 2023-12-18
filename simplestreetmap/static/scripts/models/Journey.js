@@ -29,12 +29,12 @@ export default class Journey extends AbstractAnnotation {
   }
 
   addSource () {
-    map.addSource(this.id, { type: 'geojson', data: this.path })
+    map.getMap().addSource(this.id, { type: 'geojson', data: this.path })
   }
 
   setColor (color) {
     this.color = color
-    map.setPaintProperty(
+    map.getMap().setPaintProperty(
       this.id,
       'line-color',
       color
@@ -42,12 +42,12 @@ export default class Journey extends AbstractAnnotation {
   }
 
   moveOnTop () {
-    map.moveLayer(this.id)
+    map.getMap().moveLayer(this.id)
   }
 
   show () {
     // TODO: mettre le layer des noms de villes au dessus
-    map.addLayer({
+    map.getMap().addLayer({
       id: this.id,
       type: 'line',
       source: this.id,
@@ -67,14 +67,14 @@ export default class Journey extends AbstractAnnotation {
   }
 
   hide () {
-    if (this.visible) { map.removeLayer(this.id) }
+    if (this.visible) { map.getMap().removeLayer(this.id) }
     this.visible = false
     return this.visible
   }
 
   destroy () {
     this.hide()
-    map.removeSource(this.id)
+    map.getMap().removeSource(this.id)
   }
 
   zoomOn () {
@@ -92,13 +92,14 @@ export default class Journey extends AbstractAnnotation {
       }
     }
 
-    map.fitBounds(bounds, {
+    map.getMap().fitBounds(bounds, {
       padding: 200
     })
   }
 
   toJson () {
     return {
+      id: this.id,
       from: this.from,
       to: this.to,
       mode: this.mode,

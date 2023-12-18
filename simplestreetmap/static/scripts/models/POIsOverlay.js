@@ -14,7 +14,7 @@ export default class POIsOverlay extends AbstractAnnotation {
   }
 
   addSource () {
-    map.addSource(this.id, {
+    map.getMap().addSource(this.id, {
       type: 'vector',
       tiles: [`${this.tilesUrl}/${this.sourceLayer}/{z}/{x}/{y}.pbf`],
       minzoom: 10
@@ -23,7 +23,7 @@ export default class POIsOverlay extends AbstractAnnotation {
 
   setColor (color) {
     this.color = color
-    map.setPaintProperty(
+    map.getMap().setPaintProperty(
       this.id,
       'circle-color',
       color
@@ -31,12 +31,12 @@ export default class POIsOverlay extends AbstractAnnotation {
   }
 
   moveOnTop () {
-    map.moveLayer(this.id)
+    map.getMap().moveLayer(this.id)
   }
 
   show () {
     // TODO: mettre le layer des noms de villes au dessus
-    map.addLayer({
+    map.getMap().addLayer({
       id: this.id,
       type: 'circle',
       source: this.id,
@@ -51,13 +51,13 @@ export default class POIsOverlay extends AbstractAnnotation {
   }
 
   hide () {
-    map.removeLayer(this.id)
+    map.getMap().removeLayer(this.id)
     this.visible = false
     return this.visible
   }
 
   destroy () {
-    map.removeSource(this.id)
+    map.getMap().removeSource(this.id)
   }
 
   toJson () {

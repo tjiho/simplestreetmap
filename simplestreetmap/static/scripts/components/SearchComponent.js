@@ -1,4 +1,5 @@
 import { html, useState } from '../../../static/vendor/preact/standalone.module.js'
+
 import { fetchSearchResult } from '../tools/api.js'
 import debounce from '../tools/debounce.js'
 
