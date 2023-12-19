@@ -65,7 +65,6 @@ class WebsocketHandler():
             print("Loading plan")
             try:
                 plan = websocket.userController.load_plan(message["map_token"])
-                print(plan)
                 await websocket.send(json.dumps({
                     "action": "hello", 
                     "map_token": plan.token, 
@@ -84,9 +83,12 @@ class WebsocketHandler():
         self.clients[plan.token].add(websocket)
 
     async def add_annotation(self, message, websocket):
-        if("annotation" in message):
+        if "annotation" in message:
             saved_annotation = websocket.userController.add_annotation(message["annotation"])
-            #breakpoint()
+            
+            if saved_annotation is None:
+                return
+
             for websocketClient in self.clients[websocket.userController.plan.token]:
                 await websocketClient.send(json.dumps({
                     "action": "add", 
@@ -99,6 +101,16 @@ class WebsocketHandler():
         pass
 
     async def remove_annotation(self, message, websocket):
+        if "id" in message and "object_type" in message:
+            websocket.userController.remove_annotation(message['id'], message['object_type'])
+            for websocketClient in self.clients[websocket.userController.plan.token]:
+                await websocketClient.send(json.dumps({
+                    "action": "remove", 
+                    "uuid": message["id"],
+                    "user_id": websocket.userController.user_id
+                }))
+        else:
+            logger.warning("No ID in message")
         pass
 
 

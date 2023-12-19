@@ -54,3 +54,8 @@ class Controller():
         if annotation['object_type'] == 'place':
             return self.add_place(annotation)
 
+
+    def remove_annotation(self,id, object_type):
+        if object_type == 'place':
+            return self.remove_place(id)
+

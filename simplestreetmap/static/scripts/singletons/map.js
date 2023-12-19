@@ -33,7 +33,7 @@ class Map {
       style: MAP_STYLE_URL,
       center: [lng, lat],
       zoom,
-      pitch: 30
+      pitch: 40
     })
 
     const self = this
@@ -67,10 +67,8 @@ class Map {
     this.websocketClient.onMessage('hello', function (data) {
       console.log('hello from websocket')
       self.userId = data.user_id
-      console.log(self.userId)
       const searchParams = new URLSearchParams(window.location.search)
       searchParams.set('token', data.map_token)
-      console.log(searchParams)
       history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
 
       if (data?.places) {
@@ -93,6 +91,16 @@ class Map {
       } else {
         new Place(data.annotation, userId, serverId)
       }
+      // si source == self et que annotation.id est dans dans nos données locales => supprimer des données locales
+      // creer annotation[data.uuid] avec annotation du bon type
+    })
+
+    this.websocketClient.onMessage('remove', function (data) {
+      console.log('remove', data)
+      const serverId = data.uuid
+      const userId = data.user_id
+      //delete this.localAnnotations[serverId]
+      delete this.syncAnnotations[serverId]
       // si source == self et que annotation.id est dans dans nos données locales => supprimer des données locales
       // creer annotation[data.uuid] avec annotation du bon type
     })
@@ -127,7 +135,7 @@ class Map {
   }
 
   pushAnnotation (element, userSource = 'self') {
-    console.log(userSource)
+    console.log('new annotation from', userSource)
     if (userSource === 'self') {
       this.localAnnotations[element.id] = element
       console.log('send to websocket')
@@ -143,7 +151,7 @@ class Map {
     delete this.syncAnnotations[element.id]
     this.notifyAnnotationsChange('remove', element)
     if (userSource === 'self') {
-      this.websocketClient.send({ action: 'remove_annotation', annotation: element.toJson() })
+      this.websocketClient.send({ action: 'remove_annotation', id: element.id, 'object_type': element.objectType })
     }
   }
 
