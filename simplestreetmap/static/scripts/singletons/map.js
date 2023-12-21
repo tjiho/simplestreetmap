@@ -3,17 +3,13 @@ import { render, html } from '../../../static/vendor/preact/standalone.module.js
 import parseHashCoordinates from '../tools/parseHashCoordinates.js'
 import POIsOverlay from '../models/POIsOverlay.js'
 import Place from '../models/Place.js'
-import WebsocketClient from '../WebSocketClient.js'
+import websocketClient from './webSocketClient.js'
 
 import ContextMenu from '../components/ContextMenu.js'
 
 class Map {
   constructor () {
     this.isinitiated = false
-
-    this.localAnnotations = {} // itineraries, places, drawings, etc. {annotation_id: annotation}
-    this.syncAnnotations = {}
-    this.callbacksOnAnnotationsChange = []
     this.userId = null
     this.map = null
   }
@@ -58,13 +54,78 @@ class Map {
 
     this.map.on('moveend', this.moveEnd.bind(this))
 
-    this.map.on('load', this.loadOverlays.bind(this))
+    this.map.on('load', () => {
+      self.loadOverlays.bind(this)
+      websocketClient.init(mapToken)
+    })
 
     this.map.on('click', this.onClick.bind(this))
+  }
 
-    this.websocketClient = new WebsocketClient(mapToken)
+  moveEnd () {
+    const { lng, lat } = this.getMap().getCenter()
+    const zoom = this.getMap().getZoom()
 
-    this.websocketClient.onMessage('hello', function (data) {
+    const searchParams = new URLSearchParams(window.location.search)
+    searchParams.set('map', `${zoom}/${lat}/${lng}`)
+    history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
+  }
+
+  onClick (e) {
+    const popup = new maplibregl.Popup({
+      className: 'Mypopup'
+      // closeButton: false
+      // closeOnClick: false,
+    })
+
+    const coordinates = e.lngLat.toArray()
+
+    const tooltipNode = document.createElement('div')
+
+    render(html`<${ContextMenu} coordinates=${coordinates} currentPopup=${popup}/>`, tooltipNode)
+
+    popup
+      .setLngLat(e.lngLat)
+      .setDOMContent(tooltipNode)
+      .addTo(this.getMap())
+  }
+
+  loadOverlays () {
+    for (const overlay of OVERLAYS) {
+      const overlayObj = new POIsOverlay(overlay)
+      overlayObj.saveToAnnotations('overlays')
+    }
+  }
+}
+
+const map = new Map()
+
+export default map
+
+/*
+
+pushAnnotation (element, userSource = 'self') {
+    console.log('new annotation from', userSource)
+    if (userSource === 'self') {
+      this.localAnnotations[element.id] = element
+      console.log('send to websocket')
+      this.websocketClient.send({ action: 'add_annotation', annotation: element.toJson() })
+    } else {
+      this.syncAnnotations[element.serverId] = element
+    }
+    this.notifyAnnotationsChange('add', element)
+  }
+
+  removeAnnotation (element, userSource = 'self') {
+    delete this.localAnnotations[element.id]
+    delete this.syncAnnotations[element.id]
+    this.notifyAnnotationsChange('remove', element)
+    if (userSource === 'self') {
+      this.websocketClient.send({ action: 'remove_annotation', id: element.id, 'object_type': element.objectType })
+    }
+  }
+
+  this.websocketClient.onMessage('hello', function (data) {
       console.log('hello from websocket')
       self.userId = data.user_id
       const searchParams = new URLSearchParams(window.location.search)
@@ -104,102 +165,5 @@ class Map {
       // si source == self et que annotation.id est dans dans nos données locales => supprimer des données locales
       // creer annotation[data.uuid] avec annotation du bon type
     })
-  }
 
-  moveEnd () {
-    const { lng, lat } = this.getMap().getCenter()
-    const zoom = this.getMap().getZoom()
-
-    const searchParams = new URLSearchParams(window.location.search)
-    searchParams.set('map', `${zoom}/${lat}/${lng}`)
-    history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
-  }
-
-  onClick (e) {
-    const popup = new maplibregl.Popup({
-      className: 'Mypopup'
-      // closeButton: false
-      // closeOnClick: false,
-    })
-
-    const coordinates = e.lngLat.toArray()
-
-    const tooltipNode = document.createElement('div')
-
-    render(html`<${ContextMenu} coordinates=${coordinates} currentPopup=${popup}/>`, tooltipNode)
-
-    popup
-      .setLngLat(e.lngLat)
-      .setDOMContent(tooltipNode)
-      .addTo(this.getMap())
-  }
-
-  pushAnnotation (element, userSource = 'self') {
-    console.log('new annotation from', userSource)
-    if (userSource === 'self') {
-      this.localAnnotations[element.id] = element
-      console.log('send to websocket')
-      this.websocketClient.send({ action: 'add_annotation', annotation: element.toJson() })
-    } else {
-      this.syncAnnotations[element.serverId] = element
-    }
-    this.notifyAnnotationsChange('add', element)
-  }
-
-  removeAnnotation (element, userSource = 'self') {
-    delete this.localAnnotations[element.id]
-    delete this.syncAnnotations[element.id]
-    this.notifyAnnotationsChange('remove', element)
-    if (userSource === 'self') {
-      this.websocketClient.send({ action: 'remove_annotation', id: element.id, 'object_type': element.objectType })
-    }
-  }
-
-  notifyAnnotationsChange (action, annotation) {
-    this.callbacksOnAnnotationsChange.forEach(callback => callback(action, annotation, { ...this.localAnnotations, ...this.syncAnnotations }))
-  }
-
-  onAnnotationsChange (callback) {
-    this.callbacksOnAnnotationsChange.push(callback)
-  }
-
-  loadOverlays () {
-    for (const overlay of OVERLAYS) {
-      const overlayObj = new POIsOverlay(overlay)
-      overlayObj.saveToAnnotations('overlays')
-    }
-
-    // map.addSource("Batiments", {
-    //   type: "geojson",
-    //   data:
-    //     "https://raw.githubusercontent.com/mastersigat/data/main/BatiRennes.geojson",
-    // });
-
-    // map.addLayer({
-    //   id: "Batiments",
-    //   type: "fill-extrusion",
-    //   source: "Batiments",
-    //   paint: {
-    //     "fill-extrusion-height": { type: "identity", property: "HAUTEUR" },
-    //     "fill-extrusion-color": {
-    //       property: "HAUTEUR",
-    //       stops: [
-    //         [5, "#1a9850"],
-    //         [7, "#91cf60"],
-    //         [9, "#d9ef8b"],
-    //         [12, "#ffffbf"],
-    //         [16, "#fee08b"],
-    //         [20, "#fc8d59"],
-    //         [30, "#d73027"],
-    //       ],
-    //     },
-    //     "fill-extrusion-opacity": 0.7,
-    //     "fill-extrusion-base": 0,
-    //   },
-    // });
-  }
-}
-
-const map = new Map()
-
-export default map
+*/

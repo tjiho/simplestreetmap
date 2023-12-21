@@ -1,4 +1,5 @@
 import map from '../singletons/map.js'
+import annotationStore from '../singletons/annotationsStore.js' 
 
 export default class Poi {
   constructor () {
@@ -18,14 +19,15 @@ export default class Poi {
 
   destroy () {}
 
+  // don't use -> do directly annotationStore.addLocalAnnotation(annotation)
   saveToAnnotations (source = 'self') {
-    map.pushAnnotation(this, source)
+    annotationStore.addLocalAnnotation(this)
   }
 
   removeFromAnnotations (source = 'self') {
     if (this.canBeDestroy) {
       this.destroy()
-      map.removeAnnotation(this, source)
+      annotationStore.removeAnnotation(this, source)
     }
   }
 

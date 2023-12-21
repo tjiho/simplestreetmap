@@ -2,7 +2,7 @@ import { html, useEffect, useState } from '../../../static/vendor/preact/standal
 import { fetchReverseGeocoding } from '../tools/api.js'
 import eventBus from '../singletons/eventBus.js'
 import Place from '../models/Place.js'
-
+import annotationStore from '../singletons/annotationsStore.js'
 import LoadingComponent from './LoadingComponent.js'
 
 export default function ContextMenu ({ coordinates, currentPopup }) {
@@ -12,7 +12,7 @@ export default function ContextMenu ({ coordinates, currentPopup }) {
     {
       label: 'Add an annotation',
       callback: () => {
-        new Place({ lat: place.coord[1], lng: place.coord[0], name: place.name, context: place.context })
+        annotationStore.addLocalAnnotation(new Place({ lat: place.coord[1], lng: place.coord[0], name: place.name, context: place.context }))
         currentPopup.remove()
       }
     },
