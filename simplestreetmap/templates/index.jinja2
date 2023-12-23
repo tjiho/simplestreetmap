@@ -24,10 +24,17 @@
     <link href="{{ request.ssm_config['maplibre']['css']['url'] }}" rel='stylesheet' />
     <!-- css -->
     <link href="{{ request.static_url('simplestreetmap:static/styles/style.css') }}" rel='stylesheet' />
-    <!-- config -->
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.11.3/preact.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.11.3/hooks.umd.js"></script> -->
+
     <script>
         const BASE_API_URL = '/api/v1';
         const MAP_STYLE_URL = "{{ request.ssm_config['general']['map_style_url'] }}";
+        const WEBSOCKET_URL = "{{ request.ssm_config['general']['websocket_url'] }}";
         const OVERLAYS = [];
         {% for overlay in request.ssm_config['overlays'] %}
           OVERLAYS.push({
@@ -39,51 +46,27 @@
     </script>
 </head>
 <body>
-    <div id='map'></div>
-    <div id="left-side-bar">
-    </div>
-    <div id="annotations">
-    </div>
+    
 
+    <!-- <script type="importmap">
+      {
+        "imports": {
+          "preact": "https://esm.sh/preact@10.19.2",
+          "preact/": "https://esm.sh/preact@10.19.2/",
+          "htm/preact": "https://esm.sh/htm@3.1.1/preact?external=preact"
+        }
+      }
+    </script> -->
     <!-- todo: add a contextmenu -->
 
     <script type="module">
 
-        import { render, html} from "{{ request.static_url('simplestreetmap:static/vendor/preact/standalone.module.js') }}";
-
-        //import search from './src/singletons/search.js'
-        import map from "{{ request.static_url('simplestreetmap:static/scripts/singletons/map.js') }}";
-        import webSocketClient from "{{ request.static_url('simplestreetmap:static/scripts/singletons/webSocketClient.js') }}";
-        import PlaceComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/PlaceComponent.js') }}";
-        import TabsComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabsComponent.js') }}";
-        import TabExploreComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabExploreComponent.js') }}";
-        import TabJourneyComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/TabJourneyComponent.js') }}";
-        import ListAnnotationsComponent from "{{ request.static_url('simplestreetmap:static/scripts/components/ListAnnotationsComponent.js') }}";
-
-        customElements.define('c-place', PlaceComponent);
-        const tabs = [
-          {
-            icon: 'edit-find',
-            label: 'Explore',
-            content: TabExploreComponent,
-            childProps: {},
-            selected: true
-          },
-          {
-            icon: 'compass',
-            label: 'Journey',
-            content: TabJourneyComponent,
-            childProps: {}
-          }
-        ];
+        import { html, render } from "{{ request.static_url('simplestreetmap:static/vendor/preact/standalone.module.js') }}";
+        import Main from "{{ request.static_url('simplestreetmap:static/scripts/components/Main.js') }}";
+    
         render(
-            html`<${TabsComponent} tabs="${tabs}" name="left-side-bar"/>`,
-            document.getElementById('left-side-bar')
-        );
-
-        render(
-          html`<${ListAnnotationsComponent}/>`,
-          document.getElementById('annotations')
+            html`<${Main} />`,
+            document.body
         );
     </script>
     {% include "components/chipBaseTemplate.jinja2" %}

@@ -1,15 +1,19 @@
 import { html, useState } from '../../../static/vendor/preact/standalone.module.js'
+
 import SearchComponent from './SearchComponent.js'
 import Place from '../models/Place.js'
 import map from '../singletons/map.js'
 import eventBus from '../singletons/eventBus.js'
+import annotationStore from '../singletons/annotationsStore.js'
 
 export default function TabExploreComponent () {
   const [place, setPlace] = useState(null)
 
   function addPlace (coordinates, name, context) {
-    setPlace(new Place({ lat: coordinates[1], lng: coordinates[0], name, context }))
-    map.flyTo({ center: coordinates, zoom: 13 })
+    const place = new Place({ lat: coordinates[1], lng: coordinates[0], name, context })
+    annotationStore.addLocalAnnotation(place)
+    setPlace(place)
+    map.getMap().flyTo({ center: coordinates, zoom: 13 })
   }
 
   eventBus.on('selectPlace', (e) => {

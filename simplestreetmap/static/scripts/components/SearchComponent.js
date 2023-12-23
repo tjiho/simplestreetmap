@@ -1,4 +1,5 @@
 import { html, useState } from '../../../static/vendor/preact/standalone.module.js'
+
 import { fetchSearchResult } from '../tools/api.js'
 import debounce from '../tools/debounce.js'
 
@@ -67,7 +68,7 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
       <div class="search-container" autoCompleted=${results.length > 0 ? 'true' : null} onkeydown=${keydown}>
         <input type="search" id="${id}" onInput=${onInputSearch} onBlur=${blur} onFocus=${onInputSearch} autocomplete="off" value=${value}/>
         <ul class="results">
-          ${results.map((searchResult, index) => result({ ...searchResult, onResultSelected: _onResultSelected, selected:index === selectedresult }))}
+          ${results.map((searchResult, index) => result({ ...searchResult, onResultSelected: _onResultSelected, selected: index === selectedresult }))}
         </ul>
       </div>
     `

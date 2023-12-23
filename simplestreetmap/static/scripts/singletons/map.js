@@ -1,19 +1,37 @@
+import { render, html } from '../../../static/vendor/preact/standalone.module.js'
+
 import parseHashCoordinates from '../tools/parseHashCoordinates.js'
 import POIsOverlay from '../models/POIsOverlay.js'
 import websocketClient from './webSocketClient.js'
+import annotationStore from '../singletons/annotationsStore.js'
+import ContextMenu from '../components/ContextMenu.js'
 
-class Map extends maplibregl.Map {
+class Map {
   constructor () {
+    this.isinitiated = false
+    this.userId = null
+    this.map = null
+  }
+
+  getMap () {
+    return this.map
+  }
+
+  initMap (container) {
     console.log('Init map')
     const params = new URLSearchParams(window.location.search)
     const { lng, lat, zoom } = parseHashCoordinates(params.get('map') || '', 1.4436, 43.6042, 13)
+    const mapToken = params.get('token')
 
-    super({
-      container: 'map',
+    this.map = new maplibregl.Map({
+      container,
       style: MAP_STYLE_URL,
       center: [lng, lat],
-      zoom
+      zoom,
+      pitch: 40
     })
+
+    const self = this
 
     const nav = new maplibregl.NavigationControl()
 
@@ -29,54 +47,56 @@ class Map extends maplibregl.Map {
       unit: 'metric'
     })
 
-    this.addControl(nav, 'bottom-right')
-    this.addControl(gps, 'bottom-right')
-    this.addControl(scale)
+    this.map.addControl(nav, 'bottom-right')
+    this.map.addControl(gps, 'bottom-right')
+    this.map.addControl(scale)
 
-    this.on('moveend', function () {
-      const { lng, lat } = map.getCenter()
-      const zoom = map.getZoom()
+    this.map.on('moveend', this.moveEnd.bind(this))
 
-      const searchParams = new URLSearchParams(window.location.search)
-      searchParams.set('map', `${zoom}/${lat}/${lng}`)
-      history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
+    this.map.on('load', () => {
+      self.loadOverlays.bind(this)
+      websocketClient.init(mapToken)
     })
 
-    this.on('load', function () {
-      this.loadOverlays()
+    this.map.on('click', this.onClick.bind(this))
+  }
+
+  moveEnd () {
+    const { lng, lat } = this.getMap().getCenter()
+    const zoom = this.getMap().getZoom()
+
+    const searchParams = new URLSearchParams(window.location.search)
+    searchParams.set('map', `${zoom}/${lat}/${lng}`)
+    history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
+  }
+
+  onClick (e) {
+    const popup = new maplibregl.Popup({
+      className: 'Mypopup'
+      // closeButton: false
+      // closeOnClick: false,
     })
 
-    this.annotations = {} // itineraries, places, drawings, etc. {annotation_id: annotation}
-    this.callbacksOnAnnotationsChange = []
-  }
+    const coordinates = e.lngLat.toArray()
 
-  pushAnnotation (element, userSource = 'self') {
-    this.annotations[element.id] = element
-    this.callbacksOnAnnotationsChange.forEach(callback => callback('add', element, this.annotations))
-    if(userSource == 'self') {
-      websocketClient.send({action: "add", annotation: element.toJson()})
-    }
-  }
+    const tooltipNode = document.createElement('div')
 
-  removeAnnotation (element, userSource = 'self') {
-    delete this.annotations[element.id]
-    this.callbacksOnAnnotationsChange.forEach(callback => callback('remove', element, this.annotations))
-    if(userSource == 'self') {
-      websocketClient.send({action: "remove", annotation: element.toJson()})
-    }
-  }
+    render(html`<${ContextMenu} coordinates=${coordinates} currentPopup=${popup}/>`, tooltipNode)
 
-  onAnnotationsChange (callback) {
-    this.callbacksOnAnnotationsChange.push(callback)
+    popup
+      .setLngLat(e.lngLat)
+      .setDOMContent(tooltipNode)
+      .addTo(this.getMap())
   }
 
   loadOverlays () {
     for (const overlay of OVERLAYS) {
       const overlayObj = new POIsOverlay(overlay)
-      overlayObj.saveToAnnotations('overlays')
+      annotationStore.addLocalAnnotation(overlayObj, { sendToServer: false })
     }
   }
 }
 
 const map = new Map()
+
 export default map

@@ -1,10 +1,9 @@
-import map from '../singletons/map.js'
-
-export default class Poi {
+export default class AbstractAnnotation {
   constructor () {
     this.id = crypto.randomUUID()
     this.visible = false
     this.canBeDestroy = true
+    this.serverId = null
   }
 
   setColor (color) {}
@@ -17,23 +16,12 @@ export default class Poi {
 
   destroy () {}
 
-  saveToAnnotations (source = 'self') {
-    map.pushAnnotation(this, source)
-  }
-
-  removeFromAnnotations (source = 'self') {
-    if (this.canBeDestroy) {
-      this.destroy()
-      map.removeAnnotation(this, source)
-    }
-  }
-
   zoomOn () {}
 
   toJson () {
     return {
       id: this.id,
-      objectType: this.objectType
+      object_type: this.objectType
     }
   }
 }
