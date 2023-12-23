@@ -27,9 +27,17 @@ and install the project
 
 ## Run
 
+### Main server
+
 ```
 gunicorn -b 127.0.0.1:8088 --workers 4 'simplestreetmap:make_app()'
 ``` 
+
+### Websocket
+
+```
+python3 websockets/main.py
+```
 
 ## Install a search and reverse server:
 

@@ -2,6 +2,7 @@ def get_config():
     return {
         'general': {
             'map_style_url': 'https://maps.ppsfleet.navy/tileserver-data/qwant-basic-gl-style-toulouse/built-style-debug.json',
+            'websocket_url': 'ws://127.0.0.1:8765',
         },
         'overlays': [
             {

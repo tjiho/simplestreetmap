@@ -11,7 +11,7 @@ class WebSocketClient {
   init (mapToken = null) {
     console.log('Init websocket client')
     this.mapToken = mapToken
-    this.socket = new WebSocket('ws://localhost:8765')
+    this.socket = new WebSocket(WEBSOCKET_URL)
     this.socket.onopen = this.onOpen.bind(this)
     this.socket.onmessage = this.onMessage.bind(this)
     this.socket.onclose = function () {

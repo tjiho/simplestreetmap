@@ -34,6 +34,7 @@
     <script>
         const BASE_API_URL = '/api/v1';
         const MAP_STYLE_URL = "{{ request.ssm_config['general']['map_style_url'] }}";
+        const WEBSOCKET_URL = "{{ request.ssm_config['general']['websocket_url'] }}";
         const OVERLAYS = [];
         {% for overlay in request.ssm_config['overlays'] %}
           OVERLAYS.push({

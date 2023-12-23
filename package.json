@@ -13,7 +13,8 @@
       "BASE_SEARCH_URL",
       "BASE_REVERSE_URL",
       "OVERLAYS",
-      "WebSocket"
+      "WebSocket",
+      "WEBSOCKET_URL"
     ],
     "ignore": [
       "/simplestreetmap/static/vendor/",
