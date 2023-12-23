@@ -9,7 +9,7 @@ import simplifyDuration from '../tools/simplifyDuration.js'
 import Journey from '../models/Journey.js'
 import eventBus from '../singletons/eventBus.js'
 import map from '../singletons/map.js'
-import AbstractAnnotation from '../models/AbstractAnnotation.js'
+import annotationStore from '../singletons/annotationsStore.js'
 
 export default function TabJourneyComponent () {
   const [state, setState] = useState('form')
@@ -182,7 +182,7 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
             distances: j.distances,
             duration: j.duration,
             sections: j.sections,
-            saveToAnnotations: () => { AbstractAnnotation.addLocalAnnotation(j) },
+            saveToAnnotations: () => { annotationStore.addLocalAnnotation(j) },
             setColor: j.setColor.bind(j),
             moveOnTop: j.moveOnTop.bind(j),
             backToForm: _backToForm,
