@@ -25,6 +25,12 @@ Then do a venv:
 and install the project  
 `pip install .`
 
+### Init database for websocket
+
+```
+python3 websockets/main.py setup
+```
+
 ## Run
 
 ### Main server
