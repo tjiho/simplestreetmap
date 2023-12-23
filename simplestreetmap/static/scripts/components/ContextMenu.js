@@ -17,7 +17,7 @@ export default function ContextMenu ({ coordinates, currentPopup }) {
       }
     },
     {
-      label: 'Start an itinerary from',
+      label: 'Set as start',
       callback: () => {
         eventBus.emit('selectTab', { tab: 1 })
         eventBus.emit('startJourneyFrom', { place: { coordinates: place.coord, name: place.name } })
@@ -25,7 +25,7 @@ export default function ContextMenu ({ coordinates, currentPopup }) {
       }
     },
     {
-      label: 'Start an itinerary to',
+      label: 'Set as destination',
       callback: () => {
         eventBus.emit('selectTab', { tab: 1 })
         eventBus.emit('startJourneyTo', { place: { coordinates: place.coord, name: place.name } })
