@@ -1,12 +1,9 @@
-import map from '../singletons/map.js'
-import annotationStore from '../singletons/annotationsStore.js' 
-
-export default class Poi {
+export default class AbstractAnnotation {
   constructor () {
     this.id = crypto.randomUUID()
     this.visible = false
     this.canBeDestroy = true
-    this.backendId = null
+    this.serverId = null
   }
 
   setColor (color) {}
@@ -18,18 +15,6 @@ export default class Poi {
   hide () {}
 
   destroy () {}
-
-  // don't use -> do directly annotationStore.addLocalAnnotation(annotation)
-  saveToAnnotations (source = 'self') {
-    annotationStore.addLocalAnnotation(this)
-  }
-
-  removeFromAnnotations (source = 'self') {
-    if (this.canBeDestroy) {
-      this.destroy()
-      annotationStore.removeAnnotation(this, source)
-    }
-  }
 
   zoomOn () {}
 

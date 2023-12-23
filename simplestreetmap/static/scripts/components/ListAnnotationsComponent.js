@@ -1,6 +1,5 @@
 import { html, useState, useEffect } from '../../../static/vendor/preact/standalone.module.js'
 
-import map from '../singletons/map.js'
 import eventBus from '../singletons/eventBus.js'
 import annotationStore from '../singletons/annotationsStore.js'
 
@@ -26,7 +25,10 @@ export default function ListAnnotationsComponent () {
       ${Object.values(annotations).map((annotation) => AnnotationLineComponent({
         name: annotation.name,
         objectType: annotation.objectType,
-        removeFromAnnotations: annotation.removeFromAnnotations.bind(annotation),
+        removeFromAnnotations: () => {
+          console.log('removeFromAnnotations')
+          annotationStore.removeAnnotation(annotation)
+        }, // annotation.removeFromAnnotations.bind(annotation),
         baseVisible: annotation.visible,
         show: annotation.show.bind(annotation),
         hide: annotation.hide.bind(annotation),

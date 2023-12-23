@@ -13,8 +13,8 @@ class Base(DeclarativeBase):
 class Place(Base):
     __tablename__ = "place"
     id: Mapped[int] = mapped_column(primary_key=True)
-    uuid: Mapped[str] = mapped_column(String(40))
-    
+
+    uuid: Mapped[str] = mapped_column(String(50))
     name: Mapped[str] = mapped_column(String(50))
     lat: Mapped[float]
     lng: Mapped[float]
@@ -25,10 +25,8 @@ class Place(Base):
 
     user_id: Mapped[str] = mapped_column(String(40))
 
-    #plan_id: Mapped[int] = mapped_column(ForeignKey("plan.id"))
-
     def __repr__(self) -> str:
-        return f"Place(id={self.id!r}, name={self.name!r}, latitude={self.lat!r}, longitude={self.lng!r})"
+        return f"Place(id={self.id!r}, name={self.name!r}, latitude={self.lat!r}, longitude={self.lng!r}, uuid={self.uuid!r}, context={self.context!r})"
     
     def toJSON(self):
         return {

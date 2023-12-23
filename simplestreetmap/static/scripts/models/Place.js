@@ -12,7 +12,7 @@ export default class Place extends AbstractAnnotation {
     this.objectType = 'place'
 
     this.show()
-    //this.saveToAnnotations(source)
+    // this.saveToAnnotations(source)
   }
 
   moveOnTop () {

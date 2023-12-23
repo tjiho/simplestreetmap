@@ -45,7 +45,10 @@ class Controller():
         return place_object
 
     def remove_place(self, place_id):
-        place_object = Place(id=place_id)
+        try:
+            place_object = self.session.query(Place).filter(Place.uuid == place_id).one()
+        except Exception as e:
+            raise Exception("Place not found")
         self.session.delete(place_object)
         self.session.commit()
         pass

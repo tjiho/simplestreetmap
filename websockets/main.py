@@ -27,33 +27,32 @@ class WebsocketHandler():
         logger.debug("New connection")
         
         async for message in websocket:
+            #try:
             message = json.loads(message)
             print(message)
             match message:
                 case {"action": "ping"}:
                     logger.debug("Ping received")
-                    await websocket.send("pong")
+                    await websocket.send(json.dumps({"action": "pong"}))
                 case {"action": "pong"}:
                     logger.debug("Pong received")
-                    await websocket.send("ping")
+                    await websocket.send(json.dumps({"action": "ping"}))
                 case {"action": "close"}:
                     logger.debug("Close received")
                     await websocket.close()
                 case {"action": "hello"}:
                     logger.debug("Hello received")
                     await self.hello(message, websocket)
-                    # if token, check if data else create empty session
-                    # if no token, create empty session and send token
                 case {"action": "add_annotation"}:
                     logger.debug("add_annotation received")
                     await self.add_annotation(message, websocket)
-                    # create new annotation
                 case {"action": "remove_annotation"}:
                     logger.debug("remove_annotation received")
                     await self.remove_annotation(message, websocket)
-                    # check id and delete annotation
-
-            #await websocket.send(message)
+            # except Exception as e:
+            #     logger.error(e)
+            #     #await websocket.send(json.dumps({"action": "error", "message": str(e)}))
+            #     pass
 
     async def run_loop(self):
         while True:
@@ -91,7 +90,7 @@ class WebsocketHandler():
 
             for websocketClient in self.clients[websocket.userController.plan.token]:
                 await websocketClient.send(json.dumps({
-                    "action": "add", 
+                    "action": "add_annotation", 
                     "annotation": message["annotation"], 
                     "uuid": saved_annotation.uuid,
                     "user_id": websocket.userController.user_id
@@ -105,7 +104,7 @@ class WebsocketHandler():
             websocket.userController.remove_annotation(message['id'], message['object_type'])
             for websocketClient in self.clients[websocket.userController.plan.token]:
                 await websocketClient.send(json.dumps({
-                    "action": "remove", 
+                    "action": "remove_annotation", 
                     "uuid": message["id"],
                     "user_id": websocket.userController.user_id
                 }))
