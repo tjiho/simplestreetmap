@@ -88,13 +88,12 @@ class WebsocketHandler():
             if saved_annotation is None:
                 return
 
-            for websocketClient in self.clients[websocket.userController.plan.token]:
-                await websocketClient.send(json.dumps({
-                    "action": "add_annotation", 
-                    "annotation": message["annotation"], 
-                    "uuid": saved_annotation.uuid,
-                    "user_id": websocket.userController.user_id
-                }))
+            await self.send_messages_to_clients(websocket.userController.plan.token, json.dumps({
+                "action": "add_annotation", 
+                "annotation": message["annotation"], 
+                "uuid": saved_annotation.uuid,
+                "user_id": websocket.userController.user_id
+            }))
         else:
             logger.warning("No annotation in message")
         pass
@@ -102,15 +101,21 @@ class WebsocketHandler():
     async def remove_annotation(self, message, websocket):
         if "id" in message and "object_type" in message:
             websocket.userController.remove_annotation(message['id'], message['object_type'])
-            for websocketClient in self.clients[websocket.userController.plan.token]:
-                await websocketClient.send(json.dumps({
-                    "action": "remove_annotation", 
-                    "uuid": message["id"],
-                    "user_id": websocket.userController.user_id
-                }))
+            await self.send_messages_to_clients(websocket.userController.plan.token, json.dumps({
+                "action": "remove_annotation", 
+                "uuid": message["id"],
+                "user_id": websocket.userController.user_id
+            }))
         else:
             logger.warning("No ID in message")
         pass
+    
+    async def send_messages_to_clients(self, plan_token, message):
+        for websocketClient in self.clients[plan_token].copy():
+            try:
+                await websocketClient.send(message)
+            except Exception as e:
+                self.clients[plan_token].remove(websocketClient)
 
 
 async def main():
