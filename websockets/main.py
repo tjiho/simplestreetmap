@@ -100,14 +100,15 @@ class WebsocketHandler():
                 "action": "hello", 
                 "map_token": plan.token, 
                 "read_token": plan.read_token,
-                "user_id": websocket.userController.user_id
+                "user_id": websocket.userController.user_id,
+                "write": True,
             }))
 
         self.clients[plan.token].add(websocket)
 
     async def add_annotation(self, message, websocket):
         if not websocket.userController.can_edit:
-            pass
+            return
 
         if "annotation" in message:
             saved_annotation = websocket.userController.add_annotation(message["annotation"])
@@ -127,7 +128,7 @@ class WebsocketHandler():
 
     async def remove_annotation(self, message, websocket):
         if not websocket.userController.can_edit:
-            pass
+            return
 
         if "id" in message and "object_type" in message:
             websocket.userController.remove_annotation(message['id'], message['object_type'])

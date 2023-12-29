@@ -69,8 +69,8 @@ export default function Main () {
             </div>
             <div id="annotations">
             <div class="connection-infos ${local ? 'connection-infos--local' : canEdit ? 'connection-infos--edit' : 'connection-infos--read'}">
-              <div>${local ? 'You are not connected' : 'You are connected'}</div>
-              <div>${canEdit ? 'You can edit the map' : "Your are in read only mode, your change won't be synced"}</div>
+              <div>${local ? 'You are not connected.' : 'You are connected.'}</div>
+              <div>${canEdit ? 'You can edit the map.' : "Your are in read only mode, your change won't be synced."}</div>
             </div>
             <${ListAnnotationsComponent}/>
             </div>

@@ -19,7 +19,7 @@ class AnnotationStore {
     annotation.setSynced(false)
     this.localAnnotations[annotation.id] = annotation
     this.notifyAnnotationsChange('addLocalAnnotation', annotation)
-    if (sendToServer) {
+    if (sendToServer && webSocketClient.canEdit) {
       webSocketClient.send({ action: 'add_annotation', annotation: annotation.toJson() })
     }
   }
@@ -45,7 +45,7 @@ class AnnotationStore {
       delete this.syncAnnotations[serverId]
       this.notifyAnnotationsChange('removeSyncAnnotation', annotation)
 
-      if (sendToServer) {
+      if (sendToServer && webSocketClient.canEdit) {
         webSocketClient.send({ action: 'remove_annotation', id: serverId, object_type: annotation.objectType })
       }
 
