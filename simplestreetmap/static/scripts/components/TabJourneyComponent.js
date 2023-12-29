@@ -111,7 +111,7 @@ function JourneyFormComponent ({ onSubmit }) {
         <label for="journey-to-input">End</label>
         <${SearchComponent} id="journey-to-input" onResultSelected="${addEndPoint}" value=${searchTo} onInput=${onInputTo}/>
       </div>
-      <input class="standard-button" type="submit" value="Find itinerary"/>
+      <input class="standard-button small-margin-top" type="submit" value="Find itinerary"/>
     </form>
   `
 }

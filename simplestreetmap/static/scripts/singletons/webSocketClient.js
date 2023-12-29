@@ -1,11 +1,17 @@
 import Place from '../models/Place.js'
 import annotationStore from './annotationsStore.js'
+import eventBus from './eventBus.js'
 
 class WebSocketClient {
   constructor () {
     this.userId = null
     this.socket = null
     this.mapToken = null
+    this.writeToken = null
+    this.readToken = null
+    this.canEdit = false
+    this.connecting = true
+    this.isConnected = false
   }
 
   init (mapToken = null) {
@@ -14,9 +20,7 @@ class WebSocketClient {
     this.socket = new WebSocket(WEBSOCKET_URL)
     this.socket.onopen = this.onOpen.bind(this)
     this.socket.onmessage = this.onMessage.bind(this)
-    this.socket.onclose = function () {
-      console.log('Disconnected from websocket')
-    }
+    this.socket.onclose = this.onclose.bind(this)
     // setInterval(() => {
     //   if (this.socket.readyState === WebSocket.CLOSED) {
     //     console.log('Websocket is closed')
@@ -25,6 +29,19 @@ class WebSocketClient {
 
     //   this.send({ action: 'ping' })
     // }, 5000)
+  }
+
+  get isLocal () {
+    return !this.connecting && !this.isConnected
+  }
+
+  onclose () {
+    console.log('Disconnected from websocket')
+    this.connecting = false
+    this.isConnected = false
+    eventBus.emit('websocket-disconnected')
+
+    eventBus.emit('websocket-update-state')
   }
 
   onOpen () {
@@ -88,8 +105,15 @@ class WebSocketClient {
   hello (data) {
     console.log('hello from websocket')
     this.userId = data.user_id
+    this.canEdit = data.write
+    this.readToken = data.read_token
+    this.writeToken = this.canEdit ? data.write_token : null
+    this.mapToken = data.map_token
+    this.connecting = false
+    this.isConnected = true
+
     const searchParams = new URLSearchParams(window.location.search)
-    searchParams.set('token', data.map_token)
+    searchParams.set('token', this.mapToken)
     history.replaceState(null, null, `${document.location.pathname}?${searchParams}`)
 
     if (data?.places) {
@@ -99,6 +123,9 @@ class WebSocketClient {
         annotationStore.addSyncAnnotation(place)
       })
     }
+
+    eventBus.emit('websocket-hello', data)
+    eventBus.emit('websocket-update-state')
   }
 }
 

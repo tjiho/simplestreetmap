@@ -6,7 +6,8 @@
 @import './annotations.css';
 @import './place.css';
 @import './contextMenu.css';
-
+@import './share.css';
+@import './form.css';
 
 body 
 { 
@@ -45,6 +46,20 @@ body
   height: calc(100%);
   border-radius: 0px;
   box-sizing: border-box;
+}
+
+#loading-screen {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 @media only screen and (min-device-width: 650px) {

@@ -1,0 +1,15 @@
+.share-link__input-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.share-link__input-line > input {
+  flex-grow: 1;
+}
+
+.share-link {
+  margin-bottom: 1rem;
+}

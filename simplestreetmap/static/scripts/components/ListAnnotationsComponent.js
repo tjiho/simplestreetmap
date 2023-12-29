@@ -3,7 +3,7 @@ import { html, useState, useEffect } from '../../../static/vendor/preact/standal
 import eventBus from '../singletons/eventBus.js'
 import annotationStore from '../singletons/annotationsStore.js'
 
-export default function ListAnnotationsComponent () {
+export default function ListAnnotationsComponent ({local, canEdit}) {
   const [annotations, setAnnotations] = useState({})
 
   useEffect(() => {
@@ -35,13 +35,14 @@ export default function ListAnnotationsComponent () {
         zoomOn: annotation.zoomOn.bind(annotation),
         onClick: () => clickOnAnnotation(annotation),
         canBeDestroy: annotation.canBeDestroy,
+        synced: annotation.synced,
         key: annotation.id
       }))}
     </ul>
   `
 }
 
-function AnnotationLineComponent ({ name, objectType, removeFromAnnotations, baseVisible, show, hide, zoomOn, onClick, canBeDestroy }) {
+function AnnotationLineComponent ({ name, objectType, removeFromAnnotations, baseVisible, show, hide, zoomOn, onClick, canBeDestroy, synced }) {
   const [visible, setVisibility] = useState(baseVisible)
 
   function _removeAnnotation (e) {
@@ -67,6 +68,7 @@ function AnnotationLineComponent ({ name, objectType, removeFromAnnotations, bas
 
   return html`
     <li class="annotations-line" title="${name}">
+      ${AnnotationSyncedComponent({ synced })}
       ${AnnotationIconTypeComponent({ objectType })}
       <span class="annotations-line__name" onClick=${clickOnAnnotation}>${name}</span>
       <div class="annotations-line__actions">
@@ -98,6 +100,14 @@ function AnnotationIconTypeComponent ({ objectType }) {
       return html`<img src="/static/images/breeze-white-icon/edit-paste-in-place.svg" class="annotations-line__icon"/>`
     default:
       return html`<img src="/static/images/breeze-white-icon/edit-paste-in-place.svg" class="annotations-line__icon"/>`
+  }
+}
+
+function AnnotationSyncedComponent ({ synced }) {
+  if (synced) {
+    return html`<img src="/static/images/breeze-white-icon/folder-cloud.svg" class="annotations-line__icon"/>`
+  } else {
+    return html`<img src="/static/images/breeze-white-icon/cross.svg" class="annotations-line__icon"/>`
   }
 }
 

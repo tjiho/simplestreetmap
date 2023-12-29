@@ -1,3 +1,20 @@
+.connection-infos {
+    border: solid 1px var(--line-color-big-contrast);
+    padding: 0.5rem;
+}
+
+.connection-infos--edit {
+    background-color: #CAFFBA;
+}
+
+.connection-infos--local {
+    background-color: #FFD6D6;
+}
+
+.connection-infos--read {
+    background-color: #D6D6FF;
+}
+
 #annotations > ul {
     margin: 0;
     padding-left: 1rem;

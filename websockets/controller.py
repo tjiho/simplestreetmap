@@ -9,6 +9,7 @@ class Controller():
         self.plan = None
         self.session = Session(self.database_connection)
         self.user_id = str(uuid4())
+        self.can_edit = False
         pass
     
     def close(self):
@@ -19,14 +20,25 @@ class Controller():
         if plan is None:
             raise Exception("Plan not found")
         self.plan = plan
+        self.can_edit = True
+        return plan
+    
+    def load_plan_by_read_token(self, read_token):
+        plan = self.session.query(Plan).filter(Plan.read_token == read_token).one()
+        if plan is None:
+            raise Exception("Plan not found")
+        self.plan = plan
+        self.can_edit = False
         return plan
 
     def create_plan(self, name=''):
-        token = str(uuid4())
-        plan = Plan(name=name, token=token)
+        token = str(uuid4()) + '_write'
+        read_token = str(uuid4()) + '_read'
+        plan = Plan(name=name, token=token, read_token=read_token)
         self.session.add(plan)
         self.session.commit()
         self.plan = plan
+        self.can_edit = True
         return plan
 
     def add_place(self, place):
@@ -54,11 +66,17 @@ class Controller():
         pass
 
     def add_annotation(self,annotation):
+        if self.can_edit == False:
+            return None
+
         if annotation['object_type'] == 'place':
             return self.add_place(annotation)
 
 
     def remove_annotation(self,id, object_type):
+        if self.can_edit == False:
+            return None
+
         if object_type == 'place':
             return self.remove_place(id)
 

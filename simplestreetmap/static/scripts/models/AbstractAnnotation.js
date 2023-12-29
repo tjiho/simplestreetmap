@@ -4,6 +4,7 @@ export default class AbstractAnnotation {
     this.visible = false
     this.canBeDestroy = true
     this.serverId = null
+    this.synced = false
   }
 
   setColor (color) {}
@@ -17,6 +18,10 @@ export default class AbstractAnnotation {
   destroy () {}
 
   zoomOn () {}
+
+  setSynced (synced) {
+    this.synced = synced
+  }
 
   toJson () {
     return {

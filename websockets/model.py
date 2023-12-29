@@ -43,6 +43,7 @@ class Plan(Base): # sorry can't use map keyword
     __tablename__ = "plan"
     id: Mapped[int] = mapped_column(primary_key=True)
     token: Mapped[str] = mapped_column(String(40))
+    read_token: Mapped[str] = mapped_column(String(40))
     name: Mapped[str] = mapped_column(String(30))
     places: Mapped[List["Place"]] = relationship(back_populates="plan")
 

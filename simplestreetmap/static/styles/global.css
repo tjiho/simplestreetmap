@@ -59,25 +59,12 @@ h3
     width:100%;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.form-field label {
-    display: block;
-    font-weight: bold;
-}
-
-select {
-    background-color: white;
-    border: solid 1px var(--line-color-big-contrast);
-    padding: calc(0.25rem);
-    border-radius: 0.25rem;
-}
-
 .secondary-text {
     font-size: 80%;
     opacity: .6;
+}
+
+.small-margin-top
+{
+    margin-top: 0.5rem;
 }

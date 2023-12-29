@@ -62,26 +62,53 @@ class WebsocketHandler():
         websocket.userController = Controller(engine)
         if "map_token" in message:
             print("Loading plan")
-            try:
-                plan = websocket.userController.load_plan(message["map_token"])
-                await websocket.send(json.dumps({
-                    "action": "hello", 
-                    "map_token": plan.token, 
-                    "places": [ place.toJSON() for place in plan.places],
-                    "user_id": websocket.userController.user_id
-                }))
-            except Exception as e:
-                print(e)
-                # return error
-                pass
+
+            if "read" in message["map_token"]:
+                try:
+                    plan = websocket.userController.load_plan_by_read_token(message["map_token"])
+                    await websocket.send(json.dumps({
+                        "action": "hello", 
+                        "map_token": plan.read_token, 
+                        "places": [ place.toJSON() for place in plan.places],
+                        "user_id": websocket.userController.user_id,
+                        "write": False,
+                        "read_token": plan.read_token
+                    }))
+                except Exception as e:
+                    print(e)
+                    # return error
+                    pass
+            else:
+                try:
+                    plan = websocket.userController.load_plan(message["map_token"])
+                    await websocket.send(json.dumps({
+                        "action": "hello", 
+                        "map_token": plan.token, 
+                        "places": [ place.toJSON() for place in plan.places],
+                        "user_id": websocket.userController.user_id,
+                        "write": True,
+                        "read_token": plan.read_token
+                    }))
+                except Exception as e:
+                    print(e)
+                    # return error
+                    pass
         else:
             print("Creating new plan")
             plan = websocket.userController.create_plan()
-            await websocket.send(json.dumps({"action": "hello", "map_token": plan.token, "user_id": websocket.userController.user_id}))
+            await websocket.send(json.dumps({
+                "action": "hello", 
+                "map_token": plan.token, 
+                "read_token": plan.read_token,
+                "user_id": websocket.userController.user_id
+            }))
 
         self.clients[plan.token].add(websocket)
 
     async def add_annotation(self, message, websocket):
+        if not websocket.userController.can_edit:
+            pass
+
         if "annotation" in message:
             saved_annotation = websocket.userController.add_annotation(message["annotation"])
             
@@ -99,6 +126,9 @@ class WebsocketHandler():
         pass
 
     async def remove_annotation(self, message, websocket):
+        if not websocket.userController.can_edit:
+            pass
+
         if "id" in message and "object_type" in message:
             websocket.userController.remove_annotation(message['id'], message['object_type'])
             await self.send_messages_to_clients(websocket.userController.plan.token, json.dumps({

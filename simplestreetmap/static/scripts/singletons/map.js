@@ -81,7 +81,7 @@ class Map {
 
     const tooltipNode = document.createElement('div')
 
-    render(html`<${ContextMenu} coordinates=${coordinates} currentPopup=${popup}/>`, tooltipNode)
+    render(html`<${ContextMenu} coordinates=${coordinates} currentPopup=${popup} canEdit=${websocketClient.canEdit} local=${websocketClient.isLocal}/>`, tooltipNode)
 
     popup
       .setLngLat(e.lngLat)

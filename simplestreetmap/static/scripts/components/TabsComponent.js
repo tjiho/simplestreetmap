@@ -2,7 +2,7 @@ import { html, useState } from '../../../static/vendor/preact/standalone.module.
 
 import eventBus from '../singletons/eventBus.js'
 
-export default function TabsComponent ({ tabs, name }) {
+export default function TabsComponent ({ tabs, name, ...props }) {
   const [selectedTab, setSelectedTab] = useState(0)
 
   eventBus.on('selectTab', (e) => {
@@ -27,7 +27,7 @@ export default function TabsComponent ({ tabs, name }) {
       <div class="tabs-content">
         ${tabs.map(({ content, contentProps }, index) => html`
           <section role="tabpanel" id="tab-panel-${name}-${index}" aria-labelledby="tab-${name}-${index}" class="${index === selectedTab ? 'is-selected' : ''}">
-            ${content({ ...contentProps })}
+            ${content({ ...contentProps, ...props })}
           </section>`)}
       </div>
     </div>`

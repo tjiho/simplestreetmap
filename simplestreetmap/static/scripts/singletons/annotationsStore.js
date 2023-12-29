@@ -16,6 +16,7 @@ class AnnotationStore {
   }
 
   addLocalAnnotation (annotation, { sendToServer = true } = {}) {
+    annotation.setSynced(false)
     this.localAnnotations[annotation.id] = annotation
     this.notifyAnnotationsChange('addLocalAnnotation', annotation)
     if (sendToServer) {
@@ -33,6 +34,7 @@ class AnnotationStore {
   }
 
   addSyncAnnotation (annotation) {
+    annotation.setSynced(true)
     this.syncAnnotations[annotation.serverId] = annotation
     this.notifyAnnotationsChange('addSyncAnnotation', annotation)
   }
