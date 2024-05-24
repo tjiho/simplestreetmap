@@ -107,7 +107,7 @@ class WebSocketClient {
     this.userId = data.user_id
     this.canEdit = data.write
     this.readToken = data.read_token
-    this.writeToken = this.canEdit ? data.write_token : null
+    this.writeToken = this.canEdit ? data.map_token : null
     this.mapToken = data.map_token
     this.connecting = false
     this.isConnected = true
