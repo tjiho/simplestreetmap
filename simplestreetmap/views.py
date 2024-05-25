@@ -2,7 +2,7 @@ def search_view(request):
     if not request.params.get('q', ''):
         return []
 
-    return request.search_adapter.search(request.params['q'])
+    return request.search_adapter.search(request.params['q'], request.params.get('lat', ''), request.params.get('lon', ''))
 
 def reverse_view(request):
     if not request.params.get('lat', '') or not request.params.get('lon', ''):

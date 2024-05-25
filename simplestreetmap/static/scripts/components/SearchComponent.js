@@ -2,6 +2,7 @@ import { html, useState } from '../../../static/vendor/preact/standalone.module.
 
 import { fetchSearchResult } from '../tools/api.js'
 import debounce from '../tools/debounce.js'
+import map from '../singletons/map.js'
 
 const debounceSearch = debounce(fetchSearchResult, 300)
 const CITY_TYPES = ['city', 'town', 'village']
@@ -27,8 +28,8 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
     // if (searchController) { searchController.abort() }
     // setSearchController(new AbortController())
     // const signal = searchController.signal
-
-    debounceSearch(inputValue).then(setResults)
+    const currentCoordinates = map.getMap().getCenter().toArray()
+    debounceSearch(inputValue, currentCoordinates).then(setResults)
     setSelectedResult(0)
   }
 

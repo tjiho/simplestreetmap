@@ -6,8 +6,8 @@ class AddokSearchAdapter(BaseSearchAdapter):
     def __init__(self, config):
         self.url = config['url']
 
-    def search(self, query):
-        response = requests.get(f'{self.url}/search', params = { 'q': query }).json()
+    def search(self, query, lat, lon):
+        response = requests.get(f'{self.url}/search', params = { 'q': query, 'lon': lon, 'lat': lat }).json()
         result = []
         for feature in response['features']:
             result.append(result_from_feature(feature))

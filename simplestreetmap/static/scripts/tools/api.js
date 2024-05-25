@@ -1,5 +1,5 @@
-export async function fetchSearchResult (query, signal) {
-  const result = await window.fetch(`${BASE_API_URL}/search?q=${query}`, signal)
+export async function fetchSearchResult (query, coordinates, signal) {
+  const result = await window.fetch(`${BASE_API_URL}/search?q=${query}&lat=${coordinates[1]}&lon=${coordinates[0]}`, signal)
   return await result.json()
 }
 
