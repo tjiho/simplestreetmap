@@ -56,7 +56,7 @@ function ExploreDetailComponent ({ lat, lng, name, context }) {
   return html`
     <div class="place-detail">
       <h3>${name}</h3>
-      <div class="context secondary-text">${context.join(', ')}</div>
+      <div class="context secondary-text">${context?.join(', ')}</div>
       <div class="secondary-text">${lat}, ${lng}</div>
       <button class="standard-button" onClick=${addStartPoint}>Itinerary from</button>
       <button class="standard-button" onClick=${addEndPoint}>Itinerary to</button>
