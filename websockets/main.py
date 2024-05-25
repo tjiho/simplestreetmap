@@ -70,11 +70,11 @@ class WebsocketHandler():
                     plan = websocket.userController.load_plan_by_read_token(message["map_token"])
                     await websocket.send(json.dumps({
                         "action": "hello", 
-                        "map_token": plan.read_token, 
-                        "places": [ place.toJSON() for place in plan.places],
+                        "map_token": plan.get('read_token'), 
+                        "places": plan.get('places'),
                         "user_id": websocket.userController.user_id,
                         "write": False,
-                        "read_token": plan.read_token
+                        "read_token": plan.get('read_token')
                     }))
                 except Exception as e:
                     print(e)
@@ -85,11 +85,11 @@ class WebsocketHandler():
                     plan = websocket.userController.load_plan(message["map_token"])
                     await websocket.send(json.dumps({
                         "action": "hello", 
-                        "map_token": plan.token, 
-                        "places": [ place.toJSON() for place in plan.places],
+                        "map_token": plan.get('token'), 
+                        "places": plan.get('places'),
                         "user_id": websocket.userController.user_id,
                         "write": True,
-                        "read_token": plan.read_token
+                        "read_token": plan.get('read_token')
                     }))
                 except Exception as e:
                     print(e)
@@ -100,13 +100,13 @@ class WebsocketHandler():
             plan = websocket.userController.create_plan()
             await websocket.send(json.dumps({
                 "action": "hello", 
-                "map_token": plan.token, 
-                "read_token": plan.read_token,
+                "map_token": plan.get('token'), 
+                "read_token": plan.get('read_token'),
                 "user_id": websocket.userController.user_id,
                 "write": True,
             }))
 
-        self.clients[plan.token].add(websocket)
+        self.clients[websocket.userController.plan_token].add(websocket)
 
     async def add_annotation(self, message, websocket):
         if not websocket.userController.can_edit:
@@ -118,10 +118,10 @@ class WebsocketHandler():
             if saved_annotation is None:
                 return
 
-            await self.send_messages_to_clients(websocket.userController.plan.token, json.dumps({
+            await self.send_messages_to_clients(websocket.userController.plan_token, json.dumps({
                 "action": "add_annotation", 
                 "annotation": message["annotation"], 
-                "uuid": saved_annotation.uuid,
+                "uuid": saved_annotation.get('uuid'),
                 "user_id": websocket.userController.user_id
             }))
         else:
@@ -134,7 +134,7 @@ class WebsocketHandler():
 
         if "id" in message and "object_type" in message:
             websocket.userController.remove_annotation(message['id'], message['object_type'])
-            await self.send_messages_to_clients(websocket.userController.plan.token, json.dumps({
+            await self.send_messages_to_clients(websocket.userController.plan_token, json.dumps({
                 "action": "remove_annotation", 
                 "uuid": message["id"],
                 "user_id": websocket.userController.user_id

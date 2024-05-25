@@ -50,5 +50,14 @@ class Plan(Base): # sorry can't use map keyword
     def __repr__(self) -> str:
         return f"Plan(id={self.id!r}, name={self.name!r}, places={self.places!r})"
 
+    def toJSON(self):
+        return {
+            'id': self.id,
+            'token': self.token,
+            'read_token': self.read_token,
+            'name': self.name,
+            'places': [ place.toJSON() for place in self.places]
+        }
+
 def setup_database(engine):
     Base.metadata.create_all(engine)
