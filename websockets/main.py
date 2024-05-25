@@ -53,6 +53,8 @@ class WebsocketHandler():
             #     logger.error(e)
             #     #await websocket.send(json.dumps({"action": "error", "message": str(e)}))
             #     pass
+        print("client disconnected !")
+        websocket.userController.close()
 
     async def run_loop(self):
         while True:
