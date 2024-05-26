@@ -46,12 +46,13 @@ class Controller():
         plan = Plan(name=name, token=token, read_token=read_token)
         with self.SessionMaker() as session:
             session.add(plan)
+            detachedPlan = plan.toJSON()
             session.commit()
             session.expunge_all()
             self.plan_id = plan.id
             self.plan_token = plan.token
             self.can_edit = True
-            return plan.toJSON()
+            return detachedPlan
 
     def add_place(self, place):
         annotation_uuid = str(uuid4())
