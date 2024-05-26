@@ -34,7 +34,6 @@ class Controller():
             plan = session.query(Plan).filter(Plan.read_token == read_token).one()
             if plan is None:
                 raise Exception("Plan not found")
-            session.expunge_all()
             self.plan_id = plan.id
             self.plan_token = plan.token
             self.can_edit = False
@@ -48,7 +47,6 @@ class Controller():
             session.add(plan)
             detachedPlan = plan.toJSON()
             session.commit()
-            session.expunge_all()
             self.plan_id = plan.id
             self.plan_token = plan.token
             self.can_edit = True
