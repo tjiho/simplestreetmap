@@ -11,7 +11,11 @@ class BrouterJourneyAdapter(BaseJourneyAdapter):
     def itinerary(self, origin_lon, origin_lat, destination_lon, destination_lat, profile='trekking', dateTime=None, mode=None):
         print('Requesting Brouter...')
         lonlats="%s,%s|%s,%s" % (origin_lon, origin_lat, destination_lon, destination_lat)
-        response = requests.get(self.url, params = {'profile':profile,'lonlats': lonlats,'format':'geojson','alternativeidx':0 }).json()
+        try:
+            response = requests.get(self.url, params = {'profile':profile,'lonlats': lonlats,'format':'geojson','alternativeidx':0 }).json()
+        except:
+            return []
+ 
         print('Brouter response received')
 
         if not 'features' in response:
@@ -22,6 +26,10 @@ class BrouterJourneyAdapter(BaseJourneyAdapter):
         curr_journey = {}
         curr_journey['distances'] = journey['properties']['track-length']
         curr_journey['duration'] = journey['properties']['total-time']
+        curr_journey['plain-ascend'] = journey['properties'].get('plain-ascend',0)
+        curr_journey['filtered ascend'] = journey['properties'].get('filtered ascend',0)
+        curr_journey['messages'] = journey['properties'].get('messages',[])
+
 
         departure_time = datetime.datetime.now()
         arrival_time = departure_time + datetime.timedelta(seconds=int(journey['properties']['total-time']))
