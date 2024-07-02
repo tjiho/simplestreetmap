@@ -22,7 +22,13 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
   // const [searchValue, setSearchValue] = useState(initialSearchValue)
 
   function onInputSearch (e) {
+    console.log('onInputSearch',e)
     const inputValue = e.target.value
+
+    if(e.inputType && inputValue === value) {
+      return
+    }
+
     // setSearchValue(inputValue)
     onInput(e)
     // if (searchController) { searchController.abort() }
@@ -33,8 +39,13 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
     setSelectedResult(0)
   }
 
-  function _onResultSelected (coord, name, context) {
+  function _onResultSelected (coord, name, context, event) {
+    if(event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
     onResultSelected(coord, name, context)
+    document.getElementById(id).blur()
     setResults([])
     onInput({ target: { value: name } })
   }
@@ -79,7 +90,7 @@ function result ({ type, name, coord, context, onResultSelected, selected }) {
   const isCity = CITY_TYPES.includes(type)
 
   return html`
-    <li onClick=${(e) => onResultSelected(coord, name, context)} selected=${selected}>
+    <li onClick=${(e) => onResultSelected(coord, name, context, e)} selected=${selected}>
       <span class="name">${name}</span>
       <span class="context secondary-text">${context.join(', ')}</span>
       ${isCity ? html`<img src="/static/images/maki/${type}.svg" />` : ''}

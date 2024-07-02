@@ -1,14 +1,23 @@
-@import './global.css';
-@import './search.css';
-@import './itinerary.css';
-@import './tabs.css';
-@import './button.css';
-@import './annotations.css';
-@import './place.css';
-@import './contextMenu.css';
-@import './share.css';
-@import './form.css';
 
+
+@import './global.css' layer(base);
+@import './search.css' layer(base);
+@import './itinerary.css' layer(base);
+@import './tabs.css' layer(base);
+@import './button.css' layer(base);
+@import './annotations.css' layer(base);
+@import './place.css' layer(base);
+@import './contextMenu.css' layer(base);
+@import './share.css' layer(base);
+@import './form.css' layer(base);
+
+
+@import './mobile/style.css' layer(mobile);
+
+
+@layer base, mobile;
+
+@layer base {
 body 
 { 
   margin:0; 
@@ -17,7 +26,7 @@ body
 
 #map 
 { 
-  position:absolute; 
+  position:absolute !important; 
   top:0; 
   bottom:0; 
   width: calc(100% - 350px);
@@ -62,72 +71,4 @@ body
   text-align: center;
 }
 
-@media only screen and (min-device-width: 650px) {
-  .search-results__result:last-child
-  {
-    border-radius: 0px 0px 5px 5px;
-  }
-
-  .search-container--with-results .search-label
-  {
-    border-radius: 5px 5px 0px 0px;
-  }
-}
-
-@media only screen and (max-device-width: 650px) {
-
-  #search-container
-  {
-
-    display:flex;
-    flex-direction:column;
-  }
-
-  .search-container--with-results
-  {
-      height: 100%;
-      background-color:white;
-  }
-
-  .search-container__top
-  {
-    flex-direction:column;
-  }
-
-  .search-label
-  {
-      margin-left:auto;
-      margin-right:auto;
-  }
-
-  #places{
-    padding-left:0px;
-    white-space: nowrap;
-    overflow-x: auto;
-    box-shadow: none;
-    flex-wrap: nowrap;
-  }
-
-  #places > *
-  {
-    box-shadow: none;
-  }
-
-  .search-container--with-results .search-container__bottom
-  {
-    display:block;
-    padding: 2em;
-    border-top: 1px solid var(--line-color);
-    text-align:center;
-  }
-
-  #search-results
-  {
-    width: auto;
-    max-width: 100%;
-    position: initial;
-    box-shadow: none;
-    flex:1;
-    overflow: auto;
-  }
 }

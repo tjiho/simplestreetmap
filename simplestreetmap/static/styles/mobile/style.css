@@ -1,0 +1,27 @@
+
+@media (max-width: 800px) {
+    #annotations {
+        display: none;
+    }
+
+    #map {
+        width: 100%;
+    }
+
+    #left-side-bar {
+        display: block;
+        width: auto;
+    }
+
+    .tabs-container {
+        width: 100%;
+    }
+
+    .tabs-content {
+        flex:1;
+    }
+
+    [role="tabpanel"] {
+        flex: 1;
+    }
+}
