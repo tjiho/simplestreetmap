@@ -1,3 +1,11 @@
+#annotation-mobile-button {
+    display: none;
+}
+
+#close-annotation-panel {
+    display: none;
+}
+
 .connection-infos {
     border: solid 1px var(--line-color-big-contrast);
     padding: 0.5rem;

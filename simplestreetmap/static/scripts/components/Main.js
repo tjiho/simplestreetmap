@@ -5,6 +5,7 @@ import TabsComponent from './TabsComponent.js'
 import TabExploreComponent from './TabExploreComponent.js'
 import TabJourneyComponent from './TabJourneyComponent.js'
 import ListAnnotationsComponent from './ListAnnotationsComponent.js'
+import AnnotationsMobileComponent from './AnnotationsMobileComponent.js'
 import TabShareComponent from './TabShareComponent.js'
 import eventBus from '../singletons/eventBus.js'
 import webSocketClient from '../singletons/webSocketClient.js'
@@ -36,6 +37,7 @@ export default function Main () {
   const [loaded, setLoaded] = useState(false)
   const [canEdit, setCanEdit] = useState(false)
   const [local, setLocal] = useState(false)
+  const [displayAnnotations, setDisplayAnnotations] = useState(false)
 
   useEffect(() => {
     const mapContainer = document.getElementById('map')
@@ -47,6 +49,10 @@ export default function Main () {
       setLocal(webSocketClient.isLocal)
     })
   }, [])
+
+  function closeAnnotationMobile () {
+    setDisplayAnnotations(false)
+  }
 
   return html`
         <main>
@@ -67,12 +73,16 @@ export default function Main () {
               <div>Connecting to server...</div>
             `}
             </div>
-            <div id="annotations">
-            <div class="connection-infos ${local ? 'connection-infos--local' : canEdit ? 'connection-infos--edit' : 'connection-infos--read'}">
-              <div>${local ? 'You are not connected.' : 'You are connected.'}</div>
-              <div>${canEdit ? 'You can edit the map.' : "Your are in read only mode, your change won't be synced."}</div>
-            </div>
-            <${ListAnnotationsComponent}/>
+            <${AnnotationsMobileComponent} setDisplayAnnotations=${setDisplayAnnotations} local=${local}/>
+            <div id="annotations" visible=${displayAnnotations}>
+              <button id="close-annotation-panel" onclick=${closeAnnotationMobile} class="standard-button button--secondary">
+                Close annotations
+              </button>
+              <div class="connection-infos ${local ? 'connection-infos--local' : canEdit ? 'connection-infos--edit' : 'connection-infos--read'}">
+                <div>${local ? 'You are not connected.' : 'You are connected.'}</div>
+                <div>${canEdit ? 'You can edit the map.' : "Your are in read only mode, your change won't be synced."}</div>
+              </div>
+              <${ListAnnotationsComponent}/>
             </div>
         </main>
     `
