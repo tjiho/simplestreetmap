@@ -3,7 +3,7 @@ import { html, useState, useEffect } from '../../../static/vendor/preact/standal
 import eventBus from '../singletons/eventBus.js'
 import annotationStore from '../singletons/annotationsStore.js'
 
-export default function ListAnnotationsComponent ({local, canEdit}) {
+export default function ListAnnotationsComponent ({ local, canEdit }) {
   const [annotations, setAnnotations] = useState({})
 
   useEffect(() => {

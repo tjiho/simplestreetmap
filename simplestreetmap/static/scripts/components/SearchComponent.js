@@ -22,10 +22,10 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
   // const [searchValue, setSearchValue] = useState(initialSearchValue)
 
   function onInputSearch (e) {
-    console.log('onInputSearch',e)
+    console.log('onInputSearch', e)
     const inputValue = e.target.value
 
-    if(e.inputType && inputValue === value) {
+    if (e.inputType && inputValue === value) {
       return
     }
 
@@ -40,7 +40,7 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
   }
 
   function _onResultSelected (coord, name, context, event) {
-    if(event) {
+    if (event) {
       event.preventDefault()
       event.stopPropagation()
     }
