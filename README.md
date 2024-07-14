@@ -1,6 +1,9 @@
-# Simplestreetmap
+<h1 align="center">Simplestreetmap</h1>
 
-Another open source frontend map based on OSM data. A demo is available at [https://beta.maps.ppsfleet.navy](https://beta.maps.ppsfleet.navy)
+<h4 align="center">Collaborative map interface for OpenStreetMap with joint editing capabilities, location search, and route planning functionalities </h4>
+
+
+A demo is available at [https://beta.maps.ppsfleet.navy](https://beta.maps.ppsfleet.navy)
 
 ![screenshot](./simplestreetmap/static/images/screenshot.png)
 
