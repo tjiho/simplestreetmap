@@ -18,17 +18,17 @@
 @layer base, mobile;
 
 @layer base {
-body 
-{ 
-  margin:0; 
-  padding:0; 
+body
+{
+  margin:0;
+  padding:0;
 }
 
-#map 
-{ 
-  position:absolute !important; 
-  top:0; 
-  bottom:0; 
+#map
+{
+  position:absolute !important;
+  top:0;
+  bottom:0;
   width: calc(100% - 350px);
 }
 
@@ -55,6 +55,7 @@ body
   height: calc(100%);
   border-radius: 0px;
   box-sizing: border-box;
+  overflow:auto;
 }
 
 #loading-screen {
