@@ -5,6 +5,7 @@ export default class AbstractAnnotation {
     this.canBeDestroy = true
     this.serverId = null
     this.synced = false
+    this.shouldBeSynced = true
   }
 
   setColor (color) {}
@@ -22,6 +23,12 @@ export default class AbstractAnnotation {
   setSynced (synced) {
     this.synced = synced
   }
+
+  setShouldBeSynced (shouldBeSynced) {
+    this.shouldBeSynced = shouldBeSynced
+  }
+
+  update(newAnnotationFields) {}
 
   toJson () {
     return {

@@ -20,7 +20,10 @@ class AnnotationStore {
     this.localAnnotations[annotation.id] = annotation
     this.notifyAnnotationsChange('addLocalAnnotation', annotation)
     if (sendToServer && webSocketClient.canEdit) {
+      annotation.setShouldBeSynced(true)
       webSocketClient.send({ action: 'add_annotation', annotation: annotation.toJson() })
+    } else {
+      annotation.setShouldBeSynced(false)
     }
   }
 
@@ -31,6 +34,11 @@ class AnnotationStore {
     if (destroy) {
       annotation.destroy()
     }
+  }
+
+  updateLocalAnnotation (annotation, updatedFields) {
+    annotation.update(updatedFields)
+    this.notifyAnnotationsChange('updateLocalAnnotation', annotation)
   }
 
   addSyncAnnotation (annotation) {
@@ -55,9 +63,19 @@ class AnnotationStore {
     }
   }
 
+  updateSyncAnnotation (annotation, updatedFields, { sendToServer = true } = {}) {
+    this.notifyAnnotationsChange('updateSyncAnnotation', annotation)
+    annotation.update(updatedFields)
+    if (sendToServer && webSocketClient.canEdit) {
+      annotation.setSynced(false)
+      webSocketClient.send({ action: 'update_annotation', annotation: annotation.toJson() })
+    }
+  }
+
   moveLocalAnnotationToSync (localId, serverId) {
     const annotation = this.localAnnotations[localId]
     annotation.serverId = serverId
+    annotation.setSynced(true)
     this.addSyncAnnotation(annotation)
     this.removeLocalAnnotation(localId, { destroy: false })
   }
@@ -77,6 +95,20 @@ class AnnotationStore {
       this.removeLocalAnnotation(annotation.id)
     } else {
       console.warn('removeAnnotation: annotation has no id')
+    }
+  }
+
+  updateAnnotation (annotation, updatedFields) {
+    if(annotation.shouldBeSynced === true && annotation.synced === false) {
+      console.warn('updateAnnotation: annotation should be synced before update, aborting')
+      return
+    }
+    if (annotation.serverId) {
+      this.updateSyncAnnotation(annotation, updatedFields)
+    } else if (annotation.id) {
+      this.updateLocalAnnotation(annotation, updatedFields)
+    } else {
+      console.warn('editAnnotation: annotation has no id')
     }
   }
 }

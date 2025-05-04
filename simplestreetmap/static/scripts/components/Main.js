@@ -5,8 +5,8 @@ import TabsComponent from './TabsComponent.js'
 import TabExploreComponent from './TabExploreComponent.js'
 import TabJourneyComponent from './TabJourneyComponent.js'
 import ListAnnotationsComponent from './ListAnnotationsComponent.js'
-import AnnotationEditionDialogComponent from './AnnotationEditionDialogComponent.js'
 import AnnotationsMobileComponent from './AnnotationsMobileComponent.js'
+import TabSettingsComponent from './TabSettingsComponent.js'
 import TabShareComponent from './TabShareComponent.js'
 import eventBus from '../singletons/eventBus.js'
 import webSocketClient from '../singletons/webSocketClient.js'
@@ -29,7 +29,13 @@ const tabs = [
     label: 'Share',
     content: TabShareComponent,
     childProps: {}
-  }
+  },
+  {
+    icon: 'configure',
+    label: 'Settings',
+    content: TabSettingsComponent,
+    childProps: {}
+   },
 
 ]
 
@@ -85,7 +91,6 @@ export default function Main () {
               </div>
               <${ListAnnotationsComponent}/>
             </div>
-            <${AnnotationEditionDialogComponent}/>
         </main>
     `
 }

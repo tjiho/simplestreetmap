@@ -1,5 +1,7 @@
+import pdb
 import asyncio
 import websockets
+from websockets.asyncio.server import serve
 import json
 import sys
 import logging
@@ -16,18 +18,19 @@ logger.setLevel(logging.DEBUG)
 
 engine = create_engine("sqlite:///database.sqlite", echo=False)
 
+# pdb.set_trace()
+
 
 class WebsocketHandler():
     def __init__(self):
-        
+
         self.clients = defaultdict(set)
-    
-   
+
     async def websocketListener(self, websocket):
         logger.debug("New connection")
-        
+
         async for message in websocket:
-            #try:
+            # try:
             message = json.loads(message)
             print(message)
             match message:
@@ -67,10 +70,11 @@ class WebsocketHandler():
 
             if "read" in message["map_token"]:
                 try:
-                    plan = websocket.userController.load_plan_by_read_token(message["map_token"])
+                    plan = websocket.userController.load_plan_by_read_token(
+                        message["map_token"])
                     await websocket.send(json.dumps({
-                        "action": "hello", 
-                        "map_token": plan.get('read_token'), 
+                        "action": "hello",
+                        "map_token": plan.get('read_token'),
                         "places": plan.get('places'),
                         "user_id": websocket.userController.user_id,
                         "write": False,
@@ -82,10 +86,11 @@ class WebsocketHandler():
                     pass
             else:
                 try:
-                    plan = websocket.userController.load_plan(message["map_token"])
+                    plan = websocket.userController.load_plan(
+                        message["map_token"])
                     await websocket.send(json.dumps({
-                        "action": "hello", 
-                        "map_token": plan.get('token'), 
+                        "action": "hello",
+                        "map_token": plan.get('token'),
                         "places": plan.get('places'),
                         "user_id": websocket.userController.user_id,
                         "write": True,
@@ -99,8 +104,8 @@ class WebsocketHandler():
             print("Creating new plan")
             plan = websocket.userController.create_plan()
             await websocket.send(json.dumps({
-                "action": "hello", 
-                "map_token": plan.get('token'), 
+                "action": "hello",
+                "map_token": plan.get('token'),
                 "read_token": plan.get('read_token'),
                 "user_id": websocket.userController.user_id,
                 "write": True,
@@ -113,14 +118,15 @@ class WebsocketHandler():
             return
 
         if "annotation" in message:
-            saved_annotation = websocket.userController.add_annotation(message["annotation"])
-            
+            saved_annotation = websocket.userController.add_annotation(
+                message["annotation"])
+
             if saved_annotation is None:
                 return
 
             await self.send_messages_to_clients(websocket.userController.plan_token, json.dumps({
-                "action": "add_annotation", 
-                "annotation": message["annotation"], 
+                "action": "add_annotation",
+                "annotation": message["annotation"],
                 "uuid": saved_annotation.get('uuid'),
                 "user_id": websocket.userController.user_id
             }))
@@ -133,16 +139,17 @@ class WebsocketHandler():
             return
 
         if "id" in message and "object_type" in message:
-            websocket.userController.remove_annotation(message['id'], message['object_type'])
+            websocket.userController.remove_annotation(
+                message['id'], message['object_type'])
             await self.send_messages_to_clients(websocket.userController.plan_token, json.dumps({
-                "action": "remove_annotation", 
+                "action": "remove_annotation",
                 "uuid": message["id"],
                 "user_id": websocket.userController.user_id
             }))
         else:
             logger.warning("No ID in message")
         pass
-    
+
     async def send_messages_to_clients(self, plan_token, message):
         for websocketClient in self.clients[plan_token].copy():
             try:
@@ -158,7 +165,7 @@ async def main():
         return
 
     wsHandler = WebsocketHandler()
-    async with websockets.serve(wsHandler.websocketListener, "127.0.0.1", 8765):
+    async with serve(wsHandler.websocketListener, "127.0.0.1", 8765):
         logger.debug("Server started")
         # await broadcast_messages()  # runs forever
         await asyncio.Future()  # run forever

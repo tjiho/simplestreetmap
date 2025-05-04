@@ -41,6 +41,12 @@ export default class Place extends AbstractAnnotation {
     map.getMap().flyTo({ center: [this.lng, this.lat], zoom: 13 })
   }
 
+  update(newAnnotationFields) {
+    if(newAnnotationFields.name) {
+      this.name = newAnnotationFields.name
+    }
+  }
+
   toJson () {
     return {
       id: this.id,

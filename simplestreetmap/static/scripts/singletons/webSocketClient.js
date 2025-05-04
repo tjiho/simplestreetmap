@@ -102,6 +102,18 @@ class WebSocketClient {
     annotationStore.removeSyncAnnotation(serverId, { sendToServer: false })
   }
 
+  updateAnnotation (data) {
+    const serverId = data.uuid
+    const userId = data.user_id
+    if (userId === this.userId) {
+      return
+    }
+    const annotation = annotationStore.syncAnnotations[serverId]
+    if (annotation) {
+      annotation.updateFromJson(data.annotation)
+    }
+  }
+
   hello (data) {
     console.log('hello from websocket')
     this.userId = data.user_id
