@@ -2,9 +2,13 @@ import { html, useState, useEffect } from '../../../static/vendor/preact/standal
 
 import eventBus from '../singletons/eventBus.js'
 import annotationStore from '../singletons/annotationsStore.js'
+import translate from '../tools/translate.js'
+
 import AnnotationEditionDialogComponent from './AnnotationEditionDialogComponent.js'
 
 export default function ListAnnotationsComponent ({ local, canEdit }) {
+  const t = translate('ListAnnotationsComponent')
+
   const [annotations, setAnnotations] = useState({})
   const [editingAnnotation, setEditingAnnotation] = useState(null)
 
@@ -30,7 +34,7 @@ export default function ListAnnotationsComponent ({ local, canEdit }) {
   }
 
   return html`
-    <h2>Annotations</h2>
+    <h2>${t('title')}</h2>
     <ul>
       ${Object.values(annotations).map((annotation) => AnnotationLineComponent({
         name: annotation.name,

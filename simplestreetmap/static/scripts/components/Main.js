@@ -10,6 +10,7 @@ import TabSettingsComponent from './TabSettingsComponent.js'
 import TabShareComponent from './TabShareComponent.js'
 import eventBus from '../singletons/eventBus.js'
 import webSocketClient from '../singletons/webSocketClient.js'
+
 const tabs = [
   {
     icon: 'edit-find',

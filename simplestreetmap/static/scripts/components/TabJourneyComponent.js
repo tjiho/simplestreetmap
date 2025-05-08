@@ -10,6 +10,9 @@ import Journey from '../models/Journey.js'
 import eventBus from '../singletons/eventBus.js'
 import map from '../singletons/map.js'
 import annotationStore from '../singletons/annotationsStore.js'
+import translate from '../tools/translate.js'
+
+const t = translate('TabJourneyComponent')
 
 export default function TabJourneyComponent () {
   const [state, setState] = useState('form')
@@ -33,17 +36,17 @@ export default function TabJourneyComponent () {
   switch (state) {
     case 'form':
       return html`
-        <h2>Plan your journey</h2>
+        <h2>${t('title')}</h2>
         <${JourneyFormComponent} onSubmit=${findJourney}/>
       `
     case 'list':
       return html`
-        <h2>Plan your journey</h2>
+        <h2>${t('title')}</h2>
         <${JourneyListComponent} from=${from} to=${to} mode=${mode} backToForm=${backToForm}/>
       `
     default:
       return html`
-        <h2>Plan your journey</h2>
+        <h2>${t('title')}</h2>
         <${JourneyFormComponent} onSubmit=${findJourney}/>
       `
   }
@@ -94,24 +97,24 @@ function JourneyFormComponent ({ onSubmit }) {
   return html`
     <form onSubmit=${_onSubmit}>
       <div class="form-field">
-        <label for="journey-mode-input">Mode</label>
+        <label for="journey-mode-input">${t('mode')}</label>
         <select name="mode" id="journey-mode-input">
-          <option value="bike">Bike</option>
-          <option value="public_transport">Public transport</option>
-          <option value="walk">Walk</option>
+          <option value="bike">${t('biking')}</option>
+          <option value="public_transport">${t('public_transport')}</option>
+          <option value="walk">${t('walking')}</option>
           <option value="camera">Walk without camera</option>
         </select>
       </div>
       <div class="form-field">
-        <label for="journey-from-input">Start</label>
+        <label for="journey-from-input">${t('start')}</label>
         <${SearchComponent} id="journey-from-input" onResultSelected="${AddStartPoint}" value=${searchFrom} onInput=${onInputFrom}/>
       </div>
 
       <div class="form-field">
-        <label for="journey-to-input">End</label>
+        <label for="journey-to-input">${t('end')}</label>
         <${SearchComponent} id="journey-to-input" onResultSelected="${addEndPoint}" value=${searchTo} onInput=${onInputTo}/>
       </div>
-      <input class="standard-button small-margin-top" type="submit" value="Find itinerary"/>
+      <input class="standard-button small-margin-top" type="submit" value="${t('search')}"/>
     </form>
   `
 }
@@ -174,8 +177,8 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
     ? LoadingComponent({})
     : html`
       <div>
-        <h3>From ${from.name} to ${to.name}</h3>
-        <button onClick=${_backToForm} class="standard-button button--secondary">Look for an other itinerary</button>
+        <h3>${t('from_to', { from: from.name, to: to.name })}</h3>
+        <button onClick=${_backToForm} class="standard-button button--secondary">${t('look_for_another_itinerary')}</button>
         <ul class="journey-summmary-list">
           ${journeyList.map((j) => JourneySummaryComponent({
             id: j.id,
@@ -190,7 +193,7 @@ function JourneyListComponent ({ from, to, mode, backToForm }) {
           }))}
         </ul>
         ${journeyList.length === 0 && html`
-          <p>No journeys founds</p>
+          <p>${t('no_results')}</p>
         `}
       </div>
     `
@@ -245,7 +248,7 @@ function JourneySummaryComponent ({
           ${sections.map(journeySummarySectionComponent)} end
         </span>
       </div>
-      <button class="standard-button" onClick=${save}>Save</button>
+      <button class="standard-button" onClick=${save}>${t('save')}</button>
     </li>
   `
 }
