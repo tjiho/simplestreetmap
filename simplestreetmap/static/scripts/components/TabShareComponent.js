@@ -1,6 +1,9 @@
 import { html, useEffect, useState } from '../../../static/vendor/preact/standalone.module.js'
 import eventBus from '../singletons/eventBus.js'
 import webSocketClient from '../singletons/webSocketClient.js'
+import translate from '../tools/translate.js'
+
+const t = translate('TabShareComponent')
 
 export default function TabShareComponent ({ canEdit, local }) {
   // const urlRead = new URLSearchParams(window.location.search)
@@ -38,34 +41,34 @@ export default function TabShareComponent ({ canEdit, local }) {
 
   return html`${local
 ? html`
-    <h2>Share your map</h2>
+    <h2>${t('title')}</h2>
     <p>
-      You are not connected to the server
+     ${t('notConnected_1')}
     </p>
     <p>
-      You can still use the map, but you will not be able to share it with others.
+      ${t('notConnected_2')}
     </p>
   `
 : html`
-    <h2>Share your map</h2>
+    <h2>${t('title')}</h2>
     <p>
-    You can share your map by copying one of the two links above:
+    ${t('connected_1')}
     </p>
-    <${ShareLinkComponent} label='Public link (read-only):' link='${urlRead}'/>
+    <${ShareLinkComponent} label='${t('public_link')}' link='${urlRead}'/>
 
-    ${canEdit ? html`<${ShareLinkComponent}  label='Private link (read-write):' link='${urlWrite}'/>` : null}
+    ${canEdit ? html`<${ShareLinkComponent}  label='${t('private_link')}' link='${urlWrite}'/>` : null}
   `}`
 }
 
 function ShareLinkComponent ({ label, link }) {
-  const [buttonValue, setButtonValue] = useState('Copy')
+  const [buttonValue, setButtonValue] = useState(t('copy'))
 
   function copyToClipboard (e) {
     const input = e.target.parentNode.parentNode.querySelector('input')
     input.select()
     input.setSelectionRange(0, 99999)
     document.execCommand('copy')
-    setButtonValue('Copied!')
+    setButtonValue(t('copied!'))
     setTimeout(() => {
       setButtonValue('Copy')
     }

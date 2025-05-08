@@ -22,7 +22,6 @@ export default function SearchComponent ({ onResultSelected = () => {}, id = '',
   // const [searchValue, setSearchValue] = useState(initialSearchValue)
 
   function onInputSearch (e) {
-    console.log('onInputSearch', e)
     const inputValue = e.target.value
 
     if (e.inputType && inputValue === value) {

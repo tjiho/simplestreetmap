@@ -76,6 +76,9 @@ class WebSocketClient {
       case 'remove_annotation':
         this.removeAnnotation(data)
         break
+      case 'update_annotation':
+        this.updateAnnotation(data)
+        break
       default:
         break
     }
@@ -100,6 +103,23 @@ class WebSocketClient {
       return
     }
     annotationStore.removeSyncAnnotation(serverId, { sendToServer: false })
+  }
+
+  updateAnnotation (data) {
+    const serverId = data.uuid
+    const userId = data.user_id
+
+    const annotation = annotationStore.syncAnnotations[serverId]
+    if (annotation) {
+
+      // if (userId === this.userId) {
+      //   annotation.setSynced(true)
+      //   return
+      // }
+      
+      annotationStore.updateSyncAnnotation(annotation, data.annotation, { sendToServer: false })
+      
+    }
   }
 
   hello (data) {

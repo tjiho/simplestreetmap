@@ -2,9 +2,15 @@ import { html, useState, useEffect } from '../../../static/vendor/preact/standal
 
 import eventBus from '../singletons/eventBus.js'
 import annotationStore from '../singletons/annotationsStore.js'
+import translate from '../tools/translate.js'
+
+import AnnotationEditionDialogComponent from './AnnotationEditionDialogComponent.js'
 
 export default function ListAnnotationsComponent ({ local, canEdit }) {
+  const t = translate('ListAnnotationsComponent')
+
   const [annotations, setAnnotations] = useState({})
+  const [editingAnnotation, setEditingAnnotation] = useState(null)
 
   useEffect(() => {
     annotationStore.onAnnotationsChange((action, newElement, newAnnotations) => {
@@ -19,16 +25,24 @@ export default function ListAnnotationsComponent ({ local, canEdit }) {
     }
   }
 
+  function startAnnotationEdition (annotation) {
+    setEditingAnnotation(annotation)
+  }
+
+  function closeEditionDialog () {
+    setEditingAnnotation(null)
+  }
+
   return html`
-    <h2>Annotations</h2>
+    <h2>${t('title')}</h2>
     <ul>
       ${Object.values(annotations).map((annotation) => AnnotationLineComponent({
         name: annotation.name,
         objectType: annotation.objectType,
         removeFromAnnotations: () => {
-          console.log('removeFromAnnotations')
           annotationStore.removeAnnotation(annotation)
         }, // annotation.removeFromAnnotations.bind(annotation),
+        startAnnotationEdition: () => startAnnotationEdition(annotation),
         baseVisible: annotation.visible,
         show: annotation.show.bind(annotation),
         hide: annotation.hide.bind(annotation),
@@ -36,17 +50,25 @@ export default function ListAnnotationsComponent ({ local, canEdit }) {
         onClick: () => clickOnAnnotation(annotation),
         canBeDestroy: annotation.canBeDestroy,
         synced: annotation.synced,
+        shouldBeSynced: annotation.shouldBeSynced,
         key: annotation.id
       }))}
     </ul>
+    <${AnnotationEditionDialogComponent} annotation=${editingAnnotation} onClose=${closeEditionDialog} />
   `
 }
 
-function AnnotationLineComponent ({ name, objectType, removeFromAnnotations, baseVisible, show, hide, zoomOn, onClick, canBeDestroy, synced }) {
+function AnnotationLineComponent ({ name, objectType, removeFromAnnotations, startAnnotationEdition, baseVisible, show, hide, zoomOn, onClick, canBeDestroy, synced, shouldBeSynced, key }) {
   const [visible, setVisibility] = useState(baseVisible)
 
   function _removeAnnotation (e) {
     removeFromAnnotations()
+    e.preventDefault()
+  }
+
+  function _startAnnotationEdition (e) {
+    if(shouldBeSynced && !synced) return alert("You can't edit an annotation that is not synced")
+    startAnnotationEdition()
     e.preventDefault()
   }
 
@@ -68,11 +90,11 @@ function AnnotationLineComponent ({ name, objectType, removeFromAnnotations, bas
 
   return html`
     <li class="annotations-line" title="${name}">
-      ${AnnotationSyncedComponent({ synced })}
+      ${AnnotationSyncedComponent({ synced, shouldBeSynced })}
       ${AnnotationIconTypeComponent({ objectType })}
       <span class="annotations-line__name" onClick=${clickOnAnnotation}>${name}</span>
       <div class="annotations-line__actions">
-        <button title="Edit annotation">
+        <button title="Edit annotation" onclick="${_startAnnotationEdition}">
           <img src="/static/images/breeze/document-edit.svg" alt="pen icon"/>
         </button>
 
@@ -103,9 +125,11 @@ function AnnotationIconTypeComponent ({ objectType }) {
   }
 }
 
-function AnnotationSyncedComponent ({ synced }) {
+function AnnotationSyncedComponent ({ synced, shouldBeSynced }) {
   if (synced) {
     return html`<img src="/static/images/breeze-white-icon/folder-cloud.svg" class="annotations-line__icon"/>`
+  } else if (shouldBeSynced) {
+    return html`<img src="/static/images/breeze-white-icon/view-refresh.svg" class="annotations-line__icon"/>`
   } else {
     return html`<img src="/static/images/breeze-white-icon/cross.svg" class="annotations-line__icon"/>`
   }

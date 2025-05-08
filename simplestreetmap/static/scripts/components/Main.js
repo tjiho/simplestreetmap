@@ -6,9 +6,11 @@ import TabExploreComponent from './TabExploreComponent.js'
 import TabJourneyComponent from './TabJourneyComponent.js'
 import ListAnnotationsComponent from './ListAnnotationsComponent.js'
 import AnnotationsMobileComponent from './AnnotationsMobileComponent.js'
+import TabSettingsComponent from './TabSettingsComponent.js'
 import TabShareComponent from './TabShareComponent.js'
 import eventBus from '../singletons/eventBus.js'
 import webSocketClient from '../singletons/webSocketClient.js'
+
 const tabs = [
   {
     icon: 'edit-find',
@@ -28,7 +30,13 @@ const tabs = [
     label: 'Share',
     content: TabShareComponent,
     childProps: {}
-  }
+  },
+  {
+    icon: 'configure',
+    label: 'Settings',
+    content: TabSettingsComponent,
+    childProps: {}
+   },
 
 ]
 

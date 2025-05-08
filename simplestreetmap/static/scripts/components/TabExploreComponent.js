@@ -5,8 +5,12 @@ import Place from '../models/Place.js'
 import map from '../singletons/map.js'
 import eventBus from '../singletons/eventBus.js'
 import annotationStore from '../singletons/annotationsStore.js'
+import translate from '../tools/translate.js'
+
+const t = translate('TabExploreComponent')
 
 export default function TabExploreComponent () {
+  
   const [place, setPlace] = useState(null)
 
   function addPlace (coordinates, name, context) {
@@ -21,7 +25,7 @@ export default function TabExploreComponent () {
   })
 
   return html`
-    <h2>Explore the world!</h2>
+    <h2>${t('title')}</h2>
     ${ExploreFormComponent({ onResultSelected: addPlace })}
     ${place && ExploreDetailComponent(place)}
   `
@@ -36,7 +40,7 @@ function ExploreFormComponent ({ onResultSelected }) {
 
   return html`
   <div class="form-field">
-    <label for="search-input">What are you looking for?</label>
+    <label for="search-input">${t('search')}</label>
     <${SearchComponent} id="search-input" onResultSelected="${onResultSelected}" value="${search}" onInput=${onInputSearch}/>
   </div>
   `
