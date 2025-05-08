@@ -64,11 +64,12 @@ class AnnotationStore {
   }
 
   updateSyncAnnotation (annotation, updatedFields, { sendToServer = true } = {}) {
-    this.notifyAnnotationsChange('updateSyncAnnotation', annotation)
     annotation.update(updatedFields)
+    annotation.setSynced(true)
+    this.notifyAnnotationsChange('updateSyncAnnotation', annotation)
     if (sendToServer && webSocketClient.canEdit) {
       annotation.setSynced(false)
-      webSocketClient.send({ action: 'update_annotation', annotation: annotation.toJson() })
+      webSocketClient.send({ id: annotation.serverId, action: 'update_annotation', annotation: annotation.toJson() })
     }
   }
 

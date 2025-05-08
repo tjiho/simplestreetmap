@@ -52,6 +52,11 @@ class WebsocketHandler():
                 case {"action": "remove_annotation"}:
                     logger.debug("remove_annotation received")
                     await self.remove_annotation(message, websocket)
+                case {"action": "update_annotation"}:
+                    logger.debug("update_annotation received")
+                    await self.update_annotation(message, websocket)
+                case _:
+                    logger.debug("Unknown action", message)
             # except Exception as e:
             #     logger.error(e)
             #     #await websocket.send(json.dumps({"action": "error", "message": str(e)}))
@@ -139,8 +144,12 @@ class WebsocketHandler():
             return
 
         if "id" in message and "object_type" in message:
-            websocket.userController.remove_annotation(
-                message['id'], message['object_type'])
+            try:
+                websocket.userController.remove_annotation(
+                    message['id'], message['object_type'])
+            except Exception as e:
+                print(e)
+                pass
             await self.send_messages_to_clients(websocket.userController.plan_token, json.dumps({
                 "action": "remove_annotation",
                 "uuid": message["id"],
@@ -156,6 +165,32 @@ class WebsocketHandler():
                 await websocketClient.send(message)
             except Exception as e:
                 self.clients[plan_token].remove(websocketClient)
+
+    async def update_annotation(self, message, websocket):
+        if not websocket.userController.can_edit:
+            return
+
+        if "id" in message and "annotation" in message:
+            try:
+                saved_annotation = websocket.userController.update_annotation(
+                    message["id"],
+                    message["annotation"])
+            except Exception as e:
+                logger.warning(e)
+                return
+
+            if saved_annotation is None:
+                return
+
+            await self.send_messages_to_clients(websocket.userController.plan_token, json.dumps({
+                "uuid": message["id"],
+                "action": "update_annotation",
+                "annotation": message["annotation"],
+                "user_id": websocket.userController.user_id
+            }))
+        else:
+            logger.warning("No annotation in message")
+        pass
 
 
 async def main():
