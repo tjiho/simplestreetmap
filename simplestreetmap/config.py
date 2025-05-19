@@ -1,7 +1,7 @@
 def get_config():
     return {
         'general': {
-            'map_style_url': 'https://maps.ppsfleet.navy/tileserver-data/qwant-basic-gl-style-toulouse/built-style-debug.json',
+            'map_style_url': 'https://static.ppsfleet.navy/osm-data/styles/generic-latest.json',
             'websocket_url': 'ws://127.0.0.1:8765',
         },
         'overlays': [
@@ -18,10 +18,11 @@ def get_config():
         },
         'maplibre': {
             'js': {
-                'url': 'https://static.ppsfleet.navy/js/maplibre-3.6.2.js'
+                'url': 'https://static.ppsfleet.navy/js/maplibre-5.5.0.js',
+                'url_pmtiles': 'https://static.ppsfleet.navy/js/pmtiles-4.3.0.js'
             },
             'css': {
-                'url': 'https://static.ppsfleet.navy/js/maplibre-3.6.2.css'
-            } 
+                'url': 'https://static.ppsfleet.navy/js/maplibre-5.5.0.css'
+            }
         }
     }

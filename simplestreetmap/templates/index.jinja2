@@ -19,19 +19,13 @@
         -->
 
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <!-- mapbox -->
+
     <script src="{{ request.ssm_config['maplibre']['js']['url'] }}"></script>
+    <script src="{{ request.ssm_config['maplibre']['js']['url_pmtiles'] }}"></script>
     <link href="{{ request.ssm_config['maplibre']['css']['url'] }}" rel='stylesheet' />
-    <!-- css -->
     <link href="{{ request.static_url('simplestreetmap:static/styles/style.css') }}" rel='stylesheet' />
 
     <script src="{{ request.static_url('simplestreetmap:static/vendor/lisan/index.umd.js') }}" type="text/javascript"></script>
-
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.11.3/preact.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/htm/3.1.1/htm.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/preact/10.11.3/hooks.umd.js"></script> -->
 
     <script>
         const BASE_API_URL = '/api/v1';
@@ -40,15 +34,15 @@
         const OVERLAYS = [];
         {% for overlay in request.ssm_config['overlays'] %}
           OVERLAYS.push({
-            tilesUrl:"{{ overlay.tiles_url }}", 
-            sourceLayer:"{{ overlay.source_layer }}", 
+            tilesUrl:"{{ overlay.tiles_url }}",
+            sourceLayer:"{{ overlay.source_layer }}",
             name: "{{ overlay.name }}"
           })
         {% endfor %}
     </script>
 </head>
 <body>
-    
+
 
     <!-- <script type="importmap">
       {
@@ -65,8 +59,8 @@
 
         import { html, render } from "{{ request.static_url('simplestreetmap:static/vendor/preact/standalone.module.js') }}";
         import Main from "{{ request.static_url('simplestreetmap:static/scripts/components/Main.js') }}";
-        import locale from "{{ request.static_url('simplestreetmap:static/scripts/singletons/locale.js') }}";        
-        
+        import locale from "{{ request.static_url('simplestreetmap:static/scripts/singletons/locale.js') }}";
+
 
         render(
             html`<${Main} />`,
