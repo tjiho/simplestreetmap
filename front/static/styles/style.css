@@ -18,10 +18,12 @@
 @layer base, mobile;
 
 @layer base {
-body
+html,body,main
 {
   margin:0;
   padding:0;
+  height: 100%;
+  width: 100%;
 }
 
 #map
@@ -29,17 +31,19 @@ body
   position:absolute !important;
   top:0;
   bottom:0;
-  width: calc(100% - 350px);
+  /*width: calc(100% - 350px -40);*/
+  left: 40px;
+  right: 350px;
 }
 
 #left-side-bar
 {
   /*max-width: 350px;*/
   position: relative;
-  padding: .5rem;
   display: inline-block;
   z-index: 10;
   width: fit-content;
+  height: 100%;
 }
 
 #annotations
