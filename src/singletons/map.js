@@ -1,10 +1,13 @@
 import parseHashCoordinates from '../tools/parseHashCoordinates.js'
 
-class Map extends mapboxgl.Map {
+class Map extends maplibregl.Map {
   constructor () {
     console.log('Init map')
     const params = new URLSearchParams(window.location.search)
     const { lng, lat, zoom } = parseHashCoordinates(params.get('map') || '', 1.4436, 43.6042, 13)
+
+    let protocol = new pmtiles.Protocol({ metadata: true });
+    maplibregl.addProtocol("pmtiles", protocol.tile);
 
     super({
       container: 'map',
@@ -13,16 +16,16 @@ class Map extends mapboxgl.Map {
       zoom: zoom
     })
 
-    const nav = new mapboxgl.NavigationControl()
+    const nav = new maplibregl.NavigationControl()
 
-    const gps = new mapboxgl.GeolocateControl({
+    const gps = new maplibregl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true
       },
       trackUserLocation: true
     })
 
-    const scale = new mapboxgl.ScaleControl({
+    const scale = new maplibregl.ScaleControl({
       maxWidth: 80,
       unit: 'metric'
     })

@@ -35,7 +35,7 @@ export default class PlaceComponent extends ChipBaseComponent {
 
   addMarker (lat, lng) {
     this?.marker?.remove()
-    this.marker = new mapboxgl.Marker()
+    this.marker = new maplibregl.Marker()
       .setLngLat([lng, lat])
       .addTo(map)
   }

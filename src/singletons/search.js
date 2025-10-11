@@ -52,8 +52,9 @@ export class Search {
       if (this.searchController) { this.searchController.abort() }
       this.searchController = new AbortController()
       const signal = this.searchController.signal
+      const currentCoordinates = map.getCenter().toArray()
 
-      window.fetch(BASE_SEARCH_URL(query), { signal }).then((response) => {
+      window.fetch(BASE_SEARCH_URL(query, currentCoordinates[1], currentCoordinates[0]), { signal }).then((response) => {
         response.json().then((value) => {
           this.cleanSearchResults()
 

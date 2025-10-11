@@ -16,8 +16,9 @@
     <meta property="og:title" content="Maps.ppsfleet.navy"/>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <!-- mapbox -->
-    <script src='https://maps.ppsfleet.navy/maplibre/mapbox-gl-unminified.js'></script>
-    <link href='https://maps.ppsfleet.navy/maplibre/mapbox-gl.css' rel='stylesheet' />
+     <script src="https://static.ppsfleet.navy/js/maplibre-5.5.0.js"></script>
+    <script src="https://static.ppsfleet.navy/js/pmtiles-4.3.0.js"></script>
+    <link href="https://static.ppsfleet.navy/js/maplibre-5.5.0.css" rel='stylesheet' />
     <!-- css -->
     <link href='https://static.ppsfleet.navy/fonts/russisch-sans/style.css' rel='stylesheet' />
     <link href='./src/css/style.css' rel='stylesheet' />
