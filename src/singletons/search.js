@@ -73,7 +73,6 @@ export class Search {
   }
 
   displaySearchResult (result) {
-    console.log('yo1')
     const domResult = document.createElement('div')
     domResult.classList.add('search-results__result')
     domResult.innerText = result.properties.label
@@ -112,7 +111,6 @@ export class Search {
         previousSelection.setAttribute('selected', 'true')
         break
       case 13:
-        console.log('enter')
         currentSelection.click()
         break
     }
