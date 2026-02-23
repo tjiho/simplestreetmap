@@ -40,7 +40,8 @@
         <button id="search-close-button">Fermer la recherche</button>
       </div>
     </div>
-    
+    <c-poi-panel></c-poi-panel>
+
     <nav id="categories">
     </nav>
 
@@ -55,6 +56,13 @@
       customElements.define('c-place', PlaceComponent)
 
     </script>
+
+    <template id="template-poi-viewer">
+      <div class="poi-viewer__content">
+        <h2 class="poi-viewer__name"></h2>
+        <span class="poi-viewer__type"></span>
+      </div>
+    </template>
 
     <template id="template-chip-base">
       <div class="chip_delete">
