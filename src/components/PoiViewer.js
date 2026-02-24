@@ -1,3 +1,5 @@
+import { getLabel } from "../tools/poiLabel.js"
+
 class PoiViewer extends HTMLElement {
   constructor () {
     super()
@@ -17,7 +19,8 @@ class PoiViewer extends HTMLElement {
   render () {
     const props = this._feature.properties
     this.querySelector('.poi-viewer__name').textContent = props['name:latin'] || props.name || ''
-    this.querySelector('.poi-viewer__type').textContent = props.subclass || props.amenity || props.class || ''
+    
+    this.querySelector('.poi-viewer__type').textContent = getLabel(props)
   }
 }
 
