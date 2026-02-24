@@ -18,9 +18,15 @@ class PoiViewer extends HTMLElement {
 
   render () {
     const props = this._feature.properties
+    console.log(props)
     this.querySelector('.poi-viewer__name').textContent = props['name:latin'] || props.name || ''
     
     this.querySelector('.poi-viewer__type').textContent = getLabel(props)
+
+    if(props.website) {
+      this.querySelector('.poi-viewer__website__link').href = props.website
+      this.querySelector('.poi-viewer__website__link').textContent = props.website
+    }
   }
 }
 
