@@ -2,6 +2,7 @@ import map from "./map.js";
 import overpassSearch from "../tools/overpassSearch.js";
 import poiPanel from "./poiPanel.js";
 import PoiViewer from "../components/PoiViewer.js";
+import { poiIconExpression } from "../tools/getIcon.js";
 
 const POI_LAYERS = ["poi-named"];
 
@@ -30,32 +31,6 @@ class PoiInfo {
       url: "pmtiles://https://static.ppsfleet.navy/osm-data/poi.pmtiles",
     });
 
-    // map.addLayer({
-    //   "id": "test-poi",
-    //   "type": "circle",
-    //   "source": "poi",
-    //   "source-layer": "poi"
-    // })
-
-    const amenityIcons = {
-      restaurant: "restaurant-11",
-      cafe: "cafe-11",
-      bar: "bar-11",
-      pub: "beer-11",
-      pharmacy: "pharmacy-11",
-      hospital: "hospital-11",
-      school: "school-11",
-      bank: "bank-11",
-      fast_food: "fast-food-11",
-    };
-
-    const iconExpression = [
-      "match",
-      ["get", "amenity"],
-      ...Object.entries(amenityIcons).flat(),
-      "marker-11", // fallback
-    ];
-
     map.addLayer({
       id: "poi-named",
       type: "symbol",
@@ -63,7 +38,7 @@ class PoiInfo {
       "source-layer": "poi",
       minzoom: 15,
       layout: {
-        "icon-image": iconExpression,
+        "icon-image": poiIconExpression,
         "icon-size": 1,
         "icon-allow-overlap": false,
         "text-padding": 2,
