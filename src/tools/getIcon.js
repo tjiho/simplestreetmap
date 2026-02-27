@@ -41,6 +41,7 @@ const AMENITY_ICONS = {
   university:         "college",
   library:            "library",
   public_bookcase:    "library",
+  childcare:          "school",
 
   // Transport
   parking:            "parking",
@@ -53,6 +54,8 @@ const AMENITY_ICONS = {
   car_rental:         "car-rental",
   charging_station:   "fuel",
   taxi:               "car",
+  car_sharing:        "car-rental",
+  "kick-scooter_parking": "",
 
   // Services publics
   townhall:           "town-hall",
@@ -75,9 +78,9 @@ const AMENITY_ICONS = {
 
   // Plein air
   bbq:                "bbq",
-  bench:              "circle",
-  drinking_water:     "circle",
-  fountain:           "circle",
+  bench:              "",
+  drinking_water:     "",
+  fountain:           "",
   shelter:            "shelter",
   toilets:            "toilet",
   waste_basket:       "waste-basket",
@@ -99,6 +102,7 @@ const AMENITY_ICONS = {
   music_school:       "music",
   dancing_school:     "music",
   language_school:    "school",
+  clock:              "",
 };
 
 
@@ -387,6 +391,8 @@ function getIcon(tags) {
   return "circle";
 }
 
+
+
 function dictToMapLibreStyle(dict, key, defaultIcon) {
   return [
     "match", ["get", key],
@@ -403,7 +409,7 @@ export const poiIconExpression = [
   ["has", "leisure"],    dictToMapLibreStyle(LEISURE_ICONS, "leisure", "park-alt1-11"),
   ["has", "healthcare"], dictToMapLibreStyle(HEALTHCARE_ICONS, "healthcare", "doctor-11"),
   ["has", "craft"],      dictToMapLibreStyle(CRAFT_ICONS, "craft", "service-11"),
-  ["has", "office"],     dictToMapLibreStyle(OFFICE_ICONS, "office", "commercial-11"),
+  ["has", "office"],     dictToMapLibreStyle(OFFICE_ICONS, "office", "building-11"),
   ["has", "historic"],   dictToMapLibreStyle(HISTORIC_ICONS, "historic", "monument-11"),
-  "marker-11"
+  ""
 ];

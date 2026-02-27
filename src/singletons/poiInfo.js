@@ -30,7 +30,7 @@ class PoiInfo {
       type: "vector",
       url: "pmtiles://https://static.ppsfleet.navy/osm-data/poi.pmtiles",
     });
-
+    
     map.addLayer({
       id: "poi-named",
       type: "symbol",
