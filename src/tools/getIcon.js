@@ -265,22 +265,22 @@ const CRAFT_ICONS = {
 
 
 const OFFICE_ICONS = {
-  estate_agent:       "commercial",
-  company:            "commercial",
-  lawyer:             "commercial",
-  insurance:          "commercial",
-  employment_agency:  "commercial",
-  coworking:          "commercial",
-  association:        "commercial",
+  estate_agent:       "building",
+  company:            "building",
+  lawyer:             "building",
+  insurance:          "building",
+  employment_agency:  "building",
+  coworking:          "building",
+  association:        "building",
   government:         "town-hall",
   political_party:    "town-hall",
   financial:          "bank",
-  tax_advisor:        "commercial",
-  architect:          "commercial",
-  notary:             "commercial",
-  accountant:         "commercial",
-  it:                 "commercial",
-  yes:                "commercial",
+  tax_advisor:        "building",
+  architect:          "building",
+  notary:             "building",
+  accountant:         "building",
+  it:                 "building",
+  yes:                "building",
 };
 
 
@@ -404,7 +404,7 @@ function dictToMapLibreStyle(dict, key, defaultIcon) {
 export const poiIconExpression = [
   "case",
   ["has", "tourism"],    dictToMapLibreStyle(TOURISM_ICONS, "tourism", "attraction-11"),
-  ["has", "amenity"],    dictToMapLibreStyle(AMENITY_ICONS, "amenity", "circle-11"),
+  ["has", "amenity"],    dictToMapLibreStyle(AMENITY_ICONS, "amenity", "marker-11"),
   ["has", "shop"],       dictToMapLibreStyle(SHOP_ICONS, "shop", "shop-11"),
   ["has", "leisure"],    dictToMapLibreStyle(LEISURE_ICONS, "leisure", "park-alt1-11"),
   ["has", "healthcare"], dictToMapLibreStyle(HEALTHCARE_ICONS, "healthcare", "doctor-11"),
