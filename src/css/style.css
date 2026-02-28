@@ -1,4 +1,5 @@
 @import './global.css';
+@import './opening-hour.css';
 
 #search-container
 {
@@ -236,6 +237,10 @@ c-poi-panel.poi-panel--open {
   text-transform: capitalize;
 }
 
+.poi-viewer__opening-hour:has(> c-opening-hour){
+  margin-top: 1rem;
+}
+
 @media only screen and (max-device-width: 650px) {
   c-poi-panel {
     width: auto;
@@ -244,57 +249,4 @@ c-poi-panel.poi-panel--open {
     max-width: 100%;
     border-radius: 0;
   }
-}
-
-/* POI Popup */
-.poi-popup .maplibregl-popup-content {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-family: 'Russisch Sans';
-}
-
-.poi-popup__name {
-  display: block;
-  font-size: 1.1em;
-  margin-bottom: 2px;
-}
-
-.poi-popup__class {
-  display: block;
-  font-size: 0.85em;
-  color: #666;
-  text-transform: capitalize;
-  margin-bottom: 8px;
-}
-
-.poi-popup__loading {
-  font-size: 0.85em;
-  color: #999;
-  font-style: italic;
-}
-
-.poi-popup__details {
-  border-top: 1px solid var(--line-color);
-  padding-top: 8px;
-}
-
-.poi-popup__detail {
-  font-size: 0.9em;
-  margin-bottom: 4px;
-  line-height: 1.4;
-}
-
-.poi-popup__label {
-  font-weight: bold;
-}
-
-.poi-popup__detail a {
-  color: var(--main-color);
-}
-
-.poi-popup__osm-link {
-  display: block;
-  margin-top: 8px;
-  font-size: 0.8em;
-  color: var(--main-color);
 }

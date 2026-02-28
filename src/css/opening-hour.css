@@ -1,0 +1,37 @@
+.opening-hour {
+    margin: auto;
+    width: 80%;
+    border: 2px solid;
+    padding: 1rem;
+
+    &[open] {
+        background-color: #ddfbd4;
+
+        .opening-hour__title--closed {
+            display: none;
+        }
+    }
+
+    &[closed] {
+
+        .opening-hour__title--open {
+            display: none;
+        }
+    }
+    
+
+    .opening-hour__title {
+            font-weight: bold;
+            margin: 0;
+            border-bottom: 1px solid #00000073;
+            padding-bottom: 0.5rem;
+            text-align: center;
+            font-variant: all-small-caps;
+    }
+
+    .opening-hour__description {
+        font-weight: bold;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+}

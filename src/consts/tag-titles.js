@@ -214,7 +214,7 @@ const TAGS_TITLE = {
     "chair": "Chaise",
     "arts_centre": "Centre artistique",
     "healthcare": "Santé",
-    "public_bookcase": "Micro bibliothèque",
+    "public_bookcase": "Boite à livre",
     "public_service": "Service public",
     "piano": "Piano",
     "kick-scooter_rental": "Location trottinettes",

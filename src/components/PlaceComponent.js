@@ -1,7 +1,7 @@
 import map from '../singletons/map.js'
 import ChipBaseComponent from './ChipBaseComponent.js'
 
-export default class PlaceComponent extends ChipBaseComponent {
+class PlaceComponent extends ChipBaseComponent {
   constructor () {
     super()
 
@@ -64,3 +64,7 @@ export default class PlaceComponent extends ChipBaseComponent {
     super.remove()
   }
 }
+
+customElements.define('c-place', PlaceComponent)
+
+export default PlaceComponent
