@@ -24,7 +24,7 @@ const AMENITY_ICONS = {
   // Courses
   marketplace:        "grocery",
   fuel:               "fuel",
-  vending_machine:    "shop",
+  vending_machine:    "",
 
   // Santé
   hospital:           "hospital",
