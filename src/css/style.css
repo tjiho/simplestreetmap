@@ -224,6 +224,8 @@ c-poi-panel.poi-panel--open {
 
 .poi-viewer__content {
   padding: 16px;
+  max-height: calc(100vh - 8rem);
+  overflow: auto;
 }
 
 .poi-viewer__name {

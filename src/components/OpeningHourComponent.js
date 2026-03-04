@@ -1,3 +1,24 @@
+function compute_opening_hours_obj(oh_string) {
+  try {
+    const oh = new opening_hours(oh_string, null);
+    return oh
+  } catch (error) {
+    return null
+  }
+}
+
+function formatOhInterval(interval) {
+  const htmlInterval = document.createElement('span')
+  const options = {
+    hour: "numeric",
+    minute: "numeric"
+  }
+  const start = new Intl.DateTimeFormat(undefined, options).format(interval[0])
+  const end = new Intl.DateTimeFormat(undefined, options).format(interval[1])
+  htmlInterval.innerText = `${start} – ${end}`
+  return htmlInterval
+}
+
 class OpeningHourComponent extends HTMLElement {
   constructor () {
     super()
@@ -14,9 +35,12 @@ class OpeningHourComponent extends HTMLElement {
     return this._oh
   }
 
+  
+
   render () {
-    const oh = new opening_hours(this._oh, null);
-    const isOpen = oh.getState()
+    const compute_oh = compute_opening_hours_obj(this.oh)
+    if(!compute_oh) return
+    const isOpen = compute_oh.getState()
     if(isOpen) {
       this.querySelector('.opening-hour').removeAttribute('closed')
       this.querySelector('.opening-hour').setAttribute('open', 'true')
@@ -38,11 +62,29 @@ class OpeningHourComponent extends HTMLElement {
       to.setHours(23,59,59,999);
       week.push({
         day: from.getDay(),
-        intervals: oh.getOpenIntervals(from, to),
+        from,
+        to,
+        intervals: compute_oh.getOpenIntervals(from, to),
       });
     }
 
-    console.log(week)
+    for(const {from, intervals} of week) {
+      const tpl = document.getElementById('template-opening-hour-day').content.cloneNode(true)
+      tpl.querySelector('h2').innerText = new Intl.DateTimeFormat(undefined, { weekday: "long" }).format(from);
+      if(intervals.length > 0)
+      {
+        intervals.forEach(element => {
+          tpl.querySelector('.opening-hour__time').appendChild(formatOhInterval(element))
+        });
+        
+      } else {
+        tpl.querySelector('.opening-hour__time').innerText = "Fermée"
+      }
+      this.querySelector('.opening-hour').appendChild(tpl)
+      
+    }
+
+    
     
   }
 }

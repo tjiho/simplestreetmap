@@ -1,11 +1,16 @@
 .opening-hour {
     margin: auto;
-    width: 80%;
-    border: 2px solid;
-    padding: 1rem;
+    /*width: 80%;*/
+    padding: 1rem 2rem;
+    box-shadow: 0 0 .2rem #a4a4a4,
+                0 0 .2rem #9f9f9f;
+
+    &:not([open]):not([closed]) {
+        display: none;
+    }
 
     &[open] {
-        background-color: #ddfbd4;
+        background-color: #e7ffe8;
 
         .opening-hour__title--closed {
             display: none;
@@ -33,5 +38,23 @@
         font-weight: bold;
         text-align: center;
         margin-top: 0.5rem;
+    }
+
+    .opening-hour__day {
+        display: flex;
+        margin-bottom: 0.5rem;
+    }
+
+    .opening-hour__day h2 {
+        margin: 0;
+        flex: 1;
+        font-size: 1.1rem;
+    }
+
+    .opening-hour__time {
+        flex:1;
+        display: flex;
+        flex-direction: column;
+        font-weight: 500;
     }
 }
