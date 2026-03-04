@@ -1,5 +1,5 @@
-import { getLabel } from "../tools/poiLabel.js"
-import OpeningHourComponent from "./OpeningHourComponent.js"
+import { getLabel } from '../tools/poiLabel.js'
+import OpeningHourComponent from './OpeningHourComponent.js'
 
 class PoiViewer extends HTMLElement {
   constructor () {
@@ -21,20 +21,19 @@ class PoiViewer extends HTMLElement {
     const props = this._feature.properties
     console.log(props)
     this.querySelector('.poi-viewer__name').textContent = props['name:latin'] || props.name || ''
-    
+
     this.querySelector('.poi-viewer__type').textContent = getLabel(props)
 
-    if(props.website) {
+    if (props.website) {
       this.querySelector('.poi-viewer__website__link').href = props.website
       this.querySelector('.poi-viewer__website__link').textContent = props.website
     }
 
-    if(props.opening_hours) {
+    if (props.opening_hours) {
       const openingHoursComponent = new OpeningHourComponent()
       openingHoursComponent.oh = props.opening_hours
       this.querySelector('.poi-viewer__opening-hour').appendChild(openingHoursComponent)
     }
-    
   }
 }
 

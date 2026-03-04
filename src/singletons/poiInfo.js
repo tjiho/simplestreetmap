@@ -1,66 +1,66 @@
-import map from "./map.js";
-import overpassSearch from "../tools/overpassSearch.js";
-import poiPanel from "./poiPanel.js";
-import PoiViewer from "../components/PoiViewer.js";
-import { poiIconExpression } from "../tools/getIcon.js";
+import map from './map.js'
+import overpassSearch from '../tools/overpassSearch.js'
+import poiPanel from './poiPanel.js'
+import PoiViewer from '../components/PoiViewer.js'
+import { poiIconExpression } from '../tools/getIcon.js'
 
-const POI_LAYERS = ["poi-named"];
+const POI_LAYERS = ['poi-named']
 
 class PoiInfo {
-  constructor() {
-    this.popup = null;
-    this.controller = null;
+  constructor () {
+    this.popup = null
+    this.controller = null
 
-    map.on("load", () => {
-      this.addPoiLayer();
+    map.on('load', () => {
+      this.addPoiLayer()
 
-      map.on("click", (e) => this.handleClick(e));
+      map.on('click', (e) => this.handleClick(e))
 
-      map.on("mousemove", (e) => {
+      map.on('mousemove', (e) => {
         const features = map.queryRenderedFeatures(e.point, {
-          layers: POI_LAYERS,
-        });
-        map.getCanvas().style.cursor = features.length ? "pointer" : "";
-      });
-    });
+          layers: POI_LAYERS
+        })
+        map.getCanvas().style.cursor = features.length ? 'pointer' : ''
+      })
+    })
   }
 
-  addPoiLayer() {
-    map.addSource("poi", {
-      type: "vector",
-      url: "pmtiles://https://static.ppsfleet.navy/osm-data/poi.pmtiles",
-    });
-    
+  addPoiLayer () {
+    map.addSource('poi', {
+      type: 'vector',
+      url: 'pmtiles://https://static.ppsfleet.navy/osm-data/poi.pmtiles'
+    })
+
     map.addLayer({
-      id: "poi-named",
-      type: "symbol",
-      source: "poi",
-      "source-layer": "poi",
+      id: 'poi-named',
+      type: 'symbol',
+      source: 'poi',
+      'source-layer': 'poi',
       minzoom: 15,
       layout: {
-        "icon-image": poiIconExpression,
-        "icon-size": 1,
-        "icon-allow-overlap": false,
-        "text-padding": 2,
-        "text-font": ["Open Sans Regular"],
-        "text-anchor": "top",
-        "text-field": [
-          "case",
-          ["has", "name:latin"],
-          ["get", "name:latin"],
-          ["get", "name"],
+        'icon-image': poiIconExpression,
+        'icon-size': 1,
+        'icon-allow-overlap': false,
+        'text-padding': 2,
+        'text-font': ['Open Sans Regular'],
+        'text-anchor': 'top',
+        'text-field': [
+          'case',
+          ['has', 'name:latin'],
+          ['get', 'name:latin'],
+          ['get', 'name']
         ],
-        "text-optional": true,
-        "text-offset": [0, 1.4],
-        "text-size": 10,
-        "text-max-width": 9,
+        'text-optional': true,
+        'text-offset': [0, 1.4],
+        'text-size': 10,
+        'text-max-width': 9
       },
       paint: {
-        "text-color": "#333",
-        "text-halo-color": "#fff",
-        "text-halo-width": 1.5,
-      },
-    });
+        'text-color': '#333',
+        'text-halo-color': '#fff',
+        'text-halo-width': 1.5
+      }
+    })
 
     // map.addLayer({
     //   id: 'poi-named',
@@ -115,43 +115,43 @@ class PoiInfo {
     // })
   }
 
-  handleClick(e) {
+  handleClick (e) {
     const bbox = [
       [e.point.x - 5, e.point.y - 5],
-      [e.point.x + 5, e.point.y + 5],
-    ];
-    const features = map.queryRenderedFeatures(bbox, { layers: POI_LAYERS });
+      [e.point.x + 5, e.point.y + 5]
+    ]
+    const features = map.queryRenderedFeatures(bbox, { layers: POI_LAYERS })
 
     if (!features.length) {
-      this.closePopup();
-      poiPanel.close();
-      return;
+      this.closePopup()
+      poiPanel.close()
+      return
     }
 
-    const feature = features[0];
-    const viewer = new PoiViewer();
-    viewer.feature = feature;
-    poiPanel.open(viewer);
+    const feature = features[0]
+    const viewer = new PoiViewer()
+    viewer.feature = feature
+    poiPanel.open(viewer)
   }
 
-  showPopup(coords, html) {
-    this.closePopup();
+  showPopup (coords, html) {
+    this.closePopup()
     this.popup = new maplibregl.Popup({
-      maxWidth: "320px",
-      className: "poi-popup",
+      maxWidth: '320px',
+      className: 'poi-popup'
     })
       .setLngLat(coords)
       .setHTML(html)
-      .addTo(map);
+      .addTo(map)
   }
 
-  closePopup() {
+  closePopup () {
     if (this.popup) {
-      this.popup.remove();
-      this.popup = null;
+      this.popup.remove()
+      this.popup = null
     }
   }
 }
 
-const poiInfo = new PoiInfo();
-export default poiInfo;
+const poiInfo = new PoiInfo()
+export default poiInfo
