@@ -10,7 +10,7 @@
     <meta property="og:title" content="Maps.ppsfleet.navy"/>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <!-- mapbox -->
-     <script src="https://static.ppsfleet.navy/js/maplibre-5.5.0.js"></script>
+    <script src="https://static.ppsfleet.navy/js/maplibre-5.5.0.js"></script>
     <script src="https://static.ppsfleet.navy/js/pmtiles-4.3.0.js"></script>
     <link href="https://static.ppsfleet.navy/js/maplibre-5.5.0.css" rel='stylesheet' />
     <!-- css -->
@@ -18,6 +18,9 @@
     <link href='./src/css/style.css' rel='stylesheet' />
     <!-- config -->
     <script src='./config.js'></script>
+    <script src="./src/consts/tag-titles.js"></script>
+    <!-- Add opening_hours object -->
+    <script src="./static/opening_hours+deps.min.js"></script>
     <style>
       body { margin:0; padding:0; }
       #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -40,7 +43,8 @@
         <button id="search-close-button">Fermer la recherche</button>
       </div>
     </div>
-    
+    <c-poi-panel></c-poi-panel>
+
     <nav id="categories">
     </nav>
 
@@ -49,11 +53,47 @@
     <script type="module">
       import search from './src/singletons/search.js'
       import map from './src/singletons/map.js'
+      import poiInfo from './src/singletons/poiInfo.js'
 
       import PlaceComponent from './src/components/PlaceComponent.js'
-      customElements.define('c-place', PlaceComponent)
+
 
     </script>
+
+    <template id="template-poi-viewer">
+      <div class="poi-viewer__content">
+        <h2 class="poi-viewer__name"></h2>
+        <div class="poi-viewer__type"></div>
+        <div class="poi-viewer__website">
+          <a class="poi-viewer__website__link"></a>
+        </div>
+        <div class="poi-viewer__opening-hour"></div>
+        <div class="poi-viewer__all"></div>
+      </div>
+    </template>
+
+    <template id="template-opening-hour">
+      <article class="opening-hour">
+        
+        <h1 class="opening-hour__title opening-hour__title--open">Ouvert</h1>
+        <h1 class="opening-hour__title opening-hour__title--closed">Fermée</h1>
+        <div class="opening-hour__description">
+        </div>
+        
+        <!-- <div class="opening-hour-today">
+          <h2>Horaire du jour</h2>
+          <div class="opening-hour-time">00:30 – 23:00</div>
+        </div>
+        <div class="opening-hour-generic"></div> -->
+      </article>
+    </template>
+
+    <template id="template-opening-hour-day">
+      <div class="opening-hour__day">
+        <h2>Mardi</h2>
+        <div class="opening-hour__time"></div>
+      </div>
+    </template>
 
     <template id="template-chip-base">
       <div class="chip_delete">
