@@ -1,0 +1,37 @@
+/* Layer switcher */
+.layer-switcher {
+  display: flex;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  align-self: baseline;
+  margin: 1rem;
+}
+
+.layer-switcher__option {
+  padding: 0.4em 0.8em;
+  background-color: #000000aa;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.layer-switcher__option:first-child {
+  border-right: 1px solid #ffffff33;
+}
+
+.layer-switcher__option--active {
+  background-color: var(--main-color);
+}
+
+.layer-switcher__option:hover:not(.layer-switcher__option--active) {
+  background-color: #000000cc;
+}
+
+@media only screen and (max-device-width: 650px) {
+  .layer-switcher {
+    position: fixed;
+    bottom: 2rem;
+  }
+}

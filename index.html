@@ -36,6 +36,10 @@
         </label>
         <div id="places">
         </div>
+        <div class="layer-switcher" id="layer-switcher">
+          <button class="layer-switcher__option" data-layer="plan">Plan</button>
+          <button class="layer-switcher__option" data-layer="satellite">Satellite</button>
+        </div>
       </div>
       <div id="search-results">
       </div>
@@ -53,6 +57,7 @@
     <script type="module">
       import search from './src/singletons/search.js'
       import map from './src/singletons/map.js'
+      import layerSwitcher from './src/singletons/layerSwitcher.js'
       import poiInfo from './src/singletons/poiInfo.js'
 
       import PlaceComponent from './src/components/PlaceComponent.js'
