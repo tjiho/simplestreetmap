@@ -55,7 +55,7 @@ class PlaceComponent extends ChipBaseComponent {
     const places = urlParams.getAll('places')
     const placesWithoutSelf = places.filter((place) => place !== `${this._lat},${this._lng},${this._name}`)
 
-    urlParams.delete('places', placesWithoutSelf)
+    urlParams.delete('places')
     placesWithoutSelf.forEach((place) => urlParams.append('places', place))
 
     history.replaceState(null, null, `${document.location.pathname}?${urlParams}`)
