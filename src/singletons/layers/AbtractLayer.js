@@ -35,6 +35,7 @@ export default class AbstractLayer {
   }
 
   show() {
+    console.log("show");
     this.layersIds.forEach((id) => {
       if (map.getLayer(id)) {
         map.setLayoutProperty(id, "visibility", "visible");
@@ -43,6 +44,7 @@ export default class AbstractLayer {
   }
 
   hide() {
+    console.log("hide");
     this.layersIds.forEach((id) => {
       if (map.getLayer(id)) {
         map.setLayoutProperty(id, "visibility", "none");

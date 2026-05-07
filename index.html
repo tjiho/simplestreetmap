@@ -61,17 +61,7 @@
                     />
                 </label>
                 <div id="places"></div>
-                <div class="layer-switcher" id="layer-switcher">
-                    <button class="layer-switcher__option" data-layer="plan">
-                        Plan
-                    </button>
-                    <button
-                        class="layer-switcher__option"
-                        data-layer="satellite"
-                    >
-                        Satellite
-                    </button>
-                </div>
+                <div id="layer-switcher"></div>
             </div>
             <div id="search-results"></div>
             <div class="search-container__bottom">
@@ -87,8 +77,12 @@
         <script type="module">
             import search from "./src/singletons/search.js";
             import map from "./src/singletons/map.js";
-            //import layerSwitcher from './src/singletons/layerSwitcher.js'
-            //import elevation from './src/singletons/elevation.js'
+            import { render, html } from "./src/libs/preact.mjs";
+            import LayerSwitcher from "./src/components/LayerSwitcher.js";
+            render(
+                html`<${LayerSwitcher} />`,
+                document.getElementById("layer-switcher"),
+            );
             import PlaceComponent from "./src/components/PlaceComponent.js";
             import poiInfo from "./src/singletons/poiInfo.js";
         </script>

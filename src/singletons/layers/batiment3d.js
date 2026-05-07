@@ -1,5 +1,5 @@
 import AbstractLayer from "./AbtractLayer.js";
-class Elevation extends AbstractLayer {
+class Batiment3d extends AbstractLayer {
   constructor() {
     super();
 
@@ -64,5 +64,5 @@ class Elevation extends AbstractLayer {
   }
 }
 
-const elevation = new Elevation();
-export default elevation;
+const batiment3d = new Batiment3d();
+export default batiment3d;
