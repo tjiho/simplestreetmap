@@ -1,6 +1,7 @@
 import map from './map.js'
 import overpassSearch from '../tools/overpassSearch.js'
 import poiPanel from './poiPanel.js'
+import { render, html } from '../libs/preact.mjs'
 import PoiViewer from '../components/PoiViewer.js'
 import poiLayer from './layers/poi.js'
 
@@ -35,9 +36,9 @@ class PoiInfo {
     }
 
     const feature = features[0]
-    const viewer = new PoiViewer()
-    viewer.feature = feature
-    poiPanel.open(viewer)
+    const container = document.createElement('div')
+    render(html`<${PoiViewer} feature=${feature} />`, container)
+    poiPanel.open(container)
   }
 
   showPopup (coords, html) {
