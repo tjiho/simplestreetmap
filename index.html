@@ -1,117 +1,143 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset='utf-8' />
-    <title>Maps.ppsfleet.navy</title>
-    <meta property="og:image:width" content="600"/>
-    <meta property="og:image:height" content="400"/>
-    <meta property="og:image:type" content="image/png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:title" content="Maps.ppsfleet.navy"/>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <!-- mapbox -->
-    <script src="https://static.ppsfleet.navy/js/maplibre-5.5.0.js"></script>
-    <script src="https://static.ppsfleet.navy/js/pmtiles-4.3.0.js"></script>
-    <link href="https://static.ppsfleet.navy/js/maplibre-5.5.0.css" rel='stylesheet' />
-    <!-- css -->
-    <link href='https://static.ppsfleet.navy/fonts/russisch-sans/style.css' rel='stylesheet' />
-    <link href='./src/css/style.css' rel='stylesheet' />
-    <!-- config -->
-    <script src='./config.js'></script>
-    <script src="./src/consts/tag-titles.js"></script>
-    <!-- Add opening_hours object -->
-    <script src="./static/opening_hours+deps.min.js"></script>
-    <style>
-      body { margin:0; padding:0; }
-      #map { position:absolute; top:0; bottom:0; width:100%; }
-    </style>
-</head>
-<body>
-    <div id='map'></div>
-    <div id="search-container">
-      <div class="search-container__top">
-        <label class="search-label" for="search-input">
-          <img src="./static/images/helium/search.svg" id="search-button" class="search-label__icon"/>
-          <input type="search" placeholder="search..." id="search-input" class="search-label__input"/>
-        </label>
-        <div id="places">
+    <head>
+        <meta charset="utf-8" />
+        <title>Maps.ppsfleet.navy</title>
+        <meta property="og:image:width" content="600" />
+        <meta property="og:image:height" content="400" />
+        <meta property="og:image:type" content="image/png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:title" content="Maps.ppsfleet.navy" />
+        <meta
+            name="viewport"
+            content="initial-scale=1,maximum-scale=1,user-scalable=no"
+        />
+        <!-- mapbox -->
+        <script src="https://static.ppsfleet.navy/js/maplibre-5.5.0.js"></script>
+        <script src="https://static.ppsfleet.navy/js/pmtiles-4.3.0.js"></script>
+        <link
+            href="https://static.ppsfleet.navy/js/maplibre-5.5.0.css"
+            rel="stylesheet"
+        />
+        <!-- css -->
+        <link
+            href="https://static.ppsfleet.navy/fonts/russisch-sans/style.css"
+            rel="stylesheet"
+        />
+        <link href="./src/css/style.css" rel="stylesheet" />
+        <!-- config -->
+        <script src="./config.js"></script>
+        <script src="./src/consts/tag-titles.js"></script>
+        <!-- Add opening_hours object -->
+        <script src="./static/opening_hours+deps.min.js"></script>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            #map {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <div id="search-container">
+            <div class="search-container__top">
+                <label class="search-label" for="search-input">
+                    <img
+                        src="./static/images/helium/search.svg"
+                        id="search-button"
+                        class="search-label__icon"
+                    />
+                    <input
+                        type="search"
+                        placeholder="search..."
+                        id="search-input"
+                        class="search-label__input"
+                    />
+                </label>
+                <div id="places"></div>
+                <div id="layer-switcher"></div>
+            </div>
+            <div id="search-results"></div>
+            <div class="search-container__bottom">
+                <button id="search-close-button">Fermer la recherche</button>
+            </div>
         </div>
-        <div class="layer-switcher" id="layer-switcher">
-          <button class="layer-switcher__option" data-layer="plan">Plan</button>
-          <button class="layer-switcher__option" data-layer="satellite">Satellite</button>
-        </div>
-      </div>
-      <div id="search-results">
-      </div>
-      <div class="search-container__bottom">
-        <button id="search-close-button">Fermer la recherche</button>
-      </div>
-    </div>
-    <c-poi-panel></c-poi-panel>
+        <c-poi-panel></c-poi-panel>
 
-    <nav id="categories">
-    </nav>
+        <nav id="categories"></nav>
 
-    <!-- todo: add a contextmenu -->
+        <!-- todo: add a contextmenu -->
 
-    <script type="module">
-      import search from './src/singletons/search.js'
-      import map from './src/singletons/map.js'
-      import layerSwitcher from './src/singletons/layerSwitcher.js'
-      import poiInfo from './src/singletons/poiInfo.js'
+        <script type="module">
+            import search from "./src/singletons/search.js";
+            import map from "./src/singletons/map.js";
+            import { render, html } from "./src/libs/preact.mjs";
+            import LayerSwitcher from "./src/components/LayerSwitcher.js";
+            render(
+                html`<${LayerSwitcher} />`,
+                document.getElementById("layer-switcher"),
+            );
+            import PlaceComponent from "./src/components/PlaceComponent.js";
+            import poiInfo from "./src/singletons/poiInfo.js";
+        </script>
 
-      import PlaceComponent from './src/components/PlaceComponent.js'
+        <template id="template-poi-viewer">
+            <div class="poi-viewer__content">
+                <h2 class="poi-viewer__name"></h2>
+                <div class="poi-viewer__type"></div>
+                <div class="poi-viewer__website">
+                    <a class="poi-viewer__website__link"></a>
+                </div>
+                <div class="poi-viewer__opening-hour"></div>
+                <div class="poi-viewer__all"></div>
+            </div>
+        </template>
 
+        <template id="template-opening-hour">
+            <article class="opening-hour">
+                <h1 class="opening-hour__title opening-hour__title--open">
+                    Ouvert
+                </h1>
+                <h1 class="opening-hour__title opening-hour__title--closed">
+                    Fermée
+                </h1>
+                <div class="opening-hour__description"></div>
 
-    </script>
-
-    <template id="template-poi-viewer">
-      <div class="poi-viewer__content">
-        <h2 class="poi-viewer__name"></h2>
-        <div class="poi-viewer__type"></div>
-        <div class="poi-viewer__website">
-          <a class="poi-viewer__website__link"></a>
-        </div>
-        <div class="poi-viewer__opening-hour"></div>
-        <div class="poi-viewer__all"></div>
-      </div>
-    </template>
-
-    <template id="template-opening-hour">
-      <article class="opening-hour">
-        
-        <h1 class="opening-hour__title opening-hour__title--open">Ouvert</h1>
-        <h1 class="opening-hour__title opening-hour__title--closed">Fermée</h1>
-        <div class="opening-hour__description">
-        </div>
-        
-        <!-- <div class="opening-hour-today">
+                <!-- <div class="opening-hour-today">
           <h2>Horaire du jour</h2>
           <div class="opening-hour-time">00:30 – 23:00</div>
         </div>
         <div class="opening-hour-generic"></div> -->
-      </article>
-    </template>
+            </article>
+        </template>
 
-    <template id="template-opening-hour-day">
-      <div class="opening-hour__day">
-        <h2>Mardi</h2>
-        <div class="opening-hour__time"></div>
-      </div>
-    </template>
+        <template id="template-opening-hour-day">
+            <div class="opening-hour__day">
+                <h2>Mardi</h2>
+                <div class="opening-hour__time"></div>
+            </div>
+        </template>
 
-    <template id="template-chip-base">
-      <div class="chip_delete">
-        <img src="./static/images/breeze/edit-delete-black.svg" class="icon--medium icon--white"/>
-      </div>
-      <div class="chip__name">
-        <slot name="name">empty</slot>
-      </div>
-      <div class="chip__actions">
-        <slot name="actions"></slot>
-      </div>
-      <link href='./src/css/chip.css' rel='stylesheet' />
-    </template>
-
-</body>
+        <template id="template-chip-base">
+            <div class="chip_delete">
+                <img
+                    src="./static/images/breeze/edit-delete-black.svg"
+                    class="icon--medium icon--white"
+                />
+            </div>
+            <div class="chip__name">
+                <slot name="name">empty</slot>
+            </div>
+            <div class="chip__actions">
+                <slot name="actions"></slot>
+            </div>
+            <link href="./src/css/chip.css" rel="stylesheet" />
+        </template>
+    </body>
 </html>

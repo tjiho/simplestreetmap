@@ -1,49 +1,49 @@
 /* POI Panel */
 c-poi-panel {
-  display: none;
-  position: absolute;
-  top: calc(50px + 2em);
-  left: 1em;
-  width: 350px;
-  max-width: calc(100% - 2em);
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: var(--shadow);
-  z-index: 50;
-  box-sizing: border-box;
+    display: none;
+    position: absolute;
+    top: calc(50px + 2em);
+    left: 1em;
+    width: 350px;
+    max-width: calc(100% - 2em);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    z-index: 50;
+    box-sizing: border-box;
 }
 
 c-poi-panel.poi-panel--open {
-  display: block;
+    display: block;
 }
 
 .poi-viewer__content {
-  padding: 16px;
-  max-height: calc(100vh - 8rem);
-  overflow: auto;
+    padding: 16px;
+    max-height: calc(100vh - 8rem);
+    overflow: auto;
 }
 
 .poi-viewer__name {
-  font-size: 1.1em;
-  margin: 0 0 2px 0;
+    font-size: 1.1em;
+    margin: 0 0 2px 0;
 }
 
 .poi-viewer__type {
-  font-size: 0.85em;
-  color: #666;
-  text-transform: capitalize;
+    font-size: 0.85em;
+    color: #666;
+    text-transform: capitalize;
 }
 
-.poi-viewer__opening-hour:has(> c-opening-hour){
-  margin-top: 1rem;
+.poi-viewer__opening-hour:has(.opening-hour) {
+    margin-top: 1rem;
 }
 
 @media only screen and (max-device-width: 650px) {
-  c-poi-panel {
-    width: auto;
-    left: 0;
-    right: 0;
-    max-width: 100%;
-    border-radius: 0;
-  }
+    c-poi-panel {
+        width: auto;
+        left: 0;
+        right: 0;
+        max-width: 100%;
+        border-radius: 0;
+    }
 }
