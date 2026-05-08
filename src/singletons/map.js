@@ -56,6 +56,7 @@ class Map extends maplibregl.Map {
       this.setProjection({
         type: "globe",
       });
+      document.getElementById("map").style.backgroundColor = "#000";
     });
   }
 
