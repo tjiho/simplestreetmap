@@ -51,6 +51,12 @@ class Map extends maplibregl.Map {
         `${document.location.pathname}?${searchParams}`,
       );
     });
+
+    this.on("load", () => {
+      this.setProjection({
+        type: "globe",
+      });
+    });
   }
 
   onLoadOrNow(fn) {
