@@ -20,7 +20,7 @@ export default class AbstractLayer {
     });
   }
 
-  addLayer(layer) {
+  addLayer(layer, before = null) {
     if (this.layersIds.includes(layer.id)) {
       console.warn(`Layer "${layer.id}" already exists. Skipping.`);
       return;
@@ -29,7 +29,7 @@ export default class AbstractLayer {
 
     map.onLoadOrNow(() => {
       if (!map.getLayer(layer.id)) {
-        map.addLayer(layer);
+        map.addLayer(layer, before);
       }
     });
   }
