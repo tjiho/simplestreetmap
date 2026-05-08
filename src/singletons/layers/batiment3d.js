@@ -23,7 +23,7 @@ class Batiment3d extends AbstractLayer {
           visibility: "none",
         },
       },
-      "park-label",
+      "waterway-name",
     );
 
     // map.addSource("lidar", {

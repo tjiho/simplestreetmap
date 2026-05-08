@@ -14,14 +14,17 @@ class Sattelite extends AbstractLayer {
       attribution: "© IGN-Géoportail",
     });
 
-    this.addLayer({
-      id: "satellite",
-      type: "raster",
-      source: "satellite",
-      layout: {
-        visibility: "none",
+    this.addLayer(
+      {
+        id: "satellite",
+        type: "raster",
+        source: "satellite",
+        layout: {
+          visibility: "none",
+        },
       },
-    });
+      "waterway-name",
+    );
   }
 }
 
