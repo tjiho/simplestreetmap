@@ -1,16 +1,16 @@
-import AbstractLayer from "./AbtractLayer.js";
+import AbstractLayer from "./AbstractLayer.js";
 import map from "../map.js";
 
 class Terrain extends AbstractLayer {
   constructor() {
-    super();
+    super({ visibleOnLoad: true });
 
     this.addSource("terrain", {
       type: "raster-dem",
       url: "pmtiles://https://static.ppsfleet.navy/osm-data/france-elevation.pmtiles",
       encoding: "terrarium",
       //tileSize: 512,
-      maxzoom: 10,
+      //maxzoom: 10,
     });
 
     map.onLoadOrNow(() => {

@@ -1,9 +1,9 @@
-import AbstractLayer from "./AbtractLayer.js";
+import AbstractLayer from "./AbstractLayer.js";
 import { poiIconExpression } from "../../tools/getIcon.js";
 
 class PoiLayer extends AbstractLayer {
   constructor() {
-    super();
+    super({ visibleOnLoad: true });
 
     this.addSource("poi", {
       type: "vector",

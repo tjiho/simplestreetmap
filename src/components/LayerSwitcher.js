@@ -2,6 +2,7 @@ import { html, useState, useEffect } from "../libs/preact.mjs";
 
 import satellite from "../singletons/layers/sattelite.js";
 import batiment3d from "../singletons/layers/batiment3d.js";
+import bicycle from "../singletons/layers/bicycle.js";
 
 const layers = {
   satellite: {
@@ -12,12 +13,18 @@ const layers = {
     layer: batiment3d,
     name: "Batiment 3d",
   },
+  bicycle: {
+    layer: bicycle,
+    name: "Vélo (alpha)",
+  },
 };
 
 function LayerButton({ layerKey, name, isActive, onClick }) {
   return html`
     <button
-      class="layer-switcher__option ${isActive ? "layer-switcher__option--active" : ""}"
+      class="layer-switcher__option ${isActive
+        ? "layer-switcher__option--active"
+        : ""}"
       onClick=${() => onClick(layerKey)}
     >
       ${name}
@@ -30,7 +37,10 @@ export default function LayerSwitcher() {
 
   const allLayers = [
     { key: "plan", name: "Plan" },
-    ...Object.entries(layers).map(([key, config]) => ({ key, name: config.name })),
+    ...Object.entries(layers).map(([key, config]) => ({
+      key,
+      name: config.name,
+    })),
   ];
 
   useEffect(() => {
@@ -62,7 +72,7 @@ export default function LayerSwitcher() {
             isActive=${activeLayer === key}
             onClick=${handleLayerChange}
           />
-        `
+        `,
       )}
     </div>
   `;

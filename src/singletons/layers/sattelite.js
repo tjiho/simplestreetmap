@@ -1,4 +1,4 @@
-import AbstractLayer from "./AbtractLayer.js";
+import AbstractLayer from "./AbstractLayer.js";
 class Sattelite extends AbstractLayer {
   constructor() {
     super();
@@ -19,9 +19,6 @@ class Sattelite extends AbstractLayer {
         id: "satellite",
         type: "raster",
         source: "satellite",
-        layout: {
-          visibility: "none",
-        },
       },
       "waterway-name",
     );

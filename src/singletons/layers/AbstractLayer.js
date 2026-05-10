@@ -1,9 +1,11 @@
 import map from "../map.js";
 
 export default class AbstractLayer {
-  constructor() {
+  constructor({ visibleOnLoad = false } = {}) {
     this.layersIds = [];
     this.sourcesIds = [];
+    this.beforeLayer = null;
+    this.visibleOnLoad = visibleOnLoad;
   }
 
   addSource(id, source) {
@@ -29,7 +31,12 @@ export default class AbstractLayer {
 
     map.onLoadOrNow(() => {
       if (!map.getLayer(layer.id)) {
-        map.addLayer(layer, before);
+        if (!this.visibleOnLoad) {
+          layer.layout = {
+            visibility: "none",
+          };
+        }
+        map.addLayer(layer, this.beforeLayer || before);
       }
     });
   }
