@@ -71,29 +71,56 @@ class Map extends maplibregl.Map {
 
   changeBaseMap(url) {
     return new Promise((resolve) => {
-      console.log("plop", url, this.currentStyleUrl);
       if (this.currentStyleUrl === url) {
         resolve();
         return;
       }
+
+      const isCustom = (id) => id.startsWith("custom-");
+
       this.setStyle(url, {
         diff: false,
-        transformStyle: (previous, next) => ({
-          ...next,
-          sources: {
-            ...next.sources,
-            ...Object.fromEntries(
-              Object.entries(previous.sources).filter(([id]) =>
-                id.startsWith("custom-"),
-              ),
-            ),
-          },
-          layers: [
-            ...next.layers,
-            ...previous.layers.filter((l) => l.id.startsWith("custom-")),
-          ],
-        }),
+        transformStyle: (prev, next) => {
+          if (!prev) return next; // 1er appel, pas d'ancien style
+
+          // --- sources custom ---
+          const customSources = Object.fromEntries(
+            Object.entries(prev.sources).filter(([id]) => isCustom(id)),
+          );
+
+          // --- layers custom, en préservant leur position ---
+          const layers = [...next.layers];
+          const nextIds = new Set(next.layers.map((l) => l.id));
+
+          for (let i = 0; i < prev.layers.length; i++) {
+            const layer = prev.layers[i];
+            if (!isCustom(layer.id)) continue;
+
+            let beforeId = null;
+            for (let j = i + 1; j < prev.layers.length; j++) {
+              if (
+                !isCustom(prev.layers[j].id) &&
+                nextIds.has(prev.layers[j].id)
+              ) {
+                beforeId = prev.layers[j].id;
+                break;
+              }
+            }
+
+            const idx = beforeId
+              ? layers.findIndex((l) => l.id === beforeId)
+              : layers.length;
+            layers.splice(idx, 0, layer);
+          }
+
+          return {
+            ...next,
+            sources: { ...next.sources, ...customSources },
+            layers,
+          };
+        },
       });
+
       this.currentStyleUrl = url;
       map.once("style.load", resolve);
     });
