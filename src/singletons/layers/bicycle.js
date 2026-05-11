@@ -17,6 +17,7 @@ class Bicycle extends AbstractLineLayer {
         [17, 8],
         [19, 20],
       ],
+      baseStyle: "https://static.ppsfleet.navy/osm-data/styles/positron.json",
     });
 
     this.beforeLayer = "waterway-name";
@@ -27,18 +28,25 @@ class Bicycle extends AbstractLineLayer {
     // #1E88E5
     // #FFA726
     this.addLayers([
-      ...this.dashedLane({
-        id: "route-chill",
-        filter: ["==", "cat", "2.1"],
+      ...this.dashedLanePrimary({
+        id: "partage-voiture",
+        filter: ["==", "cat", "4"],
         color: "#1E88E5",
       }),
 
-      ...this.dashedLane({
-        id: "chemin-pieton",
+      ...this.borderLane({
+        id: "partage-pieton-secondary",
+        filter: ["==", "cat", "3.2"],
+        color: "#a885ab",
+      }),
+
+      ...this.dashedLanePrimary({
+        id: "partage-pieton-main",
         filter: ["==", "cat", "3.1"],
         color: "#AB47BC",
       }),
-      ...this.dashedLane({
+
+      ...this.dashedLanePrimary({
         id: "bande",
         filter: ["==", "cat", "1.2"],
         color: "#4ECA00",

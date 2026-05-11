@@ -20,6 +20,7 @@ class Map extends maplibregl.Map {
       center: [lng, lat],
       zoom,
     });
+    this.currentStyleUrl = BASE_MAP_URL;
 
     const nav = new maplibregl.NavigationControl();
 
@@ -66,6 +67,36 @@ class Map extends maplibregl.Map {
     } else {
       this.on("load", fn);
     }
+  }
+
+  changeBaseMap(url) {
+    return new Promise((resolve) => {
+      console.log("plop", url, this.currentStyleUrl);
+      if (this.currentStyleUrl === url) {
+        resolve();
+        return;
+      }
+      this.setStyle(url, {
+        diff: false,
+        transformStyle: (previous, next) => ({
+          ...next,
+          sources: {
+            ...next.sources,
+            ...Object.fromEntries(
+              Object.entries(previous.sources).filter(([id]) =>
+                id.startsWith("custom-"),
+              ),
+            ),
+          },
+          layers: [
+            ...next.layers,
+            ...previous.layers.filter((l) => l.id.startsWith("custom-")),
+          ],
+        }),
+      });
+      this.currentStyleUrl = url;
+      map.once("style.load", resolve);
+    });
   }
 }
 

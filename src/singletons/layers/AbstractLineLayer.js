@@ -7,8 +7,8 @@ import {
 } from "../../tools/layers.js";
 
 export default class AbstractLineLayer extends AbstractLayer {
-  constructor({ source, sourceLayer, sourceConfig, baseWidth }) {
-    super();
+  constructor({ source, sourceLayer, sourceConfig, baseWidth, baseStyle }) {
+    super({ baseStyle });
     this._source = source;
     this._sourceLayer = sourceLayer;
     this._baseWidth = baseWidth;
@@ -48,7 +48,7 @@ export default class AbstractLineLayer extends AbstractLayer {
     ];
   }
 
-  dashedLane({
+  dashedLanePrimary({
     id,
     filter,
     color,
@@ -59,6 +59,29 @@ export default class AbstractLineLayer extends AbstractLayer {
   }) {
     return [
       this.border({ id, filter, color, minzoom: detailZoom }),
+      this.fill({ id, filter, color: innerColor, minzoom: detailZoom }),
+      this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
+      // Zoom faible : juste les pointillés à la largeur de la base
+      this.fill({
+        id: id + "-overview",
+        filter,
+        color,
+        maxzoom: detailZoom,
+      }),
+      // Zoom élevé : style complet
+    ];
+  }
+
+  dashedLaneWithoutborder({
+    id,
+    filter,
+    color,
+    innerColor = "#FFFFFF",
+    detailZoom = 13,
+    dashArray = [3, 3],
+    overviewDashArray = [1, 2],
+  }) {
+    return [
       this.fill({ id, filter, color: innerColor }),
       this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
       // Zoom faible : juste les pointillés à la largeur de la base
@@ -70,6 +93,14 @@ export default class AbstractLineLayer extends AbstractLayer {
         dashArray: overviewDashArray,
         maxzoom: detailZoom,
       }),
+      // Zoom élevé : style complet
+    ];
+  }
+
+  borderLane({ id, filter, color, innerColor = "#FFFFFF", detailZoom = 13 }) {
+    return [
+      this.border({ id, filter, color, minzoom: detailZoom }),
+      this.fill({ id, filter, color: innerColor }),
       // Zoom élevé : style complet
     ];
   }

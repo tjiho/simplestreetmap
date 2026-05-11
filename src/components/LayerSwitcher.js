@@ -3,8 +3,12 @@ import { html, useState, useEffect } from "../libs/preact.mjs";
 import satellite from "../singletons/layers/sattelite.js";
 import batiment3d from "../singletons/layers/batiment3d.js";
 import bicycle from "../singletons/layers/bicycle.js";
-
+import plan from "../singletons/layers/plan.js";
 const layers = {
+  plan: {
+    layer: plan,
+    name: "Plan",
+  },
   satellite: {
     layer: satellite,
     name: "Satellite",
@@ -35,25 +39,17 @@ function LayerButton({ layerKey, name, isActive, onClick }) {
 export default function LayerSwitcher() {
   const [activeLayer, setActiveLayer] = useState("plan");
 
-  const allLayers = [
-    { key: "plan", name: "Plan" },
-    ...Object.entries(layers).map(([key, config]) => ({
-      key,
-      name: config.name,
-    })),
-  ];
-
-  useEffect(() => {
-    clearLayers();
+  useEffect(async () => {
+    await clearLayers();
 
     if (activeLayer in layers) {
       layers[activeLayer].layer.show();
     }
   }, [activeLayer]);
 
-  function clearLayers() {
+  async function clearLayers() {
     for (const layer of Object.values(layers)) {
-      layer.layer.hide();
+      await layer.layer.hide();
     }
   }
 
@@ -64,8 +60,8 @@ export default function LayerSwitcher() {
 
   return html`
     <div class="layer-switcher">
-      ${allLayers.map(
-        ({ key, name }) => html`
+      ${Object.entries(layers).map(
+        ([key, { name }]) => html`
           <${LayerButton}
             layerKey=${key}
             name=${name}

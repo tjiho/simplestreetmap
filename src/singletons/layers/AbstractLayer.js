@@ -1,14 +1,16 @@
 import map from "../map.js";
 
 export default class AbstractLayer {
-  constructor({ visibleOnLoad = false } = {}) {
+  constructor({ visibleOnLoad = false, baseStyle = BASE_MAP_URL } = {}) {
     this.layersIds = [];
     this.sourcesIds = [];
     this.beforeLayer = null;
     this.visibleOnLoad = visibleOnLoad;
+    this.baseStyle = baseStyle;
   }
 
   addSource(id, source) {
+    id = "custom-" + id;
     if (this.sourcesIds.includes(id)) {
       console.warn(`Source "${id}" already exists. Skipping.`);
       return;
@@ -23,6 +25,8 @@ export default class AbstractLayer {
   }
 
   addLayer(layer, before = null) {
+    layer.id = "custom-" + layer.id;
+    layer.source = "custom-" + layer.source;
     if (this.layersIds.includes(layer.id)) {
       console.warn(`Layer "${layer.id}" already exists. Skipping.`);
       return;
@@ -41,7 +45,8 @@ export default class AbstractLayer {
     });
   }
 
-  show() {
+  async show() {
+    await map.changeBaseMap(this.baseStyle);
     this.layersIds.forEach((id) => {
       if (map.getLayer(id)) {
         map.setLayoutProperty(id, "visibility", "visible");
@@ -49,7 +54,8 @@ export default class AbstractLayer {
     });
   }
 
-  hide() {
+  async hide() {
+    // await map.changeBaseMap(BASE_MAP_URL);
     this.layersIds.forEach((id) => {
       if (map.getLayer(id)) {
         map.setLayoutProperty(id, "visibility", "none");
