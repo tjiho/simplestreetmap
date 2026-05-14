@@ -45,29 +45,9 @@
     </head>
     <body>
         <div id="map"></div>
-        <div id="search-container">
-            <div class="search-container__top">
-                <label class="search-label" for="search-input">
-                    <img
-                        src="./static/images/helium/search.svg"
-                        id="search-button"
-                        class="search-label__icon"
-                    />
-                    <input
-                        type="search"
-                        placeholder="search..."
-                        id="search-input"
-                        class="search-label__input"
-                    />
-                </label>
-                <div id="places"></div>
-                <div id="layer-switcher"></div>
-            </div>
-            <div id="search-results"></div>
-            <div class="search-container__bottom">
-                <button id="search-close-button">Fermer la recherche</button>
-            </div>
-        </div>
+        <div id="search-root"></div>
+        <div id="places" style="display: none;"></div>
+        <div id="layer-switcher" style="display: none;"></div>
         <c-poi-panel></c-poi-panel>
 
         <nav id="categories"></nav>
@@ -75,12 +55,34 @@
         <!-- todo: add a contextmenu -->
 
         <script type="module">
-            import search from "./src/singletons/search.js";
             import map from "./src/singletons/map.js";
             import { render, html } from "./src/libs/preact.mjs";
             //import terrain from "./src/singletons/layers/terrain.js";
+            import SearchComponent from "./src/components/SearchComponent.js";
             import LayerSwitcher from "./src/components/LayerSwitcher.js";
 
+            // Monter SearchComponent
+            render(
+                html`<${SearchComponent} />`,
+                document.getElementById("search-root")
+            );
+
+            // Déplacer places et layer-switcher dans search-container__top
+            const searchTop = document.querySelector('#search-container .search-container__top');
+            if (searchTop) {
+                const placesEl = document.getElementById('places');
+                const layerSwitcherEl = document.getElementById('layer-switcher');
+                if (placesEl) {
+                    placesEl.style.display = '';
+                    searchTop.appendChild(placesEl);
+                }
+                if (layerSwitcherEl) {
+                    layerSwitcherEl.style.display = '';
+                    searchTop.appendChild(layerSwitcherEl);
+                }
+            }
+
+            // Monter LayerSwitcher
             render(
                 html`<${LayerSwitcher} />`,
                 document.getElementById("layer-switcher"),

@@ -1,9 +1,9 @@
 import map from './map.js'
-import overpassSearch from '../tools/overpassSearch.js'
 import poiPanel from './poiPanel.js'
 import { render, html } from '../libs/preact.mjs'
 import PoiViewer from '../components/PoiViewer.js'
 import poiLayer from './layers/poi.js'
+import { searchById } from '../api/search.js'
 
 class PoiInfo {
   constructor () {

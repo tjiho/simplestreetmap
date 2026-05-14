@@ -5,3 +5,5 @@ const BASE_SEARCH_URL = (query, lat, lng) =>
 
 const BASE_REVERSE_URL = (lat, lng) =>
   `https://search.maps.ppsfleet.navy/reverse?lat=${lat}&lon=${lng}`;
+
+const BASE_OVERPASS_URL = "https://overpass.kumi.systems/api/interpreter";

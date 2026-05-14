@@ -1,5 +1,5 @@
-import reverseSearch from '../tools/reverseSearch.js'
 import map from './map.js'
+import { searchByCoords } from '../api/search.js'
 
 class Places {
   constructor (places) {
@@ -7,6 +7,7 @@ class Places {
     this.parent = document.getElementById('places')
     this.selected = []
     this.OnSelected = []
+    this.abortControllers = new Map()
 
     const currentPlaces = new URLSearchParams(window.location.search).getAll('places')
 
@@ -27,9 +28,21 @@ class Places {
     if (name) {
       element.setAttribute('name', name)
     } else {
-      reverseSearch(+lat, +lng, (value) => {
-        element.setAttribute('name', value.features[0].properties.label)
-      })
+      const controller = new AbortController()
+      const key = `${lat},${lng}`
+      this.abortControllers.set(key, controller)
+      
+      searchByCoords(lat, lng, controller.signal)
+        .then((value) => {
+          element.setAttribute('name', value.features[0].properties.label)
+          this.abortControllers.delete(key)
+        })
+        .catch((error) => {
+          if (error.name !== 'AbortError') {
+            console.error('Reverse search failed:', error)
+          }
+          this.abortControllers.delete(key)
+        })
     }
 
     this.parent.appendChild(element)
