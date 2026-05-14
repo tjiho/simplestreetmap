@@ -28,6 +28,13 @@ class Bicycle extends AbstractLineLayer {
     // #1E88E5
     // #FFA726
     this.addLayers([
+      ...this.borderLane({
+        id: "rue-paisible",
+        filter: ["==", "cat", "2.1"],
+        //color: "#949494",
+        color: "#9DAEFF",
+      }),
+
       ...this.dashedLanePrimary({
         id: "partage-voiture",
         filter: ["==", "cat", "4"],
@@ -35,9 +42,16 @@ class Bicycle extends AbstractLineLayer {
       }),
 
       ...this.borderLane({
+        id: "partage-pieton-tertiary",
+        filter: ["==", "cat", "3.3"],
+        color: "#AB47BC",
+      }),
+
+      ...this.dashedLaneSecondary({
         id: "partage-pieton-secondary",
         filter: ["==", "cat", "3.2"],
-        color: "#a885ab",
+        //color: "#a885ab",
+        color: "#AB47BC",
       }),
 
       ...this.dashedLanePrimary({
@@ -51,7 +65,7 @@ class Bicycle extends AbstractLineLayer {
         filter: ["==", "cat", "1.2"],
         color: "#4ECA00",
       }),
-      ...this.solidLane({
+      ...this.solidLanePrimary({
         id: "piste",
         filter: ["==", "cat", "1.1"],
         color: "#4ECA00",

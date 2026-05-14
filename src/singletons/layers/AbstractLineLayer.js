@@ -41,9 +41,9 @@ export default class AbstractLineLayer extends AbstractLayer {
     });
   }
 
-  solidLane({ id, filter, color, outlineColor = "#FFFFFF" }) {
+  solidLanePrimary({ id, filter, color, outlineColor = "#FFFFFF" }) {
     return [
-      this.border({ id, filter, color: outlineColor }),
+      this.border({ id, filter, color: outlineColor, borderWidth: 1 }),
       this.fill({ id, filter, color }),
     ];
   }
@@ -58,7 +58,7 @@ export default class AbstractLineLayer extends AbstractLayer {
     overviewDashArray = [1, 2],
   }) {
     return [
-      this.border({ id, filter, color, minzoom: detailZoom }),
+      this.border({ id, filter, color, minzoom: detailZoom, borderWidth: 2 }),
       this.fill({ id, filter, color: innerColor, minzoom: detailZoom }),
       this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
       // Zoom faible : juste les pointillés à la largeur de la base
@@ -68,6 +68,31 @@ export default class AbstractLineLayer extends AbstractLayer {
         color,
         maxzoom: detailZoom,
       }),
+      // Zoom élevé : style complet
+    ];
+  }
+
+  dashedLaneSecondary({
+    id,
+    filter,
+    color,
+    innerColor = "#FFFFFF",
+    detailZoom = 13,
+    dashArray = [3, 3],
+    overviewDashArray = [1, 2],
+  }) {
+    return [
+      this.border({ id, filter, color, minzoom: detailZoom, borderWidth: 1 }),
+      this.fill({ id, filter, color: innerColor, minzoom: detailZoom }),
+      this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
+      // Zoom faible : juste les pointillés à la largeur de la base
+      this.fill({
+        id: id + "-overview",
+        filter,
+        color: "#FFF",
+        maxzoom: detailZoom,
+      }),
+      this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
       // Zoom élevé : style complet
     ];
   }
@@ -99,7 +124,7 @@ export default class AbstractLineLayer extends AbstractLayer {
 
   borderLane({ id, filter, color, innerColor = "#FFFFFF", detailZoom = 13 }) {
     return [
-      this.border({ id, filter, color, minzoom: detailZoom }),
+      this.border({ id, filter, color, minzoom: detailZoom, borderWidth: 1 }),
       this.fill({ id, filter, color: innerColor }),
       // Zoom élevé : style complet
     ];
