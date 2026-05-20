@@ -1,5 +1,29 @@
-@import './global.css';
-@import './opening-hour.css';
-@import './search.css';
-@import './layer-switcher.css';
-@import './poi.css';
+@import "./global.css";
+@import "./opening-hour.css";
+@import "./search.css";
+@import "./layer-switcher.css";
+@import "./poi.css";
+
+/* Mobile : appliqué uniquement sous 800px (breakpoint hardcodé, voir aussi les @media plus bas) */
+@import "./mobile/bottom-sheet.css" (max-width: 800px);
+@import "./mobile/search.css" (max-width: 800px);
+
+/* Visibility toggle desktop/mobile (800px = breakpoint, à garder synchro avec les @import ci-dessus) */
+@media (max-width: 800px) {
+    .search-label,
+    #places {
+        display: none;
+    }
+
+    #layer-switcher {
+        position: fixed;
+        top: 8px;
+        left: 8px;
+    }
+}
+
+@media (min-width: 801px) {
+    bottom-sheet {
+        display: none;
+    }
+}

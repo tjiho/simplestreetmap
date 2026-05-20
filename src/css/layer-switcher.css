@@ -33,11 +33,3 @@
 .layer-switcher__option:hover:not(.layer-switcher__option--active) {
     background-color: #000000cc;
 }
-
-@media only screen and (max-device-width: 800px) {
-    .layer-switcher {
-        position: fixed;
-        bottom: 2rem;
-        left: 0.5rem;
-    }
-}

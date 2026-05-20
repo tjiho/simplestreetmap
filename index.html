@@ -30,18 +30,6 @@
         <script src="./src/consts/tag-titles.js"></script>
         <!-- Add opening_hours object -->
         <script src="./static/opening_hours+deps.min.js"></script>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
-            #map {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                width: 100%;
-            }
-        </style>
     </head>
     <body>
         <div id="map"></div>
@@ -50,6 +38,8 @@
         <div id="layer-switcher" style="display: none;"></div>
         <c-poi-panel></c-poi-panel>
 
+        <div id="mobile-sheet-root"></div>
+
         <nav id="categories"></nav>
 
         <!-- todo: add a contextmenu -->
@@ -57,14 +47,24 @@
         <script type="module">
             import map from "./src/singletons/map.js";
             import { render, html } from "./src/libs/preact.mjs";
+            import { registerSheetElements } from "./src/libs/pure-web-bottom-sheet.js";
             //import terrain from "./src/singletons/layers/terrain.js";
             import SearchComponent from "./src/components/SearchComponent.js";
+            import MobileSearchComponent from "./src/components/MobileSearchComponent.js";
             import LayerSwitcher from "./src/components/LayerSwitcher.js";
+
+            registerSheetElements();
 
             // Monter SearchComponent
             render(
                 html`<${SearchComponent} />`,
                 document.getElementById("search-root")
+            );
+
+            // Monter MobileSearchComponent (qui rend lui-même le <bottom-sheet>)
+            render(
+                html`<${MobileSearchComponent} />`,
+                document.getElementById("mobile-sheet-root")
             );
 
             // Déplacer places et layer-switcher dans search-container__top

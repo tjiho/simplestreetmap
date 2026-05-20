@@ -1,23 +1,44 @@
-:root
-{
-  --main-color: #69369B;
-  --main-contrast-text: white;
-  --shadow:0px 0px 15px 5px rgba(0,0,0,0.2);
-  --line-color: #d3d3d380;
+:root {
+    --main-color: #69369b;
+    --primary: var(--main-color);
+    --primary-bright: hsl(from var(--primary) h calc(s * 1.4) calc(l + 18));
+    --main-contrast-text: white;
+    --shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.2);
+    --line-color: #d3d3d380;
+
+    --dark-100: #333;
+    --dark-90: #4d4d4d;
+    --dark-80: #666;
+    --dark-70: #808080;
+    --dark-60: #999;
+    --dark-50: #b3b3b3;
+    --dark-40: #cccccc;
+    --dark-30: #e1e1e1;
+    --dark-20: #f0f0f0;
+    --dark-10: #fafafa;
 }
 
-*
-{
-    font-family:'Russisch Sans';
+* {
+    font-family: "Russisch Sans";
 }
 
-.icon--medium
-{
+.icon--medium {
     width: 1.5em;
     height: 1.5em;
 }
 
-.icon--white
-{
+.icon--white {
     filter: invert(100%);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
 }
