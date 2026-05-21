@@ -62,7 +62,7 @@ class Bicycle extends AbstractLineLayer {
           {
             style: "dashedLanePrimary",
             id: "partage-pieton-main",
-            label: "Voie verte priorité piéton",
+            label: "Voie mixte aménagée",
             filter: ["==", "cat", "3.1"],
             color: "#AB47BC",
           },
