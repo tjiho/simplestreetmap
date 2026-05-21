@@ -22,55 +22,74 @@ class Bicycle extends AbstractLineLayer {
 
     this.beforeLayer = "waterway-name";
 
-    const pisteFilter = ["==", "cat", "1.1"];
-    const bandeFilter = ["==", "cat", "1.2"];
+    this.lines = [
+      {
+        category: "Partagé avec voitures",
+        items: [
+          {
+            style: "borderLane",
+            id: "rue-paisible",
+            label: "Rue paisible",
+            filter: ["==", "cat", "2.1"],
+            color: "#9DAEFF",
+          },
+          {
+            style: "dashedLanePrimary",
+            id: "partage-voiture",
+            label: "Voie partagée voiture",
+            filter: ["==", "cat", "4"],
+            color: "#1E88E5",
+          },
+        ],
+      },
+      {
+        category: "Partagé avec piétons",
+        items: [
+          {
+            style: "borderLane",
+            id: "partage-pieton-tertiary",
+            label: "Voie piétonne sans indication",
+            filter: ["==", "cat", "3.3"],
+            color: "#B382BB",
+          },
+          {
+            style: "dashedLaneSecondary",
+            id: "partage-pieton-secondary",
+            label: "Voie partagée piéton",
+            filter: ["==", "cat", "3.2"],
+            color: "#AB47BC",
+          },
+          {
+            style: "dashedLanePrimary",
+            id: "partage-pieton-main",
+            label: "Voie verte priorité piéton",
+            filter: ["==", "cat", "3.1"],
+            color: "#AB47BC",
+          },
+        ],
+      },
+      {
+        category: "Pur vélo",
+        items: [
+          {
+            style: "dashedLanePrimary",
+            id: "bande",
+            label: "Bande cyclable",
+            filter: ["==", "cat", "1.2"],
+            color: "#4ECA00",
+          },
+          {
+            style: "solidLanePrimary",
+            id: "piste",
+            label: "Piste cyclable",
+            filter: ["==", "cat", "1.1"],
+            color: "#4ECA00",
+          },
+        ],
+      },
+    ];
 
-    // #1E88E5
-    // #FFA726
-    this.addLayers([
-      ...this.borderLane({
-        id: "rue-paisible",
-        filter: ["==", "cat", "2.1"],
-        //color: "#949494",
-        color: "#9DAEFF",
-      }),
-
-      ...this.dashedLanePrimary({
-        id: "partage-voiture",
-        filter: ["==", "cat", "4"],
-        color: "#1E88E5",
-      }),
-
-      ...this.borderLane({
-        id: "partage-pieton-tertiary",
-        filter: ["==", "cat", "3.3"],
-        color: "#AB47BC",
-      }),
-
-      ...this.dashedLaneSecondary({
-        id: "partage-pieton-secondary",
-        filter: ["==", "cat", "3.2"],
-        //color: "#a885ab",
-        color: "#AB47BC",
-      }),
-
-      ...this.dashedLanePrimary({
-        id: "partage-pieton-main",
-        filter: ["==", "cat", "3.1"],
-        color: "#AB47BC",
-      }),
-
-      ...this.dashedLanePrimary({
-        id: "bande",
-        filter: ["==", "cat", "1.2"],
-        color: "#4ECA00",
-      }),
-      ...this.solidLanePrimary({
-        id: "piste",
-        filter: ["==", "cat", "1.1"],
-        color: "#4ECA00",
-      }),
-    ]);
+    this.buildLayers();
   }
 }
 

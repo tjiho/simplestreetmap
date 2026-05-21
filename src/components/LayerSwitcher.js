@@ -1,27 +1,5 @@
 import { html, useState, useEffect } from "../libs/preact.mjs";
-
-import satellite from "../singletons/layers/sattelite.js";
-import batiment3d from "../singletons/layers/batiment3d.js";
-import bicycle from "../singletons/layers/bicycle.js";
-import plan from "../singletons/layers/plan.js";
-const layers = {
-  plan: {
-    layer: plan,
-    name: "Plan",
-  },
-  satellite: {
-    layer: satellite,
-    name: "Satellite",
-  },
-  batiment3d: {
-    layer: batiment3d,
-    name: "Batiment 3d",
-  },
-  bicycle: {
-    layer: bicycle,
-    name: "Vélo (alpha)",
-  },
-};
+import layerSelection from "../singletons/layerSelection.js";
 
 function LayerButton({ layerKey, name, isActive, onClick }) {
   return html`
@@ -37,30 +15,30 @@ function LayerButton({ layerKey, name, isActive, onClick }) {
 }
 
 export default function LayerSwitcher() {
-  const [activeLayer, setActiveLayer] = useState("plan");
+  const [activeLayer, setActiveLayer] = useState(layerSelection.active);
+  useEffect(() => layerSelection.subscribe(setActiveLayer), []);
 
   useEffect(async () => {
     await clearLayers();
 
-    if (activeLayer in layers) {
-      layers[activeLayer].layer.show();
+    if (activeLayer in layerSelection.layers) {
+      layerSelection.layers[activeLayer].layer.show();
     }
   }, [activeLayer]);
 
   async function clearLayers() {
-    for (const layer of Object.values(layers)) {
+    for (const layer of Object.values(layerSelection.layers)) {
       await layer.layer.hide();
     }
   }
 
   function handleLayerChange(layer) {
-    if (layer === activeLayer) return;
-    setActiveLayer(layer);
+    layerSelection.setActive(layer);
   }
 
   return html`
     <div class="layer-switcher">
-      ${Object.entries(layers).map(
+      ${Object.entries(layerSelection.layers).map(
         ([key, { name }]) => html`
           <${LayerButton}
             layerKey=${key}

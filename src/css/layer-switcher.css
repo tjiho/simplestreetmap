@@ -33,3 +33,57 @@
 .layer-switcher__option:hover:not(.layer-switcher__option--active) {
     background-color: #000000cc;
 }
+
+/* Layer legend */
+#layer-legend {
+    position: fixed;
+    top: 5rem;
+    right: 1rem;
+    z-index: 50;
+}
+
+.layer-legend-container {
+    background-color: #000000aa;
+    color: white;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+    padding: 0.6em 0.8em;
+    max-width: 240px;
+    font-size: 0.85em;
+}
+
+.layer-legend,
+.layer-legend__items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.layer-legend__group + .layer-legend__group {
+    margin-top: 0.6em;
+}
+
+.layer-legend__category {
+    margin: 0 0 0.3em 0;
+    font-size: 0.9em;
+    font-weight: 600;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.layer-legend__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.15em 0;
+}
+
+.layer-legend__item svg {
+    flex-shrink: 0;
+}
+
+.layer-legend__label {
+    line-height: 1.2;
+}

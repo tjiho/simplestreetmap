@@ -5,6 +5,8 @@ import {
   buildFillLayer,
   buildDashedCenterLayer,
 } from "../../tools/layers.js";
+import { html } from "../../libs/preact.mjs";
+import { legendSample } from "../../tools/legend.js";
 
 export default class AbstractLineLayer extends AbstractLayer {
   constructor({ source, sourceLayer, sourceConfig, baseWidth, baseStyle }) {
@@ -12,6 +14,7 @@ export default class AbstractLineLayer extends AbstractLayer {
     this._source = source;
     this._sourceLayer = sourceLayer;
     this._baseWidth = baseWidth;
+    this.lines = [];
 
     if (sourceConfig) {
       this.addSource(source, sourceConfig);
@@ -134,5 +137,53 @@ export default class AbstractLineLayer extends AbstractLayer {
     for (const layer of layers) {
       this.addLayer(layer);
     }
+  }
+
+  _buildItemLayers(item) {
+    switch (item.style) {
+      case "solidLanePrimary":
+        return this.solidLanePrimary(item);
+      case "dashedLanePrimary":
+        return this.dashedLanePrimary(item);
+      case "dashedLaneSecondary":
+        return this.dashedLaneSecondary(item);
+      case "borderLane":
+        return this.borderLane(item);
+      default:
+        throw new Error(`Unknown line style: ${item.style}`);
+    }
+  }
+
+  buildLayers() {
+    for (const group of this.lines) {
+      for (const item of group.items) {
+        this.addLayers(this._buildItemLayers(item));
+      }
+    }
+  }
+
+  legend() {
+    const groups = [...this.lines].reverse();
+    return html`
+      <ul class="layer-legend">
+        ${groups.map(
+          (group) => html`
+            <li class="layer-legend__group">
+              <h3 class="layer-legend__category">${group.category}</h3>
+              <ul class="layer-legend__items">
+                ${[...group.items].reverse().map(
+                  (item) => html`
+                    <li class="layer-legend__item">
+                      ${legendSample(item)}
+                      <span class="layer-legend__label">${item.label}</span>
+                    </li>
+                  `,
+                )}
+              </ul>
+            </li>
+          `,
+        )}
+      </ul>
+    `;
   }
 }

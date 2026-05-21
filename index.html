@@ -34,11 +34,13 @@
     <body>
         <div id="map"></div>
         <div id="search-root"></div>
-        <div id="places" style="display: none;"></div>
-        <div id="layer-switcher" style="display: none;"></div>
+        <div id="places" style="display: none"></div>
+        <div id="layer-switcher" style="display: none"></div>
         <c-poi-panel></c-poi-panel>
 
         <div id="mobile-sheet-root"></div>
+
+        <div id="layer-legend"></div>
 
         <nav id="categories"></nav>
 
@@ -52,32 +54,36 @@
             import SearchComponent from "./src/components/SearchComponent.js";
             import MobileSearchComponent from "./src/components/MobileSearchComponent.js";
             import LayerSwitcher from "./src/components/LayerSwitcher.js";
+            import LayerLegend from "./src/components/LayerLegend.js";
 
             registerSheetElements();
 
             // Monter SearchComponent
             render(
                 html`<${SearchComponent} />`,
-                document.getElementById("search-root")
+                document.getElementById("search-root"),
             );
 
             // Monter MobileSearchComponent (qui rend lui-même le <bottom-sheet>)
             render(
                 html`<${MobileSearchComponent} />`,
-                document.getElementById("mobile-sheet-root")
+                document.getElementById("mobile-sheet-root"),
             );
 
             // Déplacer places et layer-switcher dans search-container__top
-            const searchTop = document.querySelector('#search-container .search-container__top');
+            const searchTop = document.querySelector(
+                "#search-container .search-container__top",
+            );
             if (searchTop) {
-                const placesEl = document.getElementById('places');
-                const layerSwitcherEl = document.getElementById('layer-switcher');
+                const placesEl = document.getElementById("places");
+                const layerSwitcherEl =
+                    document.getElementById("layer-switcher");
                 if (placesEl) {
-                    placesEl.style.display = '';
+                    placesEl.style.display = "";
                     searchTop.appendChild(placesEl);
                 }
                 if (layerSwitcherEl) {
-                    layerSwitcherEl.style.display = '';
+                    layerSwitcherEl.style.display = "";
                     searchTop.appendChild(layerSwitcherEl);
                 }
             }
@@ -87,46 +93,15 @@
                 html`<${LayerSwitcher} />`,
                 document.getElementById("layer-switcher"),
             );
+
+            // Monter LayerLegend (élément indépendant, positionné en fixed)
+            render(
+                html`<${LayerLegend} />`,
+                document.getElementById("layer-legend"),
+            );
             import PlaceComponent from "./src/components/PlaceComponent.js";
             import poiInfo from "./src/singletons/poiInfo.js";
         </script>
-
-        <template id="template-poi-viewer">
-            <div class="poi-viewer__content">
-                <h2 class="poi-viewer__name"></h2>
-                <div class="poi-viewer__type"></div>
-                <div class="poi-viewer__website">
-                    <a class="poi-viewer__website__link"></a>
-                </div>
-                <div class="poi-viewer__opening-hour"></div>
-                <div class="poi-viewer__all"></div>
-            </div>
-        </template>
-
-        <template id="template-opening-hour">
-            <article class="opening-hour">
-                <h1 class="opening-hour__title opening-hour__title--open">
-                    Ouvert
-                </h1>
-                <h1 class="opening-hour__title opening-hour__title--closed">
-                    Fermée
-                </h1>
-                <div class="opening-hour__description"></div>
-
-                <!-- <div class="opening-hour-today">
-          <h2>Horaire du jour</h2>
-          <div class="opening-hour-time">00:30 – 23:00</div>
-        </div>
-        <div class="opening-hour-generic"></div> -->
-            </article>
-        </template>
-
-        <template id="template-opening-hour-day">
-            <div class="opening-hour__day">
-                <h2>Mardi</h2>
-                <div class="opening-hour__time"></div>
-            </div>
-        </template>
 
         <template id="template-chip-base">
             <div class="chip_delete">
