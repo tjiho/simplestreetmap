@@ -33,6 +33,12 @@ export default function useSearch () {
     clear()
   }, [clear])
 
+  const submit = useCallback(() => {
+    if (results.length === 0) return
+    const result = selectedIndex >= 0 ? results[selectedIndex] : results[0]
+    selectResult(result)
+  }, [results, selectedIndex, selectResult])
+
   const handleKeyDown = useCallback((e) => {
     if (results.length === 0) return
 
@@ -44,14 +50,6 @@ export default function useSearch () {
       case 38: // ArrowUp
         e.preventDefault()
         setSelectedIndex(prev => prev > 0 ? prev - 1 : results.length - 1)
-        break
-      case 13: // Enter
-        e.preventDefault()
-        if (selectedIndex >= 0 && selectedIndex < results.length) {
-          selectResult(results[selectedIndex])
-        } else if (results.length > 0) {
-          selectResult(results[0])
-        }
         break
       case 27: // Escape
         clear()
@@ -127,6 +125,7 @@ export default function useSearch () {
     selectedIndex,
     isLoading,
     selectResult,
+    submit,
     clear,
     handleKeyDown,
     runSearch: debouncedSearch

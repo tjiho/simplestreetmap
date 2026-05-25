@@ -8,14 +8,20 @@ export default function SearchComponent () {
     results,
     selectedIndex,
     selectResult,
+    submit,
     clear,
     handleKeyDown,
     runSearch
   } = useSearch()
 
+  function handleSubmit (e) {
+    e.preventDefault()
+    submit()
+  }
+
   return html`
     <div id="search-container" className=${results.length > 0 ? 'search-container--with-results' : ''}>
-      <div className="search-container__top">
+      <form className="search-container__top" onSubmit=${handleSubmit}>
         <label className="search-label">
           <img
             src="./static/images/helium/search.svg"
@@ -26,14 +32,14 @@ export default function SearchComponent () {
             type="search"
             id="search-input"
             placeholder="search..."
+            autocomplete="off"
             className="search-label__input"
             value=${query}
             onInput=${(e) => setQuery(e.target.value)}
             onKeyDown=${handleKeyDown}
           />
         </label>
-        <!-- places et layer-switcher seront ajoutés par index.html -->
-      </div>
+      </form>
       <div id="search-results">
         ${results.map((result, index) => html`
           <div
@@ -47,7 +53,7 @@ export default function SearchComponent () {
       </div>
       ${results.length > 0 && html`
         <div className="search-container__bottom">
-          <button id="search-close-button" onClick=${clear}>Fermer la recherche</button>
+          <button type="button" id="search-close-button" onClick=${clear}>Fermer la recherche</button>
         </div>
       `}
     </div>

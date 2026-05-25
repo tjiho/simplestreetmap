@@ -13,6 +13,7 @@ export default function MobileSearchComponent() {
     results,
     selectedIndex,
     selectResult,
+    submit,
     clear,
     handleKeyDown,
   } = useSearch();
@@ -28,6 +29,12 @@ export default function MobileSearchComponent() {
 
   function handleResultClick(result) {
     selectResult(result);
+    collapse();
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    submit();
     collapse();
   }
 
@@ -58,7 +65,7 @@ export default function MobileSearchComponent() {
     <bottom-sheet ref=${sheetRef} tabindex="0">
       <div slot="snap" style="--snap: 90px" class="initial"></div>
       <div slot="snap" style="--snap: 95%"></div>
-      <div slot="header" class="mobile-search-header">
+      <form slot="header" class="mobile-search-header" onSubmit=${handleSubmit}>
         <input
           ref=${inputRef}
           type="search"
@@ -72,6 +79,7 @@ export default function MobileSearchComponent() {
         ${hasContent &&
         html`
           <button
+            type="button"
             class="mobile-search-close"
             onClick=${handleClose}
             aria-label="Fermer"
@@ -79,7 +87,7 @@ export default function MobileSearchComponent() {
             ×
           </button>
         `}
-      </div>
+      </form>
       <div class="mobile-search-results">
         ${results.map(
           (result, index) => html`
