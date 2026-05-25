@@ -18,7 +18,7 @@ export default function MobileSearchComponent() {
   } = useSearch();
 
   function expand() {
-    sheetRef.current?.snapToPoint(SNAP_EXPANDED, { behavior: "smooth" });
+    sheetRef.current?.snapToPoint(SNAP_EXPANDED, { behavior: "instant" });
   }
 
   function collapse() {
