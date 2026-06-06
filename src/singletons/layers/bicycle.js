@@ -1,14 +1,22 @@
 // Bicycle.js
 import AbstractLineLayer from "./AbstractLineLayer.js";
 
-class Bicycle extends AbstractLineLayer {
-  constructor() {
+const DEFAULT_SOURCE_URL = "pmtiles://https://static.ppsfleet.navy/osm-data/velo.pmtiles";
+const DEFAULT_BASE_STYLE = "https://static.ppsfleet.navy/osm-data/styles/positron.json";
+
+export default class Bicycle extends AbstractLineLayer {
+  constructor({
+    map,
+    sourceUrl = DEFAULT_SOURCE_URL,
+    baseStyle = DEFAULT_BASE_STYLE,
+  } = {}) {
     super({
+      map,
       source: "velo",
       sourceLayer: "velo",
       sourceConfig: {
         type: "vector",
-        url: "pmtiles://https://static.ppsfleet.navy/osm-data/velo.pmtiles",
+        url: sourceUrl,
       },
       baseWidth: [
         [5, 1],
@@ -17,7 +25,7 @@ class Bicycle extends AbstractLineLayer {
         [17, 8],
         [19, 20],
       ],
-      baseStyle: "https://static.ppsfleet.navy/osm-data/styles/positron.json",
+      baseStyle,
     });
 
     this.beforeLayer = "waterway-name";
@@ -92,5 +100,3 @@ class Bicycle extends AbstractLineLayer {
     this.buildLayers();
   }
 }
-
-export default new Bicycle();

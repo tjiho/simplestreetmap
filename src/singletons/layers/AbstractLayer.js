@@ -1,7 +1,7 @@
-import map from "../map.js";
-
 export default class AbstractLayer {
-  constructor({ visibleOnLoad = false, baseStyle = BASE_MAP_URL } = {}) {
+  constructor({ map, visibleOnLoad = false, baseStyle = null } = {}) {
+    if (!map) throw new Error("AbstractLayer: `map` is required");
+    this.map = map;
     this.layersIds = [];
     this.sourcesIds = [];
     this.beforeLayer = null;
@@ -17,9 +17,9 @@ export default class AbstractLayer {
     }
     this.sourcesIds.push(id);
 
-    map.onLoadOrNow(() => {
-      if (!map.getSource(id)) {
-        map.addSource(id, source);
+    this.map.onLoadOrNow(() => {
+      if (!this.map.getSource(id)) {
+        this.map.addSource(id, source);
       }
     });
   }
@@ -33,32 +33,31 @@ export default class AbstractLayer {
     }
     this.layersIds.push(layer.id);
 
-    map.onLoadOrNow(() => {
-      if (!map.getLayer(layer.id)) {
+    this.map.onLoadOrNow(() => {
+      if (!this.map.getLayer(layer.id)) {
         if (!this.visibleOnLoad) {
           layer.layout = {
             visibility: "none",
           };
         }
-        map.addLayer(layer, this.beforeLayer || before);
+        this.map.addLayer(layer, this.beforeLayer || before);
       }
     });
   }
 
   async show() {
-    await map.changeBaseMap(this.baseStyle);
+    if (this.baseStyle) await this.map.changeBaseMap(this.baseStyle);
     this.layersIds.forEach((id) => {
-      if (map.getLayer(id)) {
-        map.setLayoutProperty(id, "visibility", "visible");
+      if (this.map.getLayer(id)) {
+        this.map.setLayoutProperty(id, "visibility", "visible");
       }
     });
   }
 
   async hide() {
-    // await map.changeBaseMap(BASE_MAP_URL);
     this.layersIds.forEach((id) => {
-      if (map.getLayer(id)) {
-        map.setLayoutProperty(id, "visibility", "none");
+      if (this.map.getLayer(id)) {
+        this.map.setLayoutProperty(id, "visibility", "none");
       }
     });
   }

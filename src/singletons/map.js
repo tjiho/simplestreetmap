@@ -1,131 +1,170 @@
-import parseHashCoordinates from "../tools/parseHashCoordinates.js";
+const PMTILES_PROTOCOL_KEY = "__plan_pmtiles_protocol_registered__";
 
-class Map extends maplibregl.Map {
-  constructor() {
-    console.log("Init map");
-    const params = new URLSearchParams(window.location.search);
-    const { lng, lat, zoom } = parseHashCoordinates(
-      params.get("map") || "",
-      1.4436,
-      43.6042,
-      13,
-    );
+let _OsmMapClass = null;
+let _instance = null;
 
-    const protocol = new pmtiles.Protocol({ metadata: true });
-    maplibregl.addProtocol("pmtiles", protocol.tile);
+function buildOsmMapClass(maplibre) {
+  if (_OsmMapClass) return _OsmMapClass;
 
-    super({
-      container: "map",
-      style: BASE_MAP_URL,
-      center: [lng, lat],
+  _OsmMapClass = class OsmMap extends maplibre.Map {
+    constructor({
+      container,
+      baseStyle,
+      center,
       zoom,
-    });
-    this.currentStyleUrl = BASE_MAP_URL;
-
-    const nav = new maplibregl.NavigationControl();
-
-    const gps = new maplibregl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      trackUserLocation: true,
-    });
-
-    const scale = new maplibregl.ScaleControl({
-      maxWidth: 80,
-      unit: "metric",
-    });
-
-    this.addControl(nav, "bottom-right");
-    this.addControl(gps, "bottom-right");
-    this.addControl(scale);
-
-    this.on("moveend", function () {
-      const { lng, lat } = map.getCenter();
-      const zoom = map.getZoom();
-
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set("map", `${zoom}/${lat}/${lng}`);
-      history.replaceState(
-        null,
-        null,
-        `${document.location.pathname}?${searchParams}`,
-      );
-    });
-
-    this.on("load", () => {
-      this.setProjection({
-        type: "globe",
+      syncUrl = false,
+      globe = false,
+    }) {
+      super({
+        container,
+        style: baseStyle,
+        center,
+        zoom,
       });
-      document.getElementById("map").style.backgroundColor = "#000";
-    });
-  }
+      this.currentStyleUrl = baseStyle;
+      this._syncUrl = syncUrl;
+      this._globe = globe;
 
-  onLoadOrNow(fn) {
-    if (this.loaded()) {
-      fn();
-    } else {
-      this.on("load", fn);
-    }
-  }
+      const nav = new maplibre.NavigationControl();
+      const gps = new maplibre.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: true,
+      });
+      const scale = new maplibre.ScaleControl({
+        maxWidth: 80,
+        unit: "metric",
+      });
 
-  changeBaseMap(url) {
-    return new Promise((resolve) => {
-      if (this.currentStyleUrl === url) {
-        resolve();
-        return;
+      this.addControl(nav, "bottom-right");
+      this.addControl(gps, "bottom-right");
+      this.addControl(scale);
+
+      if (syncUrl) {
+        this.on("moveend", () => {
+          const { lng, lat } = this.getCenter();
+          const z = this.getZoom();
+          const searchParams = new URLSearchParams(window.location.search);
+          searchParams.set("map", `${z}/${lat}/${lng}`);
+          history.replaceState(
+            null,
+            null,
+            `${document.location.pathname}?${searchParams}`,
+          );
+        });
       }
 
-      const isCustom = (id) => id.startsWith("custom-");
+      if (globe) {
+        this.on("load", () => {
+          this.setProjection({ type: "globe" });
+          const el = this.getContainer();
+          if (el) el.style.backgroundColor = "#000";
+        });
+      }
+    }
 
-      this.setStyle(url, {
-        diff: false,
-        transformStyle: (prev, next) => {
-          if (!prev) return next; // 1er appel, pas d'ancien style
+    onLoadOrNow(fn) {
+      if (this.loaded()) {
+        fn();
+      } else {
+        this.on("load", fn);
+      }
+    }
 
-          // --- sources custom ---
-          const customSources = Object.fromEntries(
-            Object.entries(prev.sources).filter(([id]) => isCustom(id)),
-          );
+    changeBaseMap(url) {
+      return new Promise((resolve) => {
+        if (this.currentStyleUrl === url) {
+          resolve();
+          return;
+        }
 
-          // --- layers custom, en préservant leur position ---
-          const layers = [...next.layers];
-          const nextIds = new Set(next.layers.map((l) => l.id));
+        const isCustom = (id) => id.startsWith("custom-");
 
-          for (let i = 0; i < prev.layers.length; i++) {
-            const layer = prev.layers[i];
-            if (!isCustom(layer.id)) continue;
+        this.setStyle(url, {
+          diff: false,
+          transformStyle: (prev, next) => {
+            if (!prev) return next;
 
-            let beforeId = null;
-            for (let j = i + 1; j < prev.layers.length; j++) {
-              if (
-                !isCustom(prev.layers[j].id) &&
-                nextIds.has(prev.layers[j].id)
-              ) {
-                beforeId = prev.layers[j].id;
-                break;
+            const customSources = Object.fromEntries(
+              Object.entries(prev.sources).filter(([id]) => isCustom(id)),
+            );
+
+            const layers = [...next.layers];
+            const nextIds = new Set(next.layers.map((l) => l.id));
+
+            for (let i = 0; i < prev.layers.length; i++) {
+              const layer = prev.layers[i];
+              if (!isCustom(layer.id)) continue;
+
+              let beforeId = null;
+              for (let j = i + 1; j < prev.layers.length; j++) {
+                if (
+                  !isCustom(prev.layers[j].id) &&
+                  nextIds.has(prev.layers[j].id)
+                ) {
+                  beforeId = prev.layers[j].id;
+                  break;
+                }
               }
+
+              const idx = beforeId
+                ? layers.findIndex((l) => l.id === beforeId)
+                : layers.length;
+              layers.splice(idx, 0, layer);
             }
 
-            const idx = beforeId
-              ? layers.findIndex((l) => l.id === beforeId)
-              : layers.length;
-            layers.splice(idx, 0, layer);
-          }
+            return {
+              ...next,
+              sources: { ...next.sources, ...customSources },
+              layers,
+            };
+          },
+        });
 
-          return {
-            ...next,
-            sources: { ...next.sources, ...customSources },
-            layers,
-          };
-        },
+        this.currentStyleUrl = url;
+        this.once("style.load", resolve);
       });
+    }
+  };
 
-      this.currentStyleUrl = url;
-      map.once("style.load", resolve);
-    });
-  }
+  return _OsmMapClass;
 }
 
-const map = new Map();
-export default map;
+export function createMap(options) {
+  const { maplibre, pmtiles } = options;
+  if (!maplibre) throw new Error("createMap: `maplibre` is required");
+  if (!options.container) throw new Error("createMap: `container` is required");
+  if (!options.baseStyle) throw new Error("createMap: `baseStyle` is required");
+
+  if (pmtiles && !maplibre[PMTILES_PROTOCOL_KEY]) {
+    const protocol = new pmtiles.Protocol({ metadata: true });
+    maplibre.addProtocol("pmtiles", protocol.tile);
+    maplibre[PMTILES_PROTOCOL_KEY] = true;
+  }
+
+  const OsmMap = buildOsmMapClass(maplibre);
+  _instance = new OsmMap(options);
+  return _instance;
+}
+
+export function getOsmMapClass(maplibre) {
+  return buildOsmMapClass(maplibre);
+}
+
+// Compat singleton pour les modules qui font
+// `import map from "../singletons/map.js"`.
+// Le bootstrap doit avoir appelé createMap() avant la première lecture.
+export default new Proxy(
+  {},
+  {
+    get(_t, prop) {
+      if (!_instance) {
+        throw new Error(
+          "map singleton not initialized — call createMap() in the bootstrap first.",
+        );
+      }
+      if (prop === "raw" || prop === "_real") return _instance;
+      const v = _instance[prop];
+      return typeof v === "function" ? v.bind(_instance) : v;
+    },
+  },
+);

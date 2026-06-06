@@ -1,15 +1,15 @@
-import satellite from "./layers/sattelite.js";
-import batiment3d from "./layers/batiment3d.js";
-import bicycle from "./layers/bicycle.js";
-import plan from "./layers/plan.js";
+import Plan from "./layers/plan.js";
+import Sattelite from "./layers/sattelite.js";
+import Batiment3d from "./layers/batiment3d.js";
+import Bicycle from "./layers/bicycle.js";
 
-class LayerSelection {
-  constructor() {
+export class LayerSelection {
+  constructor({ map, baseStyle }) {
     this.layers = {
-      plan: { layer: plan, name: "Plan" },
-      satellite: { layer: satellite, name: "Satellite" },
-      batiment3d: { layer: batiment3d, name: "Batiment 3d" },
-      bicycle: { layer: bicycle, name: "Vélo (alpha)" },
+      plan: { layer: new Plan({ map, baseStyle }), name: "Plan" },
+      satellite: { layer: new Sattelite({ map, baseStyle }), name: "Satellite" },
+      batiment3d: { layer: new Batiment3d({ map, baseStyle }), name: "Batiment 3d" },
+      bicycle: { layer: new Bicycle({ map }), name: "Vélo (alpha)" },
     };
     this.active = "plan";
     this._listeners = new Set();
@@ -31,4 +31,32 @@ class LayerSelection {
   }
 }
 
-export default new LayerSelection();
+let _instance = null;
+
+export function createLayerSelection(options) {
+  _instance = new LayerSelection(options);
+  return _instance;
+}
+
+// Compat singleton pour les composants Preact qui font
+// `import layerSelection from "../singletons/layerSelection.js"`.
+// Le bootstrap doit avoir appelé createLayerSelection() avant tout render.
+const proxy = {
+  get active() {
+    return _instance?.active;
+  },
+  get current() {
+    return _instance?.current;
+  },
+  get layers() {
+    return _instance?.layers;
+  },
+  setActive(k) {
+    return _instance?.setActive(k);
+  },
+  subscribe(fn) {
+    return _instance?.subscribe(fn);
+  },
+};
+
+export default proxy;

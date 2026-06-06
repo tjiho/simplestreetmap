@@ -1,11 +1,14 @@
 import AbstractLayer from "./AbstractLayer.js";
-class Batiment3d extends AbstractLayer {
-  constructor() {
-    super();
+
+const DEFAULT_TILES = ["https://data.geopf.fr/tms/1.0.0/BDTOPO/{z}/{x}/{y}.pbf"];
+
+export default class Batiment3d extends AbstractLayer {
+  constructor({ map, tiles = DEFAULT_TILES, baseStyle } = {}) {
+    super({ map, baseStyle });
 
     this.addSource("bdTopo", {
       type: "vector",
-      tiles: ["https://data.geopf.fr/tms/1.0.0/BDTOPO/{z}/{x}/{y}.pbf"],
+      tiles,
     });
 
     this.addLayer(
@@ -24,6 +27,3 @@ class Batiment3d extends AbstractLayer {
     );
   }
 }
-
-const batiment3d = new Batiment3d();
-export default batiment3d;

@@ -47,14 +47,14 @@
         <!-- todo: add a contextmenu -->
 
         <script type="module">
-            import map from "./src/singletons/map.js";
+            import "./src/createMap.js";
             import { render, html } from "./src/libs/preact.mjs";
             import { registerSheetElements } from "./src/libs/pure-web-bottom-sheet.js";
-            //import terrain from "./src/singletons/layers/terrain.js";
             import SearchComponent from "./src/components/SearchComponent.js";
             import MobileSearchComponent from "./src/components/MobileSearchComponent.js";
             import LayerSwitcher from "./src/components/LayerSwitcher.js";
             import LayerLegend from "./src/components/LayerLegend.js";
+            import "./src/components/PlaceComponent.js";
 
             registerSheetElements();
 
@@ -99,8 +99,6 @@
                 html`<${LayerLegend} />`,
                 document.getElementById("layer-legend"),
             );
-            import PlaceComponent from "./src/components/PlaceComponent.js";
-            import poiInfo from "./src/singletons/poiInfo.js";
         </script>
 
         <template id="template-chip-base">

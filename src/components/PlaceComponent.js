@@ -37,7 +37,7 @@ class PlaceComponent extends ChipBaseComponent {
     this?.marker?.remove()
     this.marker = new maplibregl.Marker()
       .setLngLat([lng, lat])
-      .addTo(map)
+      .addTo(map.raw)
   }
 
   updateUrl () {

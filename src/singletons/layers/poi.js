@@ -1,13 +1,15 @@
 import AbstractLayer from "./AbstractLayer.js";
 import { poiIconExpression } from "../../tools/getIcon.js";
 
-class PoiLayer extends AbstractLayer {
-  constructor() {
-    super({ visibleOnLoad: true });
+const DEFAULT_SOURCE_URL = "pmtiles://https://static.ppsfleet.navy/osm-data/poi.pmtiles";
+
+export default class PoiLayer extends AbstractLayer {
+  constructor({ map, sourceUrl = DEFAULT_SOURCE_URL, baseStyle } = {}) {
+    super({ map, visibleOnLoad: true, baseStyle });
 
     this.addSource("poi", {
       type: "vector",
-      url: "pmtiles://https://static.ppsfleet.navy/osm-data/poi.pmtiles",
+      url: sourceUrl,
     });
 
     this.addLayer({
@@ -42,6 +44,3 @@ class PoiLayer extends AbstractLayer {
     });
   }
 }
-
-const poiLayer = new PoiLayer();
-export default poiLayer;

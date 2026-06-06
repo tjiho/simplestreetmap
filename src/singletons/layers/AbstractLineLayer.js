@@ -5,12 +5,17 @@ import {
   buildFillLayer,
   buildDashedCenterLayer,
 } from "../../tools/layers.js";
-import { html } from "../../libs/preact.mjs";
-import { legendSample } from "../../tools/legend.js";
 
 export default class AbstractLineLayer extends AbstractLayer {
-  constructor({ source, sourceLayer, sourceConfig, baseWidth, baseStyle }) {
-    super({ baseStyle });
+  constructor({
+    map,
+    source,
+    sourceLayer,
+    sourceConfig,
+    baseWidth,
+    baseStyle,
+  }) {
+    super({ map, baseStyle });
     this._source = source;
     this._sourceLayer = sourceLayer;
     this._baseWidth = baseWidth;
@@ -64,14 +69,12 @@ export default class AbstractLineLayer extends AbstractLayer {
       this.border({ id, filter, color, minzoom: detailZoom, borderWidth: 2 }),
       this.fill({ id, filter, color: innerColor, minzoom: detailZoom }),
       this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
-      // Zoom faible : juste les pointillés à la largeur de la base
       this.fill({
         id: id + "-overview",
         filter,
         color,
         maxzoom: detailZoom,
       }),
-      // Zoom élevé : style complet
     ];
   }
 
@@ -88,7 +91,6 @@ export default class AbstractLineLayer extends AbstractLayer {
       this.border({ id, filter, color, minzoom: detailZoom, borderWidth: 1 }),
       this.fill({ id, filter, color: innerColor, minzoom: detailZoom }),
       this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
-      // Zoom faible : juste les pointillés à la largeur de la base
       this.fill({
         id: id + "-overview",
         filter,
@@ -96,7 +98,6 @@ export default class AbstractLineLayer extends AbstractLayer {
         maxzoom: detailZoom,
       }),
       this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
-      // Zoom élevé : style complet
     ];
   }
 
@@ -112,7 +113,6 @@ export default class AbstractLineLayer extends AbstractLayer {
     return [
       this.fill({ id, filter, color: innerColor }),
       this.dashedCenter({ id, filter, color, dashArray, minzoom: detailZoom }),
-      // Zoom faible : juste les pointillés à la largeur de la base
       this.dashedCenter({
         id: id + "-overview",
         filter,
@@ -121,7 +121,6 @@ export default class AbstractLineLayer extends AbstractLayer {
         dashArray: overviewDashArray,
         maxzoom: detailZoom,
       }),
-      // Zoom élevé : style complet
     ];
   }
 
@@ -129,7 +128,6 @@ export default class AbstractLineLayer extends AbstractLayer {
     return [
       this.border({ id, filter, color, minzoom: detailZoom, borderWidth: 1 }),
       this.fill({ id, filter, color: innerColor }),
-      // Zoom élevé : style complet
     ];
   }
 
@@ -163,27 +161,6 @@ export default class AbstractLineLayer extends AbstractLayer {
   }
 
   legend() {
-    const groups = [...this.lines].reverse();
-    return html`
-      <ul class="layer-legend">
-        ${groups.map(
-          (group) => html`
-            <li class="layer-legend__group">
-              <h3 class="layer-legend__category">${group.category}</h3>
-              <ul class="layer-legend__items">
-                ${[...group.items].reverse().map(
-                  (item) => html`
-                    <li class="layer-legend__item">
-                      ${legendSample(item)}
-                      <span class="layer-legend__label">${item.label}</span>
-                    </li>
-                  `,
-                )}
-              </ul>
-            </li>
-          `,
-        )}
-      </ul>
-    `;
+    return { groups: this.lines };
   }
 }

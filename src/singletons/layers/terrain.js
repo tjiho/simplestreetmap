@@ -1,21 +1,20 @@
 import AbstractLayer from "./AbstractLayer.js";
-import map from "../map.js";
 
-class Terrain extends AbstractLayer {
-  constructor() {
-    super({ visibleOnLoad: true });
+const DEFAULT_SOURCE_URL = "pmtiles://https://static.ppsfleet.navy/osm-data/france-elevation.pmtiles";
+
+export default class Terrain extends AbstractLayer {
+  constructor({ map, sourceUrl = DEFAULT_SOURCE_URL, baseStyle } = {}) {
+    super({ map, visibleOnLoad: true, baseStyle });
 
     this.addSource("terrain", {
       type: "raster-dem",
-      url: "pmtiles://https://static.ppsfleet.navy/osm-data/france-elevation.pmtiles",
+      url: sourceUrl,
       encoding: "terrarium",
-      //tileSize: 512,
-      //maxzoom: 10,
     });
 
-    map.onLoadOrNow(() => {
-      map.setTerrain({ source: "terrain", exaggeration: 1.2 });
-      map.setSky({
+    this.map.onLoadOrNow(() => {
+      this.map.setTerrain({ source: "terrain", exaggeration: 1.2 });
+      this.map.setSky({
         "sky-color": "#cfe8ff",
         "horizon-color": "#ffffff",
         "fog-color": "#ffffff",
@@ -28,13 +27,9 @@ class Terrain extends AbstractLayer {
         id: "hillshade",
         type: "hillshade",
         source: "terrain",
-
         paint: { "hillshade-exaggeration": 0.35 },
       },
       "road_area_pier",
     );
   }
 }
-
-const terrain = new Terrain();
-export default terrain;
