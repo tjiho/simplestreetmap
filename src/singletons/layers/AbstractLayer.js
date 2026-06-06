@@ -61,4 +61,34 @@ export default class AbstractLayer {
       }
     });
   }
+
+  onClick(callback) {
+    this.map.onLoadOrNow(() => {
+      this.map.on("click", (e) => {
+        const bbox = [
+          [e.point.x - 5, e.point.y - 5],
+          [e.point.x + 5, e.point.y + 5],
+        ];
+        const features = this.map.queryRenderedFeatures(bbox, {
+          layers: this.layersIds,
+        });
+
+        if (!features.length) {
+          callback(null, e.lngLat);
+          return;
+        }
+
+        callback(features[0], e.lngLat);
+      });
+
+      this.map.on("mousemove", (e) => {
+        const features = this.map.queryRenderedFeatures(e.point, {
+          layers: this.layersIds,
+        });
+        this.map.getCanvas().style.cursor = features.length ? "pointer" : "";
+      });
+    });
+
+    return this;
+  }
 }

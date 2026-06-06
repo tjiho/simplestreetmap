@@ -3,7 +3,6 @@ import { LayerSelection } from "./singletons/layerSelection.js";
 import { Places, setPlaces } from "./singletons/places.js";
 import poiPanel from "./singletons/poiPanel.js";
 import PoiLayer from "./singletons/layers/poi.js";
-import { enablePoiClick } from "./tools/enablePoiClick.js";
 import parseHashCoordinates from "./tools/parseHashCoordinates.js";
 import { render, html } from "./libs/preact.mjs";
 import PoiViewer from "./components/PoiViewer.js";
@@ -33,13 +32,12 @@ export const layerSelection = new LayerSelection({ map, baseStyle: BASE_MAP_URL 
 
 setPlaces(new Places({ map }));
 
-const poiEvents = enablePoiClick(map, poiLayer);
-poiEvents.addEventListener("poi:select", (e) => {
-  const { feature } = e.detail;
+poiLayer.onClick((feature) => {
+  if (!feature) {
+    poiPanel.close();
+    return;
+  }
   const container = document.createElement("div");
   render(html`<${PoiViewer} feature=${feature} />`, container);
   poiPanel.open(container);
-});
-poiEvents.addEventListener("poi:close", () => {
-  poiPanel.close();
 });
