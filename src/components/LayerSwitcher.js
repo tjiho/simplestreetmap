@@ -1,5 +1,5 @@
 import { html, useState, useEffect } from "../libs/preact.mjs";
-import layerSelection from "../singletons/layerSelection.js";
+import { layerSelection } from "../createMap.js";
 
 function LayerButton({ layerKey, name, isActive, onClick }) {
   return html`

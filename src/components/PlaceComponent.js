@@ -1,4 +1,4 @@
-import map from '../singletons/map.js'
+import { map } from '../createMap.js'
 import ChipBaseComponent from './ChipBaseComponent.js'
 
 class PlaceComponent extends ChipBaseComponent {
@@ -37,7 +37,7 @@ class PlaceComponent extends ChipBaseComponent {
     this?.marker?.remove()
     this.marker = new maplibregl.Marker()
       .setLngLat([lng, lat])
-      .addTo(map.raw)
+      .addTo(map)
   }
 
   updateUrl () {

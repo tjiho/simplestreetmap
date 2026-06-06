@@ -30,33 +30,3 @@ export class LayerSelection {
     return () => this._listeners.delete(fn);
   }
 }
-
-let _instance = null;
-
-export function createLayerSelection(options) {
-  _instance = new LayerSelection(options);
-  return _instance;
-}
-
-// Compat singleton pour les composants Preact qui font
-// `import layerSelection from "../singletons/layerSelection.js"`.
-// Le bootstrap doit avoir appelé createLayerSelection() avant tout render.
-const proxy = {
-  get active() {
-    return _instance?.active;
-  },
-  get current() {
-    return _instance?.current;
-  },
-  get layers() {
-    return _instance?.layers;
-  },
-  setActive(k) {
-    return _instance?.setActive(k);
-  },
-  subscribe(fn) {
-    return _instance?.subscribe(fn);
-  },
-};
-
-export default proxy;

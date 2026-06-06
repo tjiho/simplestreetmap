@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from '../libs/preact.mjs'
 import debounce from '../tools/debounce.js'
 import { searchByName } from '../api/search.js'
-import map from '../singletons/map.js'
+import { map } from '../createMap.js'
 import places from '../singletons/places.js'
 
 export default function useSearch () {

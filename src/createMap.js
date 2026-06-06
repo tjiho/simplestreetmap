@@ -1,5 +1,5 @@
 import { createMap } from "./singletons/map.js";
-import { createLayerSelection } from "./singletons/layerSelection.js";
+import { LayerSelection } from "./singletons/layerSelection.js";
 import { Places, setPlaces } from "./singletons/places.js";
 import poiPanel from "./singletons/poiPanel.js";
 import PoiLayer from "./singletons/layers/poi.js";
@@ -16,7 +16,7 @@ const { lng, lat, zoom } = parseHashCoordinates(
   13,
 );
 
-const map = createMap({
+export const map = createMap({
   maplibre: window.maplibregl,
   pmtiles: window.pmtiles,
   container: "map",
@@ -27,9 +27,9 @@ const map = createMap({
   globe: true,
 });
 
-const poiLayer = new PoiLayer({ map });
+export const poiLayer = new PoiLayer({ map });
 
-createLayerSelection({ map, baseStyle: BASE_MAP_URL });
+export const layerSelection = new LayerSelection({ map, baseStyle: BASE_MAP_URL });
 
 setPlaces(new Places({ map }));
 
@@ -43,5 +43,3 @@ poiEvents.addEventListener("poi:select", (e) => {
 poiEvents.addEventListener("poi:close", () => {
   poiPanel.close();
 });
-
-export { map, poiLayer };

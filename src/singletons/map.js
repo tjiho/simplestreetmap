@@ -1,12 +1,7 @@
 const PMTILES_PROTOCOL_KEY = "__plan_pmtiles_protocol_registered__";
 
-let _OsmMapClass = null;
-let _instance = null;
-
 function buildOsmMapClass(maplibre) {
-  if (_OsmMapClass) return _OsmMapClass;
-
-  _OsmMapClass = class OsmMap extends maplibre.Map {
+  return class OsmMap extends maplibre.Map {
     constructor({
       container,
       baseStyle,
@@ -125,8 +120,6 @@ function buildOsmMapClass(maplibre) {
       });
     }
   };
-
-  return _OsmMapClass;
 }
 
 export function createMap(options) {
@@ -142,29 +135,5 @@ export function createMap(options) {
   }
 
   const OsmMap = buildOsmMapClass(maplibre);
-  _instance = new OsmMap(options);
-  return _instance;
+  return new OsmMap(options);
 }
-
-export function getOsmMapClass(maplibre) {
-  return buildOsmMapClass(maplibre);
-}
-
-// Compat singleton pour les modules qui font
-// `import map from "../singletons/map.js"`.
-// Le bootstrap doit avoir appelé createMap() avant la première lecture.
-export default new Proxy(
-  {},
-  {
-    get(_t, prop) {
-      if (!_instance) {
-        throw new Error(
-          "map singleton not initialized — call createMap() in the bootstrap first.",
-        );
-      }
-      if (prop === "raw" || prop === "_real") return _instance;
-      const v = _instance[prop];
-      return typeof v === "function" ? v.bind(_instance) : v;
-    },
-  },
-);
