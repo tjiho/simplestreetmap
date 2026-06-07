@@ -6,7 +6,20 @@ Another open source frontend map based on OSM data. A demo is available at [http
 
 ## Installation
 
-Edit `config.js` with your own search, reverse, and tile server.
+The map layer lives in the [`esquisse`](https://github.com/tjiho/esquisse) submodule, so clone with it:
+
+```
+git clone --recurse-submodules <repo>
+# or, if already cloned:
+git submodule update --init --recursive
+```
+
+Edit `config.js` with your own search / reverse / tile servers and default view:
+
+- `DEFAULT_CENTER` / `DEFAULT_ZOOM` — initial view when no `?map=` in the URL.
+- `BASE_MAP_URL` — base map style.
+- `POI_TILES_URL`, `BICYCLE_TILES_URL`, `BICYCLE_BASE_STYLE_URL`, `SATELLITE_TILES_URL`, `BATIMENT3D_TILES_URL` — per-layer sources.
+- `BASE_SEARCH_URL`, `BASE_REVERSE_URL`, `BASE_OVERPASS_URL` — search / reverse / overpass endpoints.
 
 Edit `index.html` to import maplibre from your server or some CDN.
 

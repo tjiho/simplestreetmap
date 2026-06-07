@@ -1,0 +1,3 @@
+[submodule "esquisse"]
+	path = esquisse
+	url = git@github.com:tjiho/esquisse.git
