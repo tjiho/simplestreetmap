@@ -9,6 +9,9 @@ const BASE_MAP_URL = "https://static.ppsfleet.navy/osm-data/beta.json";
 const POI_TILES_URL = "pmtiles://https://static.ppsfleet.navy/osm-data/poi.pmtiles";
 const BICYCLE_TILES_URL = "pmtiles://https://static.ppsfleet.navy/osm-data/velo.pmtiles";
 const BICYCLE_BASE_STYLE_URL = "https://static.ppsfleet.navy/osm-data/styles/positron.json";
+// Local file: the server must support HTTP Range requests (php -S does not).
+const CAMERA_TILES_URL =
+  "pmtiles://https://static.ppsfleet.navy/osm-data/camera.pmtiles";
 const SATELLITE_TILES_URL =
   "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0" +
   "&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&STYLE=normal&FORMAT=image/jpeg" +
